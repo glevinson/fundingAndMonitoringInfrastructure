@@ -7,7 +7,7 @@ pragma solidity ^0.8.0;
 import "../../utils/Context.sol";
 import "./IERC721.sol";
 import "./IERC721Metadata.sol";
-import "./IERC721Enumerable.sol";
+// import "./IERC721Enumerable.sol";
 import "./IERC721Receiver.sol";
 import "../../introspection/ERC165.sol";
 import "../../utils/Address.sol";
@@ -19,7 +19,8 @@ import "../../utils/Strings.sol";
  * @title ERC721 Non-Fungible Token Standard basic implementation
  * @dev see https://eips.ethereum.org/EIPS/eip-721
  */
-contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable {
+// contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable {
+contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     using Address for address;
     using EnumerableSet for EnumerableSet.UintSet;
     using EnumerableMap for EnumerableMap.UintToAddressMap;
@@ -43,7 +44,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable 
     // Token symbol
     string private _symbol;
 
-    // Optional mapping for token URIs
+    // Optional mapping for token URIs; mapping from id of the token to the token URI string
     mapping (uint256 => string) private _tokenURIs;
 
     // Base URI
@@ -59,7 +60,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable 
         // register the supported interfaces to conform to ERC721 via ERC165
         _registerInterface(type(IERC721).interfaceId);
         _registerInterface(type(IERC721Metadata).interfaceId);
-        _registerInterface(type(IERC721Enumerable).interfaceId);
+        // _registerInterface(type(IERC721Enumerable).interfaceId);
     }
 
     /**
@@ -124,25 +125,25 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable 
     /**
      * @dev See {IERC721Enumerable-tokenOfOwnerByIndex}.
      */
-    function tokenOfOwnerByIndex(address owner, uint256 index) public view virtual override returns (uint256) {
-        return _holderTokens[owner].at(index);
-    }
+    // function tokenOfOwnerByIndex(address owner, uint256 index) public view virtual override returns (uint256) {
+    //     return _holderTokens[owner].at(index);
+    // }
 
     /**
      * @dev See {IERC721Enumerable-totalSupply}.
      */
-    function totalSupply() public view virtual override returns (uint256) {
-        // _tokenOwners are indexed by tokenIds, so .length() returns the number of tokenIds
-        return _tokenOwners.length();
-    }
+    // function totalSupply() public view virtual override returns (uint256) {
+    //     // _tokenOwners are indexed by tokenIds, so .length() returns the number of tokenIds
+    //     return _tokenOwners.length();
+    // }
 
     /**
      * @dev See {IERC721Enumerable-tokenByIndex}.
      */
-    function tokenByIndex(uint256 index) public view virtual override returns (uint256) {
-        (uint256 tokenId, ) = _tokenOwners.at(index);
-        return tokenId;
-    }
+    // function tokenByIndex(uint256 index) public view virtual override returns (uint256) {
+    //     (uint256 tokenId, ) = _tokenOwners.at(index);
+    //     return tokenId;
+    // }
 
     /**
      * @dev See {IERC721-approve}.
@@ -380,7 +381,9 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable 
      * automatically added as a prefix to the value returned in {tokenURI},
      * or to the token ID if {tokenURI} is empty.
      */
-    function _setBaseURI(string memory baseURI_) internal virtual {
+    function _setBaseURI(string memory baseURI_) internal virtual { 
+    // Internal is access specifier, can only be used by functions on this smart contract
+    // or subsequently derived ones
         _baseURI = baseURI_;
     }
 
