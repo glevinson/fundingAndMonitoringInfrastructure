@@ -442,7 +442,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"NFTFractionalization/contracts/src/OpenZeppelin/Tokens/InfrastructureNFT.sol": "InfrastructureNFT"
+			"contracts/src/OpenZeppelin/Tokens/InfrastructureNFT.sol": "InfrastructureNFT"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -456,7 +456,7 @@
 		"remappings": []
 	},
 	"sources": {
-		"NFTFractionalization/contracts/src/OpenZeppelin/Tokens/ERC-721/ERC721.sol": {
+		"contracts/src/OpenZeppelin/Tokens/ERC-721/ERC721.sol": {
 			"keccak256": "0xfe7a2b4319ccdac00d188a406e9764244f70c092e3d74144df1ffc57b25e66f4",
 			"license": "MIT",
 			"urls": [
@@ -464,7 +464,7 @@
 				"dweb:/ipfs/QmZDzrf8LzoggmJGuBEb3suuStpko6Nx8PVVnRmEf6RoyH"
 			]
 		},
-		"NFTFractionalization/contracts/src/OpenZeppelin/Tokens/ERC-721/IERC721.sol": {
+		"contracts/src/OpenZeppelin/Tokens/ERC-721/IERC721.sol": {
 			"keccak256": "0xbfb31995d85398c29c559d580307b97bd4c3532f94097e72f03a40cbf6535dce",
 			"license": "MIT",
 			"urls": [
@@ -472,7 +472,7 @@
 				"dweb:/ipfs/Qmdh33savNKyooLtyGoir3STTrMwH7e5QPPk2UgmxEN1uJ"
 			]
 		},
-		"NFTFractionalization/contracts/src/OpenZeppelin/Tokens/ERC-721/IERC721Metadata.sol": {
+		"contracts/src/OpenZeppelin/Tokens/ERC-721/IERC721Metadata.sol": {
 			"keccak256": "0x2e5354718ee156a8c749b53607b84f1ef75ba1c350307add2236087c86ab8694",
 			"license": "MIT",
 			"urls": [
@@ -480,7 +480,7 @@
 				"dweb:/ipfs/QmSeCNnbRUdhE1JKTHVA6EH6i8JeCV9gGtqWaZZqfHFiQ3"
 			]
 		},
-		"NFTFractionalization/contracts/src/OpenZeppelin/Tokens/ERC-721/IERC721Receiver.sol": {
+		"contracts/src/OpenZeppelin/Tokens/ERC-721/IERC721Receiver.sol": {
 			"keccak256": "0xdaddccda3306e5eea3fb3021c62401fdf1cde5a5fd4249a8c537e79e0f9d61ed",
 			"license": "MIT",
 			"urls": [
@@ -488,7 +488,7 @@
 				"dweb:/ipfs/QmfCDAPopvyftgfWhhfUh2cXXpYbbXJeYJy2twadLUvDY1"
 			]
 		},
-		"NFTFractionalization/contracts/src/OpenZeppelin/Tokens/InfrastructureNFT.sol": {
+		"contracts/src/OpenZeppelin/Tokens/InfrastructureNFT.sol": {
 			"keccak256": "0x399890b0358a71d66b3af867b8a9069c6d66e23f45084a3f0198d7f9f8fbc8a3",
 			"license": "MIT",
 			"urls": [
@@ -496,7 +496,7 @@
 				"dweb:/ipfs/QmUwRQkf1FqGuU5uaJWpJW91shfJqnor2N3GFgGU3Yg1fY"
 			]
 		},
-		"NFTFractionalization/contracts/src/OpenZeppelin/introspection/ERC165.sol": {
+		"contracts/src/OpenZeppelin/introspection/ERC165.sol": {
 			"keccak256": "0x2132c691b61047a2f7595eca3365cb93b6638d1769a3df801074ced615d7f320",
 			"license": "MIT",
 			"urls": [
@@ -504,7 +504,7 @@
 				"dweb:/ipfs/QmYKvsfgwqgx3XXPwaUcUJGAVz1khJd8A2fVkzwJ8cXVjM"
 			]
 		},
-		"NFTFractionalization/contracts/src/OpenZeppelin/introspection/IERC165.sol": {
+		"contracts/src/OpenZeppelin/introspection/IERC165.sol": {
 			"keccak256": "0x97dcc23a8f69a83f45a84974dd8dca221a4aefdf7418476f092571095c43e3c0",
 			"license": "MIT",
 			"urls": [
@@ -512,7 +512,7 @@
 				"dweb:/ipfs/QmPFBgVxgtA6zhU6faUC7mxnqdGj4DazycHXxeRpRBouuM"
 			]
 		},
-		"NFTFractionalization/contracts/src/OpenZeppelin/utils/Address.sol": {
+		"contracts/src/OpenZeppelin/utils/Address.sol": {
 			"keccak256": "0xdfc9b2c5408922e970a806b27e1bc9afbbf3fafffbc30ac38b53bfa64cc8fbed",
 			"license": "MIT",
 			"urls": [
@@ -520,7 +520,7 @@
 				"dweb:/ipfs/Qme2QNZS5xnxuinxZpTP2xcxiWrzNf91b6MC5Etqe6niUu"
 			]
 		},
-		"NFTFractionalization/contracts/src/OpenZeppelin/utils/Context.sol": {
+		"contracts/src/OpenZeppelin/utils/Context.sol": {
 			"keccak256": "0xc9ed8267d44ee7e41f939f457f7fc6d2638a31a10b54f4a20927d394470290fa",
 			"license": "MIT",
 			"urls": [
@@ -528,7 +528,7 @@
 				"dweb:/ipfs/QmTHRZQ7i8XPTHUBgGh8V6j5wfc7kR7ZiNkWTAkhEQjueT"
 			]
 		},
-		"NFTFractionalization/contracts/src/OpenZeppelin/utils/EnumerableMap.sol": {
+		"contracts/src/OpenZeppelin/utils/EnumerableMap.sol": {
 			"keccak256": "0x920ef4f860d6d51fef4a2a6402d8b60dcab192aae441d8618de0a55192176f8a",
 			"license": "MIT",
 			"urls": [
@@ -536,7 +536,7 @@
 				"dweb:/ipfs/QmZmDTNRtTfKFSMec277K5M9J1R3VwePfMTeThY8RhNLeL"
 			]
 		},
-		"NFTFractionalization/contracts/src/OpenZeppelin/utils/EnumerableSet.sol": {
+		"contracts/src/OpenZeppelin/utils/EnumerableSet.sol": {
 			"keccak256": "0x2bf2d4a58cd28d9b413285fc9c4816fc82383825c76ccfd76ea154a98fbe7c67",
 			"license": "MIT",
 			"urls": [
@@ -544,7 +544,7 @@
 				"dweb:/ipfs/QmbTz9p14XyqT17H2jZq8mVEkFMusUK6TUys3nMS6qqrXQ"
 			]
 		},
-		"NFTFractionalization/contracts/src/OpenZeppelin/utils/Strings.sol": {
+		"contracts/src/OpenZeppelin/utils/Strings.sol": {
 			"keccak256": "0x1b96d3fa4eae589f4705ebb99bc466fbbe61e9ff6e0c6adbf8a6ed88e57bbc14",
 			"license": "MIT",
 			"urls": [
