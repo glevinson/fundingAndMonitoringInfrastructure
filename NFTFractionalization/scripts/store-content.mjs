@@ -1,3 +1,5 @@
+// Referenced from: https://github.com/robertipk/NFT_Metadata_IPFS/blob/master/scripts/store-content.mjs
+//**************************************************************************************************** */
 dotenv.config()
 import { NFTStorage, File } from "nft.storage"
 import fs from 'fs'

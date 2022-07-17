@@ -1,0 +1,24 @@
+{
+    "description": "This NFT corresponds to a water tank built by the Spring DAO!", 
+    "image": "ipfs://QmbQR8FsMtCNDLCDafkN62zSgXWsEN8ZLn8juETnbbtSP9", 
+    "name": "Water Dispenser"
+    
+    , "attributes": [
+        {
+            "trait_type": "Country", 
+            "value": "The Gambia"
+      },  
+      {
+        "trait_type": "Village", 
+        "value": "Wellingaraba"
+      },  
+      {
+            "trait_type": "Infrastructure Type", 
+            "value": "Water Tank"
+      },
+      {
+            "trait_type": "Number", 
+            "value": "1"
+      }
+]
+  }
