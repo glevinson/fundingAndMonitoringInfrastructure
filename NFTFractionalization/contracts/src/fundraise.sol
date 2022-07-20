@@ -23,16 +23,25 @@ contract fundraise {
     
     function fund() public payable {
         uint256 minimumUSD = 50 * 10 ** 18;
-        require(getConversionRate(msg.value) >= minimumUSD, "You need to spend more ETH!");
+        // require(getConversionRate(msg.value) >= minimumUSD, "You need to spend more ETH!");
         addressToAmountFunded[msg.sender] += msg.value;
         funders.push(msg.sender);
     }
     
-    function getConversionRate(uint256 ethAmount) public view returns (uint256) {
-        uint256 ethPrice = getPrice();
-        uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1000000000000000000;
-        return ethAmountInUsd;
-    }
+    // function getConversionRate(uint256 ethAmount) public view returns (uint256) {
+    //     uint256 ethPrice = getPrice();
+    //     uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1000000000000000000;
+    //     return ethAmountInUsd;
+    // }
+
+// Not sure if below bit necessary?
+/////////////////////////////////////////////////////////////////////////////////////////////////
+    // Function to receive Ether. msg.data must be empty
+    receive() external payable {}
+
+    // Fallback function is called when msg.data is not empty
+    fallback() external payable {}
+/////////////////////////////////////////////////////////////////////////////////////////////////
     
     // function getPrice() public view returns(uint256) {
     //     AggregatorV3Interface priceFeed = AggregatorV3Interface(0x8A753747A1Fa494EC906cE90E9f37563A8AF630e);
@@ -48,17 +57,17 @@ contract fundraise {
         /**
      * Returns the latest price
      */
-    function getPrice() public view returns (uint256) {
-        (
-            uint80 roundID,
-            int256 price,
-            uint startedAt,
-            uint timeStamp,
-            uint80 answeredInRound
-        ) = ethFeed.latestRoundData();
-        return uint256(price)
-        ;
-    }
+    // function getPrice() public view returns (uint256) {
+    //     (
+    //         uint80 roundID,
+    //         int256 price,
+    //         uint startedAt,
+    //         uint timeStamp,
+    //         uint80 answeredInRound
+    //     ) = ethFeed.latestRoundData();
+    //     return uint256(price)
+    //     ;
+    // }
 
     modifier onlyOwner() {
         require(msg.sender == owner);
@@ -75,9 +84,9 @@ contract fundraise {
         funders = new address[](0);
     }   
 
-    // function balance() public view returns (uint){
-    //     return address(this).balance;
-    // }
+    function balance() public view returns (uint){
+        return address(this).balance;
+    }
 
 //**************************************************************************************************** */
     

@@ -11,6 +11,10 @@
 				"type": "constructor"
 			},
 			{
+				"stateMutability": "payable",
+				"type": "fallback"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -19,6 +23,19 @@
 					}
 				],
 				"name": "addressToAmountFunded",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "balance",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -56,38 +73,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "ethAmount",
-						"type": "uint256"
-					}
-				],
-				"name": "getConversionRate",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "getPrice",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [],
 				"name": "owner",
 				"outputs": [
@@ -106,6 +91,10 @@
 				"outputs": [],
 				"stateMutability": "payable",
 				"type": "function"
+			},
+			{
+				"stateMutability": "payable",
+				"type": "receive"
 			}
 		],
 		"devdoc": {
@@ -115,11 +104,7 @@
 		},
 		"userdoc": {
 			"kind": "user",
-			"methods": {
-				"getPrice()": {
-					"notice": "Returns the latest price"
-				}
-			},
+			"methods": {},
 			"version": 1
 		}
 	},
@@ -148,11 +133,11 @@
 			]
 		},
 		"NFTFractionalization/contracts/src/fundraise.sol": {
-			"keccak256": "0x85a823459dcd581a31724b5b8904f83f79ff438aa7955b7ff429f0fbfa89bac0",
+			"keccak256": "0x81aea5dad252ed4967ff162efd2ebceb3e521a1fd09dd10062f324cc614b61a8",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://190784e51cf93493dd9bd0543fe13f4958d5ac611eb510a31f066c18ba7bbc4e",
-				"dweb:/ipfs/QmVbq4m5K192z7Lpw3Mcgo8nrpm74EeKKk1VRYZqhoJoZo"
+				"bzz-raw://d15a843b52c110dde0351ccda58bf40c478208006e594d0252b980e346d41990",
+				"dweb:/ipfs/QmbjsH1zdYrRa9RHst5eSMA7KZPusDGagnSGnyXYkpLa1H"
 			]
 		}
 	},
