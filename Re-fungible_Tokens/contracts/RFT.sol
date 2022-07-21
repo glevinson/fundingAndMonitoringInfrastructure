@@ -29,6 +29,7 @@ contract RFT is ERC20 {
 
   // Mappings to keep track of investors:
   mapping(address => uint256) public addressToAmountFunded; // So can process refunds
+  address[] public addresses;
 
   constructor(
     string memory _name,
@@ -73,37 +74,69 @@ contract RFT is ERC20 {
 
     // Adding callee and amount of dai sent to map
     addressToAmountFunded[msg.sender] += daiAmount;
+    addresses.push(msg.sender);
 
-    _mint(msg.sender, shareAmount);
+    if ( totalSupply() == ShareSupply ){
+      TargetRaised = true;
+      disburseTokens();
+      withdraw();
+    }
 
-    // if ( totalSupply() == ShareSupply ){
-    //   TargetRaised = true;
-    //   disburseTokens();
-    // }
+  }
 
+  // function refund() external{
+  //   // All keys are initiallised set to 0
+  //   require( addressToAmountFunded[msg.sender] > 0, 'No balance to refund' );
+    
+  //   uint amount = addressToAmountFunded[msg.sender];
+  //   addressToAmountFunded[msg.sender] = 0;
+  //   dai.transfer(msg.sender, amount);
+  // }
+
+  function refund( uint amount ) external{
+    // All keys are initiallised set to 0
+    require( addressToAmountFunded[msg.sender] > 0, 'No balance to refund' );
+    require( amount <= addressToAmountFunded[msg.sender], 'Amount greater than balance' );
+    require( ( amount % SharePrice ) == 0, 'Can only refund whole shares (multiples of the share price)' );
+    
+    addressToAmountFunded[msg.sender] -= amount;
+    dai.transfer(msg.sender, amount);
   }
 
   // This function should disburse Tokens according to donations...
   function disburseTokens() private{
-
+    // Iterate through the addresses
+    for (uint i = 0; i < addresses.length; i++){
+      // The amount of tokens each donor is entitled to is the amount they have invested / the cost of each share (token)
+      uint amountTokens = ( addressToAmountFunded[ addresses[i] ] ) / SharePrice;
+      // Now set amount funded to 0 to prevent users recieving tokens and calling refund after
+      addressToAmountFunded[addresses[i]] = 0;
+      _mint( addresses[i] , amountTokens);
+    }
   }    // This minting should be saved for later
  
 
-
-  function withdrawIcoProfits() external {
+  // NB: May want to change private access modifier to internal, just important that no one can call this; 
+  // i.e. only contract
+  function withdraw() private {
     require(msg.sender == admin, 'only admin');
+
+    uint daiBalance = dai.balanceOf(address(this));
+
+    assert( daiBalance == Target );
+
+    dai.transfer(admin, daiBalance);
 
     // DONT THINK NEED THIS BIT:
     // require(block.timestamp > icoEnd, 'ICO not finished yet'); 
     // ^^
 
-    uint daiBalance = dai.balanceOf(address(this));
-    if(daiBalance > 0) {
-      dai.transfer(admin, daiBalance);
-    }
-    uint unsoldShareBalance = ShareSupply - totalSupply();
-    if(unsoldShareBalance > 0) {
-      _mint(admin, unsoldShareBalance);
-    }
+    // if(daiBalance > 0) {
+    //   dai.transfer(admin, daiBalance);
+    // }
+    // uint unsoldShareBalance = ShareSupply - totalSupply();
+    // if(unsoldShareBalance > 0) {
+    //   _mint(admin, unsoldShareBalance);
+    // }
   }
 }
