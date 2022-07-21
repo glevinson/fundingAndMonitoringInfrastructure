@@ -142,10 +142,12 @@ contract RFT is ERC20 {
       // The amount of tokens each donor is entitled to is the amount they have invested / the cost of each share (token)
       uint amountTokens = ( addressToAmountFunded[ addresses[i] ] ) / SharePrice;
 
-      if ( amountTokens == ShareSupply ){
-        nft.transferFrom(address(this), addresses[i] , nftId);
-        return;
-      }
+      // IF USER BUYS ALL TOKENS, THEY SHOULD JUST GET THE NFT!
+      // if ( amountTokens == ShareSupply ){
+      //   nft.transferFrom(address(this), addresses[i] , nftId);
+      //   return;
+      // }
+
       // Now set amount funded to 0 to prevent users recieving tokens and calling refund after
       addressToAmountFunded[addresses[i]] = 0;
       _mint( addresses[i] , amountTokens);
