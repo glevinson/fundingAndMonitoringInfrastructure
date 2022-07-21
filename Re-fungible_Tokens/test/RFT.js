@@ -34,7 +34,7 @@ contract('RFT', async addresses => {
       dai.address
     );
     await nft.approve(rft.address, 1);
-    await rft.startIco();
+    // await rft.startIco();
 
     //Invest in ICO
     await dai.approve(rft.address, DAI_AMOUNT, {from: buyer1});  
@@ -47,7 +47,7 @@ contract('RFT', async addresses => {
     await rft.buyShare(SHARE_AMOUNT, {from: buyer4});
 
     //End ICO
-    await time.increase(7 * 86400 + 1); 
+    // await time.increase(7 * 86400 + 1); 
     await rft.withdrawIcoProfits();
 
     //Check balances

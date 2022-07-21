@@ -11,7 +11,11 @@ contract RFT is ERC20 {
   //ICO & shares
   uint public SharePrice;
   uint public ShareSupply;
+
+  // DONT THINK NEED THIS BIT:
   uint public icoEnd;
+  // ^^
+
   uint public Target;
 
   //NFT & DAI
@@ -48,26 +52,51 @@ contract RFT is ERC20 {
   }
 
   // DONT THINK NEED A START OR A END TO NECCESSARILY BE SPECIFIED
-  function startIco() external {
-    require(msg.sender == admin, 'only admin');
-    nft.transferFrom(msg.sender, address(this), nftId);
-    icoEnd = block.timestamp + 7 * 86400;
-  }
+  // function startIco() external {
+  //   require(msg.sender == admin, 'only admin');
+  //   nft.transferFrom(msg.sender, address(this), nftId);
+  //   icoEnd = block.timestamp + 7 * 86400;
+  // }
 
   function buyShare(uint shareAmount) external {
-    require(icoEnd > 0, 'ICO not started yet');
-    require(block.timestamp <= icoEnd, 'ICO is finished');
+
+    // DONT THINK NEED THIS BIT:
+    // require(icoEnd > 0, 'ICO not started yet');
+    // require(block.timestamp <= icoEnd, 'ICO is finished');
+    // ^^
+
     require(totalSupply() + shareAmount <= ShareSupply, 'not enough shares left');
+    require( !TargetRaised , 'all shares sold');
+
     uint daiAmount = shareAmount * SharePrice;
     dai.transferFrom(msg.sender, address(this), daiAmount);
 
-    // This minting should be saved for later
+    // Adding callee and amount of dai sent to map
+    addressToAmountFunded[msg.sender] += daiAmount;
+
     _mint(msg.sender, shareAmount);
+
+    // if ( totalSupply() == ShareSupply ){
+    //   TargetRaised = true;
+    //   disburseTokens();
+    // }
+
   }
+
+  // This function should disburse Tokens according to donations...
+  function disburseTokens() private{
+
+  }    // This minting should be saved for later
+ 
+
 
   function withdrawIcoProfits() external {
     require(msg.sender == admin, 'only admin');
-    require(block.timestamp > icoEnd, 'ICO not finished yet'); 
+
+    // DONT THINK NEED THIS BIT:
+    // require(block.timestamp > icoEnd, 'ICO not finished yet'); 
+    // ^^
+
     uint daiBalance = dai.balanceOf(address(this));
     if(daiBalance > 0) {
       dai.transfer(admin, daiBalance);
