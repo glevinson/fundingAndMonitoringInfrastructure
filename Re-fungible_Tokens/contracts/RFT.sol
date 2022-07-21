@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8;
 
-// Majority of this lifted from: https://github.com/jklepatch/eattheblocks/blob/b9318560a7358847193ef5959c38c967999c7a71/screencast/241-re-fungible-tokens/contracts/RFT.sol
+// A lot of this referenced from: https://github.com/jklepatch/eattheblocks/blob/b9318560a7358847193ef5959c38c967999c7a71/screencast/241-re-fungible-tokens/contracts/RFT.sol
 //*****************************************************************************************************************
 import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
@@ -59,6 +59,12 @@ contract RFT is ERC20 {
   //   icoEnd = block.timestamp + 7 * 86400;
   // }
 
+  function startRaise() external {
+    require(msg.sender == admin, 'only admin');
+    nft.transferFrom(msg.sender, address(this), nftId);
+    // icoEnd = block.timestamp + 7 * 86400;
+  }
+
   function buyShare(uint shareAmount) external {
 
     // DONT THINK NEED THIS BIT:
@@ -93,29 +99,6 @@ contract RFT is ERC20 {
   //   dai.transfer(msg.sender, amount);
   // }
 
-  function refund( uint amount ) external{
-    // All keys are initiallised set to 0
-    require( addressToAmountFunded[msg.sender] > 0, 'No balance to refund' );
-    require( amount <= addressToAmountFunded[msg.sender], 'Amount greater than balance' );
-    require( ( amount % SharePrice ) == 0, 'Can only refund whole shares (multiples of the share price)' );
-    
-    addressToAmountFunded[msg.sender] -= amount;
-    dai.transfer(msg.sender, amount);
-  }
-
-  // This function should disburse Tokens according to donations...
-  function disburseTokens() private{
-    // Iterate through the addresses
-    for (uint i = 0; i < addresses.length; i++){
-      // The amount of tokens each donor is entitled to is the amount they have invested / the cost of each share (token)
-      uint amountTokens = ( addressToAmountFunded[ addresses[i] ] ) / SharePrice;
-      // Now set amount funded to 0 to prevent users recieving tokens and calling refund after
-      addressToAmountFunded[addresses[i]] = 0;
-      _mint( addresses[i] , amountTokens);
-    }
-  }    // This minting should be saved for later
- 
-
   // NB: May want to change private access modifier to internal, just important that no one can call this; 
   // i.e. only contract
   function withdraw() private {
@@ -139,4 +122,33 @@ contract RFT is ERC20 {
     //   _mint(admin, unsoldShareBalance);
     // }
   }
+
+//************************************************************************************************************************ */
+
+    function refund( uint amount ) external{
+    // All keys are initiallised set to 0
+    require( addressToAmountFunded[msg.sender] > 0, 'No balance to refund' );
+    require( amount <= addressToAmountFunded[msg.sender], 'Amount greater than balance' );
+    require( ( amount % SharePrice ) == 0, 'Can only refund whole shares (multiples of the share price)' );
+    
+    addressToAmountFunded[msg.sender] -= amount;
+    dai.transfer(msg.sender, amount);
+  }
+
+  // This function should disburse Tokens according to donations...
+  function disburseTokens() private{
+    // Iterate through the addresses
+    for (uint i = 0; i < addresses.length; i++){
+      // The amount of tokens each donor is entitled to is the amount they have invested / the cost of each share (token)
+      uint amountTokens = ( addressToAmountFunded[ addresses[i] ] ) / SharePrice;
+
+      if ( amountTokens == ShareSupply ){
+        nft.transferFrom(address(this), addresses[i] , nftId);
+        return;
+      }
+      // Now set amount funded to 0 to prevent users recieving tokens and calling refund after
+      addressToAmountFunded[addresses[i]] = 0;
+      _mint( addresses[i] , amountTokens);
+    }
+  }    // This minting should be saved for later
 }
