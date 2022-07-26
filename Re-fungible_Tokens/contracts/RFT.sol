@@ -3,6 +3,8 @@ pragma solidity 0.8.7;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 contract FundRaising is ERC20 {
     IERC20 public constant DAI = IERC20(0x6B175474E89094C44Da98b954EedeAC495271d0F);
@@ -28,4 +30,18 @@ contract FundRaising is ERC20 {
         DAI.transfer(msg.sender, value);
         _burn(msg.sender, value);
     }
+}
+
+
+contract FundRaisingMarketPlace is ERC721Enumerable {
+    string public baseURI; 
+
+    constructor(string memory springDaoMetadataURI) ERC721("Spring Dao Project Marketplace", "SpringDAO") {
+        baseURI = springDaoMetadataURI;
+    }
+
+    function _baseURI() internal view override returns (string memory) {
+        return baseURI;
+    }
+
 }
