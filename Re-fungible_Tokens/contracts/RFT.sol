@@ -45,6 +45,12 @@ contract FundRaisingMarketPlace is ERC721Enumerable {
     }
 
     function newProject(uint256 targetAmount, string calldata projectName, string calldata projectSymbol) external {
-        _safeMint(msg.sender, uint256(uint160(address(new FundRaising(targetAmount, projectName, projectSymbol)))));
+        address newProjectAddress = address(new FundRaising(targetAmount, projectName, projectSymbol));
+        _safeMint(msg.sender, uint256(uint160(newProjectAddress)));
     }
+
+    function findProjectContract( uint256 tokenID ) public pure returns ( address ){
+        return address(uint160(tokenID));
+    }
+
 }
