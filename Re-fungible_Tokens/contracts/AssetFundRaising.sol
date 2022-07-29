@@ -6,12 +6,14 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 contract AssetFundRaising is ERC20 {
-    IERC20 public constant DAI = IERC20(0x6B175474E89094C44Da98b954EedeAC495271d0F);
+    // IERC20 public constant DAI = IERC20(0x6B175474E89094C44Da98b954EedeAC495271d0F); <= Actual DAI address
+    IERC20 public DAI;
     IERC721 public immutable NFT; // The NFT that creates the FundRaisingCampaigns
     uint256 public targetAmount; // Target amount for the fundraising
 
-    constructor(uint256 amount, string memory name, string memory symbol) ERC20(name, symbol) {
+    constructor(uint256 amount, string memory name, string memory symbol, address daiAddress) ERC20(name, symbol) {
         targetAmount = amount;
+        DAI = IERC20(daiAddress);
         NFT = IERC721(msg.sender);
     }
 

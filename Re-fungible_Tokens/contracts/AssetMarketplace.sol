@@ -17,8 +17,8 @@ contract AssetMarketPlace is ERC721Enumerable {
         return baseURI;
     }
 
-    function addAsset(uint256 targetAmount, string calldata assetName, string calldata assetSymbol) external {
-        address newAssetAddress = address(new AssetFundRaising(targetAmount, assetName, assetSymbol));
+    function addAsset(uint256 targetAmount, string calldata assetName, string calldata assetSymbol, address daiAddress) external {
+        address newAssetAddress = address(new AssetFundRaising(targetAmount, assetName, assetSymbol, daiAddress));
         _safeMint(msg.sender, uint256(uint160(newAssetAddress))); // think should transfer ownership to the Assetfundraising contract
     }
 

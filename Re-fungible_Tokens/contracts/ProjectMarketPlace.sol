@@ -8,7 +8,8 @@ import "./AssetMarketPlace.sol";
 contract ProjectMarketPlace is ERC721Enumerable {
     string public baseURI; 
 
-    constructor(string memory projectMetadataURI) ERC721("Spring Dao Project Marketplace", "SpringDAO") {
+    // constructor(string memory projectMetadataURI) ERC721("Spring Dao Project Marketplace", "SpringDAO") {
+    constructor(string memory projectMetadataURI) ERC721("Spring Dao Project Marketplace Test", "SpringDAOtest") {
         baseURI = projectMetadataURI;
     }
 
