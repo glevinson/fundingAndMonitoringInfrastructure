@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "truffle": "^5.5.24"
+  },
+  "name": "projectmarketplace",
+  "version": "1.0.0",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "mocha": "^9.2.2",
+    "openzeppelin-solidity": "^4.6.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
