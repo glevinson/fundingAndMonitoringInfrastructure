@@ -35,6 +35,15 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
         assert(fundRaising.address !== '');
     });
 
+    async function investAssertion(investor, amountInvest, amountApproved) => {
+        await _testDAI.approve(fundRaising.address, amountApproved, {from: investor});
+        await fundRaising.invest(amountInvest, {from: investor});
+        let rftBalanceInvestor = await fundRaising.balanceOf(investor1);
+        let daiBalanceInvestor = await _testDAI.balanceOf(investor1);
+        assert( parseInt(rftBalanceInvestor) == 10, "Investor 1 Has Incorrect RFT Balance");
+        assert( parseInt(daiBalanceInvestor) == 90, "Investor 1 Has Incorrect DAI Balance");        
+    };
+
     it.only('Should allow investment if there are enough shares & contract not paused', async () => {
         const _testDAI = await testDAI.new();
         const fundRaising = await FundRaising.new(web3.utils.toWei('10000'), "Test Project", "testP", admin, _testDAI.address); // contract instance is a variable that points at a deployed contract
@@ -44,27 +53,25 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
             _testDAI.mint(investor2, 100 ),
             _testDAI.mint(investor3, 100 )
         ]);
-        console.log("Balance of DAI of Investor 1 BEFORE investment: " + await _testDAI.balanceOf(investor1));
-        console.log("Balance of DAI of Fundraising contract BEFORE investment: " + await _testDAI.balanceOf(fundRaising.address));
+        let rftSupply = await fundRaising.totalSupply();
+        let daiBalanceContract = await _testDAI.balanceOf(fundRaising.address);
+        assert(rftSupply == 0);
+        assert(daiBalanceContract == 0);
+
         await _testDAI.approve(fundRaising.address, 100, {from: investor1});
         await fundRaising.invest(10, {from: investor1});
-        console.log("Balance of DAI of Investor 1 AFTER investment: " + await _testDAI.balanceOf(investor1));
-        console.log("Balance of DAI of Fundraising contract AFTER investment: " + await _testDAI.balanceOf(fundRaising.address));
-        
-        let balanceInvestor1 = await fundRaising.balanceOf(investor1); // The number of RFT investor 1 has
-        let mintedTokens = await fundRaising.totalSupply(); // The total number of RFTs in circulation
-        let contractsDAI_balance = await _testDAI.balanceOf(fundRaising.address); // The DAI balance of FundRaising contract
-        let investor1_DAI_balance = await _testDAI.balanceOf(investor1); // The DAI balance of investor 1
-      
-        assert( parseInt(balanceInvestor1) == 10, "First investor hasn't recieved tokens");
-        assert( parseInt(mintedTokens) == 10, "RFT tokens not created");
-        assert( parseInt(contractsDAI_balance) == 10, "First investment not recieved by contract");
-        assert( parseInt(investor1_DAI_balance) == 90, "Investor 1 not billed correctly");
+        let rftBalanceInvestor1 = await fundRaising.balanceOf(investor1);
+        let daiBalanceInvestor1 = await _testDAI.balanceOf(investor1);
+        assert( parseInt(rftBalanceInvestor1) == 10, "Investor 1 Has Incorrect RFT Balance");
+        assert( parseInt(daiBalanceInvestor1) == 90, "Investor 1 Has Incorrect DAI Balance");        
 
-        // console.log("x is: " + x + " & type: " + typeof(x));
-        // console.log("90 is: " + 10 + " & type: " + typeof(10));
-        // console.log("x (parseInt) is: " + parseInt(x) + " & type: " + typeof(parseInt(x)));
-        // console.log("My manipulated x is: " + x.toString() + " & type: " + typeof(x));
+        rftSupply = await fundRaising.totalSupply();
+        daiBalanceContract = await _testDAI.balanceOf(fundRaising.address);
+        assert( parseInt(rftSupply) == 10, "Incorrect supply of RFT");
+        assert( parseInt(daiBalanceContract) == 10, "Contract Has Incorrect DAI Balance");
+    
+
+
 
 
         // let z = await _testDAI.balanceOf(fundRaising.address);
