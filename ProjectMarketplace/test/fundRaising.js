@@ -35,72 +35,99 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
         assert(fundRaising.address !== '');
     });
 
-    async function investAssertion(investor, amountInvest, amountApproved) => {
-        await _testDAI.approve(fundRaising.address, amountApproved, {from: investor});
-        await fundRaising.invest(amountInvest, {from: investor});
-        let rftBalanceInvestor = await fundRaising.balanceOf(investor1);
-        let daiBalanceInvestor = await _testDAI.balanceOf(investor1);
-        assert( parseInt(rftBalanceInvestor) == 10, "Investor 1 Has Incorrect RFT Balance");
-        assert( parseInt(daiBalanceInvestor) == 90, "Investor 1 Has Incorrect DAI Balance");        
-    };
-
     it.only('Should allow investment if there are enough shares & contract not paused', async () => {
         const _testDAI = await testDAI.new();
         const fundRaising = await FundRaising.new(web3.utils.toWei('10000'), "Test Project", "testP", admin, _testDAI.address); // contract instance is a variable that points at a deployed contract
+        const daiMintAmount = 100;
+
         await Promise.all([
-            _testDAI.mint(admin, 100 ),
-            _testDAI.mint(investor1, 100 ),
-            _testDAI.mint(investor2, 100 ),
-            _testDAI.mint(investor3, 100 )
+            _testDAI.mint(admin, daiMintAmount ),
+            _testDAI.mint(investor1, daiMintAmount ),
+            _testDAI.mint(investor2, daiMintAmount ),
+            _testDAI.mint(investor3, daiMintAmount )
         ]);
         let rftSupply = await fundRaising.totalSupply();
         let daiBalanceContract = await _testDAI.balanceOf(fundRaising.address);
         assert(rftSupply == 0);
         assert(daiBalanceContract == 0);
 
-        await _testDAI.approve(fundRaising.address, 100, {from: investor1});
-        await fundRaising.invest(10, {from: investor1});
-        let rftBalanceInvestor1 = await fundRaising.balanceOf(investor1);
-        let daiBalanceInvestor1 = await _testDAI.balanceOf(investor1);
-        assert( parseInt(rftBalanceInvestor1) == 10, "Investor 1 Has Incorrect RFT Balance");
-        assert( parseInt(daiBalanceInvestor1) == 90, "Investor 1 Has Incorrect DAI Balance");        
+        // Investor 1: Invests 10 Wei of DAI
+        // ************************************************************************************
+        // await _testDAI.approve(fundRaising.address, 100, {from: investor1});
+        // await fundRaising.invest(10, {from: investor1});
+        // let rftBalanceInvestor1 = await fundRaising.balanceOf(investor1);
+        // let daiBalanceInvestor1 = await _testDAI.balanceOf(investor1);
+        // assert( parseInt(rftBalanceInvestor1) == 10, "Investor 1 Has Incorrect RFT Balance");
+        // assert( parseInt(daiBalanceInvestor1) == 90, "Investor 1 Has Incorrect DAI Balance");  
+        
+        console.log("Total supply of RFT 1: " + fundRaising.totalSupply());
+        await investAssertion( investor1, 10, 100 );
+        console.log("Total supply of RFT 3: " + fundRaising.totalSupply());
 
         rftSupply = await fundRaising.totalSupply();
         daiBalanceContract = await _testDAI.balanceOf(fundRaising.address);
-        assert( parseInt(rftSupply) == 10, "Incorrect supply of RFT");
-        assert( parseInt(daiBalanceContract) == 10, "Contract Has Incorrect DAI Balance");
+        assert( rftSupply == 10, "Incorrect supply of RFT");
+        assert( daiBalanceContract == 10, "Contract Has Incorrect DAI Balance");
+        // ************************************************************************************
     
+        // Investor 2: Invests 20 Wei of DAI
+        // ************************************************************************************
+        await _testDAI.approve(fundRaising.address, 100, {from: investor2});
+        await fundRaising.invest(20, {from: investor2});
+        let rftBalanceInvestor2 = await fundRaising.balanceOf(investor2);
+        let daiBalanceInvestor2 = await _testDAI.balanceOf(investor2);
+        assert( parseInt(rftBalanceInvestor2) == 20, "Investor 2 Has Incorrect RFT Balance");
+        assert( parseInt(daiBalanceInvestor2) == 80, "Investor 2 Has Incorrect DAI Balance");  
+        
 
+        rftSupply = await fundRaising.totalSupply();
+        daiBalanceContract = await _testDAI.balanceOf(fundRaising.address);
+        assert( rftSupply == 30, "Incorrect supply of RFT");
+        assert( daiBalanceContract == 30, "Contract Has Incorrect DAI Balance");
 
+        // Investor 3: Invests 30 Wei of DAI
+        // ************************************************************************************
+        await _testDAI.approve(fundRaising.address, 100, {from: investor3});
+        await fundRaising.invest(30, {from: investor3});
+        let rftBalanceInvestor3 = await fundRaising.balanceOf(investor3);
+        let daiBalanceInvestor3 = await _testDAI.balanceOf(investor3);
+        assert( parseInt(rftBalanceInvestor3) == 30, "Investor 3 Has Incorrect RFT Balance");
+        assert( parseInt(daiBalanceInvestor3) == 70, "Investor 3 Has Incorrect DAI Balance");  
+        
 
+        rftSupply = await fundRaising.totalSupply();
+        daiBalanceContract = await _testDAI.balanceOf(fundRaising.address);
+        assert( rftSupply == 60, "Incorrect supply of RFT");
+        assert( daiBalanceContract == 60, "Contract Has Incorrect DAI Balance");
 
-        // let z = await _testDAI.balanceOf(fundRaising.address);
+        // Admin: Invests 40 Wei of DAI
+        // ************************************************************************************
+        await _testDAI.approve(fundRaising.address, 100, {from: admin});
+        await fundRaising.invest(40, {from: admin});
+        let rftBalanceAdmin = await fundRaising.balanceOf(admin);
+        let daiBalanceAdmin = await _testDAI.balanceOf(admin);
+        assert( parseInt(rftBalanceAdmin) == 40, "Admin Has Incorrect RFT Balance");
+        assert( parseInt(daiBalanceAdmin) == 60, "Admin Has Incorrect DAI Balance");  
+        
 
-        // assert( parseInt(balanceContract) == 10, "First investment not recieved");
-        // assert( parseInt(balanceInvestor1) == 10, "First investor hasn't recieved tokens");
+        rftSupply = await fundRaising.totalSupply();
+        daiBalanceContract = await _testDAI.balanceOf(fundRaising.address);
+        assert( rftSupply == 100, "Incorrect supply of RFT");
+        assert( daiBalanceContract == 100, "Contract Has Incorrect DAI Balance");
 
-        // (await fundRaising.balanceOf(investor1)).should.equal(90); 
-        // assert( Object.values((await parseInt(fundRaising.balanceOf(investor1)))) == 90, "First investor hasn't recieved tokens");
-        // assert( (await _testDAI.balanceOf(fundRaising.address))  == 10, "First investment not recieved");
-
-        // await _testDAI.approve(fundRaising.address, maxTestDAI_amount, {from: investor2});
-        // await fundRaising.invest(web3.utils.toWei('2000'), {from: investor2});
-        // assert(_testDAI.balanceOf(fundRaising.address) == web3.utils.toWei('2000'), "Second investment not recieved");
-        // assert(fundRaising.balanceOf(investor1) == web3.utils.toWei('2000'), "Second investor hasn't recieved tokens");
-
-        // await _testDAI.approve(fundRaising.address, maxTestDAI_amount, {from: investor3});
-        // await fundRaising.invest(web3.utils.toWei('3000'), {from: investor3});
-        // assert(_testDAI.balanceOf(fundRaising.address) == web3.utils.toWei('3000'), "Third investment not recieved");
-        // assert(fundRaising.balanceOf(investor1) == web3.utils.toWei('3000'), "Third investor hasn't recieved tokens");
-
-        // await _testDAI.approve(fundRaising.address, maxTestDAI_amount, {from: admin});
-        // await fundRaising.invest(web3.utils.toWei('4000'), {from: admin});
-        // assert(_testDAI.balanceOf(fundRaising.address)  == web3.utils.toWei('4000'), "Admin's investment not recieved");
-        // assert(fundRaising.balanceOf(investor1) == web3.utils.toWei('4000'), "Admin hasn't recieved tokens");
+        // QUESTION: Why doesn't get through await here?
+        async function investAssertion(investor, amountInvest, amountApproved) {
+            console.log("Entered Invest Assertion");
+            await _testDAI.approve(fundRaising.address, amountApproved, {from: investor}); // Doesn't get here?
+            await fundRaising.invest(amountInvest, {from: investor});
+            console.log("Got here 1");
+            let rftBalanceInvestor = await fundRaising.balanceOf(investor1);
+            let daiBalanceInvestor = await _testDAI.balanceOf(investor1);
+            console.log("Got here 2");
+            assert( parseInt(rftBalanceInvestor) == amountInvest, investor + " Has Incorrect RFT Balance");
+            assert( parseInt(daiBalanceInvestor) == daiMintAmount - 10, investor +  "Has Incorrect DAI Balance");
+            console.log("Got to the end of investAssertion");
+            console.log("Total supply of RFT 2 (inside investAssertion): " + fundRaising.totalSupply());
+        };
     });
 });
-// In here can use before() hook and it() for defining tests [ more info: mochajs.ord]
-
-// Separate contract blocks => independent tests
-
-// need to put the contrsuctors in
