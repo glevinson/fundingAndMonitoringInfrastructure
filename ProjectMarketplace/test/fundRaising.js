@@ -1,9 +1,10 @@
+
+
+
 // A lot of inspiration from: https://www.youtube.com/watch?v=9CBDj5A-zz4 // async addresses, investor consts, ...
 
 const FundRaising = artifacts.require('FundRaising');
 const testDAI = artifacts.require('testDAI');
-
-require('chai');
 
 contract( 'FundRaising', async accounts => {  // is this fine to put async up here
 
@@ -21,8 +22,8 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
         this._testDAI = await testDAI.new(); // QUESTION: For some reason only working with "this.", how do with const instead?
         this.fundRaising = await FundRaising.new(10000, "Test Project", "testP", admin, this._testDAI.address); // contract instance is a variable that points at a deployed contract
     })
-
-    it.only('Should deploy smart contract properly', async () => {
+    // it.only<...> means only this test runs! 
+    it/*.only*/('Should deploy smart contract properly', async () => {
         // const this_testDAI = await testDAI.new();
         // const fundRaising = await FundRaising.new(10000, "Test Project", "testP", admin, _testDAI.address); // contract instance is a variable that points at a deployed contract
         assert(this.fundRaising.address !== '');
