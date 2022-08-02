@@ -101,6 +101,70 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
 
     describe( 'Investing', function() {
 
+
+        beforeEach('Setup FundRaising', async () => {
+
+            await Promise.all([
+                _testDAI.mint(admin, daiMintAmount ), // PROBLEM: THIS IS REMINTING 1000 NEW TEST DAI FOR EACH INVESTOR BEFORE EACH TEST, PROBS NEED TO SET THEM TO 0
+                _testDAI.mint(investor1, daiMintAmount ),
+                _testDAI.mint(investor2, daiMintAmount ),
+                _testDAI.mint(investor3, daiMintAmount )
+            ]);
+
+            rftSupply = await fundRaising.totalSupply();
+            daiBalanceContract = await _testDAI.balanceOf(fundRaising.address);
+            assert(rftSupply == 0);
+            assert(daiBalanceContract == 0);
+
+            await Promise.all([
+                _testDAI.approve(fundRaising.address, daiMintAmount, {from: admin} ),
+                _testDAI.approve(fundRaising.address, daiMintAmount, {from: investor1} ),
+                _testDAI.approve(fundRaising.address, daiMintAmount, {from: investor2} ),
+                _testDAI.approve(fundRaising.address, daiMintAmount, {from: investor3} )
+            ]);
+        })
+
+        context( 'Contract unpaused', function() {
+            context( 'Enough Tokens Avaialble', function() {
+
+            });
+            context( 'Not Enough Tokens Available', function() {
+
+            });
+        });
+
+        context.only( 'Invest: if contract unpaused & enough tokens available', function() {
+
+            it('Investor sends DAI', async () => {
+                let daiBalanceInvestorBefore = (await _testDAI.balanceOf(investor1));
+                await fundRaising.invest(10, {from: investor1});
+                let daiBalanceInvestorAfter = (await _testDAI.balanceOf(investor1));
+                assert( daiBalanceInvestorAfter - daiBalanceInvestorBefore == -10 );
+            });
+            
+            it('Contract Recieves Correct DAI', async () => {
+                let daiBalanceContractBefore = (await fundRaising.totalSupply()).toNumber();
+                await fundRaising.invest(10, {from: investor1});
+                let daiBalanceAdminAfter = (await fundRaising.totalSupply()).toNumber();
+                assert( daiBalanceAdminAfter - daiBalanceContractBefore == 10 );
+            });
+
+            it('Invester Recieves Correct RFTs', async () => {
+                let rftBalanceInvestorBefore = (await fundRaising.balanceOf(investor1)).toNumber();
+                await fundRaising.invest(10, {from: investor1});
+                let rftBalanceInvestorAfter = (await fundRaising.balanceOf(investor1)).toNumber();
+                assert( rftBalanceInvestorAfter - rftBalanceInvestorBefore == 10 );
+            });
+
+            it('RFT supply adjusted', async () => {
+                let rftSupplyBefore = (await fundRaising.totalSupply()).toNumber();
+                await fundRaising.invest(10, {from: investor1});
+                let rftSupplyAfter = (await fundRaising.totalSupply()).toNumber();
+                assert( rftSupplyAfter - rftSupplyBefore == 10 );
+            });
+
+        });
+
         /* Approves the fundraising contract for an investor for a specified amount ('amountApproved')
             and invests another specified amount ('amountInvest') */
         // ************************************************************************************     
@@ -136,32 +200,6 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
             // console.log("daiBalanceContract change (in assertion function): " + (daiBalanceContract - daiBalanceContractBefore) + " == " + daiBalanceChange);
             // console.log("At the end of contract dai balance assert function, balance = ", parseInt(daiBalanceContract));
         }
-
-        // before('Setup FundRaising', async () => {
-            
-        // })
-
-        beforeEach('Setup FundRaising', async () => {
-
-            await Promise.all([
-                _testDAI.mint(admin, daiMintAmount ), // PROBLEM: THIS IS REMINTING 1000 NEW TEST DAI FOR EACH INVESTOR BEFORE EACH TEST, PROBS NEED TO SET THEM TO 0
-                _testDAI.mint(investor1, daiMintAmount ),
-                _testDAI.mint(investor2, daiMintAmount ),
-                _testDAI.mint(investor3, daiMintAmount )
-            ]);
-
-            rftSupply = await fundRaising.totalSupply();
-            daiBalanceContract = await _testDAI.balanceOf(fundRaising.address);
-            assert(rftSupply == 0);
-            assert(daiBalanceContract == 0);
-
-            await Promise.all([
-                _testDAI.approve(fundRaising.address, daiMintAmount, {from: admin} ),
-                _testDAI.approve(fundRaising.address, daiMintAmount, {from: investor1} ),
-                _testDAI.approve(fundRaising.address, daiMintAmount, {from: investor2} ),
-                _testDAI.approve(fundRaising.address, daiMintAmount, {from: investor3} )
-            ]);
-        })
 
         // it.only('Should deploy smart contract properly', async () => {
         //     assert(fundRaising.address !== '');
