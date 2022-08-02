@@ -17,20 +17,43 @@
 
 const FundRaising = artifacts.require('FundRaising');
 const testDAI = artifacts.require('testDAI');
+const { assert } = require('chai');
 const truffleAssert = require('truffle-assertions');
 
 contract( 'FundRaising', async accounts => {  // is this fine to put async up here
 
     const maxTestDAI_amount = web3.utils.toWei('10000');
     const [admin, investor1, investor2, investor3, _] = accounts; // Naming the first 4 addresses
+
     const _name = "Test Project";
     const _symbol = "testP"; // This should applied to the code from the ref below [*]
+    let targetAmount = 1000;
     
     let _testDAI;
     let fundRaising; // Not sure how to make consts
-    const daiMintAmount = 100;
+    const daiMintAmount = 1000;
     let rftSupply;
     let daiBalanceContract;
+
+    // describe.only( 'initialisation', function() {
+
+    //     it/*.only*/('Should deploy smart contract properly', async () => {
+    //         assert(fundRaising.address !== '');
+    //     });
+
+    //     it/*.only*/('Should deploy smart contract properly', async () => {
+    //         assert(fundRaising.address !== '');
+    //     });
+
+    //     it/*.only*/('Should deploy smart contract properly', async () => {
+    //         assert(fundRaising.address !== '');
+    //     });
+
+    //     it/*.only*/('Should deploy smart contract properly', async () => {
+    //         assert(fundRaising.address !== '');
+    //     });
+
+    // })
 
 
     /* Approves the fundraising contract for an investor for a specified amount ('amountApproved')
@@ -70,7 +93,7 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
 
     beforeEach('Setup FundRaising', async () => {
         _testDAI = await testDAI.new(); // QUESTION: For some reason only working with "this.", how do with const instead?
-        fundRaising = await FundRaising.new(10000, "Test Project", "testP", admin, _testDAI.address); // contract instance is a variable that points at a deployed contract
+        fundRaising = await FundRaising.new(targetAmount, _name, _symbol, admin, _testDAI.address); // contract instance is a variable that points at a deployed contract
     
         await Promise.all([
             _testDAI.mint(admin, daiMintAmount ),
@@ -122,9 +145,44 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
         // await daiBalanceContractChangeAssert(10);
     });
 
-    // it('Not allow ')
+    it('Cannot invest if not enough shares available', async () => {
 
-    it.only('Send RFTs for investment (amount != target) if there are enough shares & contract not paused', async () => {
+        // Target Amount is initiallised to 1000;
+        await investAssert( investor1, 900 );
+        await rftSupplyChangeAssert(900);
+        await daiBalanceContractChangeAssert(900);
+
+        await truffleAssert.reverts( 
+            fundRaising.invest(110, {from: investor2}), "Not enough shares left!");
+            
+    });
+
+    it('Send NFT in return for investment (if amount == target) if there are enough shares & contract not paused', async () => {
+
+        await investAssert( investor2, 1000 );
+        await rftSupplyChangeAssert( 1000 );
+        await daiBalanceContractChangeAssert(0); // DAI instantly sent to admin
+
+    });
+
+    it('Sends funds raised to admin once target reached', async () => {
+
+        await investAssert( investor1, 500 );
+        await rftSupplyChangeAssert( 500 );
+        await daiBalanceContractChangeAssert(500);
+
+        let daiBalanceAdminBefore = (await _testDAI.balanceOf(admin)).toNumber();
+        await investAssert( investor2, 500 );
+        await rftSupplyChangeAssert( 500 );
+
+        // Funds raised - sent from contract to admin
+        console.log( "Contract balance: " + (await _testDAI.balanceOf(admin)).toNumber() + " & data type: " + typeof((await _testDAI.balanceOf(admin)).toNumber()) );
+        assert( (await _testDAI.balanceOf(fundRaising.address)).toNumber() == 0 );
+        assert( (await _testDAI.balanceOf(admin)).toNumber() - daiBalanceAdminBefore == targetAmount );
+
+    });
+
+    it('Send RFTs in return for investment (if amount != target) if there are enough shares & contract not paused', async () => {
 
         // Investor 1: Invests 10 Wei of DAI
         // ************************************************************************************     
@@ -133,12 +191,11 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
         await daiBalanceContractChangeAssert(10);
         // ************************************************************************************
 
-        // Investor 1: Invests 10 Wei of DAI
+        // Investor 1: Invests another 10 Wei of DAI
         // ************************************************************************************     
         await investAssert( investor1, 10 );
         await rftSupplyChangeAssert(10);
         await daiBalanceContractChangeAssert(10);
-
         // ************************************************************************************     
     
         // Investor 2: Invests 20 Wei of DAI
@@ -158,8 +215,6 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
         await investAssert( admin, 40 ); 
         await rftSupplyChangeAssert(40);
         await daiBalanceContractChangeAssert(40);
-
-
 
     });
 
