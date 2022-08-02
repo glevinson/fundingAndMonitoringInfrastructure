@@ -36,31 +36,35 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
     /* Approves the fundraising contract for an investor for a specified amount ('amountApproved')
         and invests another specified amount ('amountInvest') */
     // ************************************************************************************     
-    async function investAssertion(investor, amountInvest, amountApproved) {
-        await _testDAI.approve(fundRaising.address, amountApproved, {from: investor});
+    async function investAssert(investor, amountInvest) {
+        
+        let rftBalanceInvestorBefore = await fundRaising.balanceOf(investor);
+        let daiBalanceInvestorBefore = await _testDAI.balanceOf(investor);
+
         await fundRaising.invest(amountInvest, {from: investor});
 
         let rftBalanceInvestor = await fundRaising.balanceOf(investor);
-        let daiBalanceInvestor = await _testDAI.balanceOf(investor);
-
-        assert( parseInt(rftBalanceInvestor) == amountInvest, "Investor Has Incorrect RFT Balance");
-        assert( parseInt(daiBalanceInvestor) == daiMintAmount - amountInvest, "Investor Has Incorrect DAI Balance");
+        // console.log("RFT balance of investor: " + rftBalanceInvestor.toNumber());
+        let daiBalanceInvestor = await _testDAI.balanceOf(investor); // QUESTION: .toNumber() better than Parse?
+        // console.log("rft balance using .toNumber(), daibalinv = " + daiBalanceInvestor.toNumber() + " & with type: " + typeof(daiBalanceInvestor.toNumber()));
+        assert( parseInt(rftBalanceInvestor - rftBalanceInvestorBefore) == amountInvest, "Investor Has Incorrect RFT Balance");
+        assert( parseInt(daiBalanceInvestor - daiBalanceInvestorBefore) == -amountInvest, "Investor Has Incorrect DAI Balance");
     };
 
     async function rftSupplyChangeAssert( rftSupplyChange ) {
         let rftSupplyBefore = rftSupply;
         rftSupply = await fundRaising.totalSupply(); // Has to be await as interacting with smart contract is asynchronous (returns promise)
         assert( rftSupply - rftSupplyBefore == rftSupplyChange, "Incorrect supply of RFT");
-        console.log("RFT supply change (in assertion function): " + (rftSupply - rftSupplyBefore) + " == " + rftSupplyChange);
-        console.log("At the end of rft supply assert function, total supply = ", rftSupply);
+        // console.log("RFT supply change (in assertion function): " + (rftSupply - rftSupplyBefore) + " == " + rftSupplyChange);
+        // console.log("At the end of rft supply assert function, total supply = ", rftSupply);
     }
 
     async function daiBalanceContractChangeAssert( daiBalanceChange ) {
         let daiBalanceContractBefore = daiBalanceContract;
         daiBalanceContract = await _testDAI.balanceOf(fundRaising.address); // updating DAI balance
         assert( daiBalanceContract - daiBalanceContractBefore == daiBalanceChange, "Contract Has Incorrect DAI Balance");
-        console.log("daiBalanceContract change (in assertion function): " + (daiBalanceContract - daiBalanceContractBefore) + " == " + daiBalanceChange);
-        console.log("At the end of contract dai balance assert function, balance = ", parseInt(daiBalanceContract));
+        // console.log("daiBalanceContract change (in assertion function): " + (daiBalanceContract - daiBalanceContractBefore) + " == " + daiBalanceChange);
+        // console.log("At the end of contract dai balance assert function, balance = ", parseInt(daiBalanceContract));
     }
 
 
@@ -79,62 +83,84 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
         daiBalanceContract = await _testDAI.balanceOf(fundRaising.address);
         assert(rftSupply == 0);
         assert(daiBalanceContract == 0);
+
+        await Promise.all([
+            _testDAI.approve(fundRaising.address, daiMintAmount, {from: admin} ),
+            _testDAI.approve(fundRaising.address, daiMintAmount, {from: investor1} ),
+            _testDAI.approve(fundRaising.address, daiMintAmount, {from: investor2} ),
+            _testDAI.approve(fundRaising.address, daiMintAmount, {from: investor3} )
+        ]);
     })
 
     it/*.only*/('Should deploy smart contract properly', async () => {
         assert(fundRaising.address !== '');
     });
 
-    it.only('Not allow investment if contract paused', async () => {
-        await investAssertion( investor1, 10, 100 ); // Investor 1 invests 10
+    it('Cannot invest if contract paused', async () => {
+        // Contract (by default) unpaused - can invest
+        // ***************************************************************************
+        await investAssert( investor1, 10 ); // Investor 1 invests 10
         await rftSupplyChangeAssert(10);
         await daiBalanceContractChangeAssert(10);
 
-        await fundRaising.pause({from: admin }); // Admin pauses contracr
-
-        // await fundRaising.invest(10, {from: investor1}); // This returns: Error: Returned error: VM Exception while processing transaction: revert Paused
+        // Contract paused - cannot invest
+        // ***************************************************************************
+        await fundRaising.pause({from: admin }); // Admin pauses contract
         await truffleAssert.reverts( 
             fundRaising.invest(10, {from: investor1}), "Contract Is Paused");
-        // console.log( "Balance of investor 1's RFTs: " +  await fundRaising.balanceOf(investor1) );
-        // assert( parseInt(await fundRaising.balanceOf(investor1)) == 10, "Investor Has Incorrect RFT Balance");
-        // assert( parseInt(await _testDAI.balanceOf(investor1)) == daiMintAmount - 10, "Investor Has Incorrect DAI Balance");
-        // await rftSupplyAssertion(0);
-        // await daiBalanceContractAssertion(0);
+        // Tests ensuring no transactions successful for investor 1
+        assert( parseInt(await fundRaising.balanceOf(investor1)) == 10, "Investor 1 Has Incorrect RFT Balance");
+        assert( parseInt(await _testDAI.balanceOf(investor1)) == daiMintAmount - 10, "Investor 1 Has Incorrect DAI Balance");
+        await rftSupplyChangeAssert(0);
+        await daiBalanceContractChangeAssert(0);
 
+        // Contract unpaused - can invest
+        // ***************************************************************************
         await fundRaising.unpause({from: admin });
-        await fundRaising.invest(10, {from: investor1});
-        assert( parseInt(await fundRaising.balanceOf(investor1)) == 20, "Investor Has Incorrect RFT Balance");
-        assert( parseInt(await _testDAI.balanceOf(investor1)) == daiMintAmount - 20, "Investor Has Incorrect DAI Balance");
-        await rftSupplyChangeAssert(10);
-        await daiBalanceContractChangeAssert(10);
+        await investAssert(investor1, 10);
+        // await rftSupplyChangeAssert(10);
+        // await daiBalanceContractChangeAssert(10);
     });
 
-    it('Send RFTs for investment (amount != target) if there are enough shares & contract not paused', async () => {
+    // it('Not allow ')
+
+    it.only('Send RFTs for investment (amount != target) if there are enough shares & contract not paused', async () => {
 
         // Investor 1: Invests 10 Wei of DAI
         // ************************************************************************************     
-        await investAssertion( investor1, 10, 100 );
+        await investAssert( investor1, 10 );
         await rftSupplyChangeAssert(10); // QUESTION: IS AWAIT REALLY NEEDED ON RFTSUPPLYASSERT OR DAIBALANCEASSERT AS WORKED WITHOUT
         await daiBalanceContractChangeAssert(10);
         // ************************************************************************************
+
+        // Investor 1: Invests 10 Wei of DAI
+        // ************************************************************************************     
+        await investAssert( investor1, 10 );
+        await rftSupplyChangeAssert(10);
+        await daiBalanceContractChangeAssert(10);
+
+        // ************************************************************************************     
     
         // Investor 2: Invests 20 Wei of DAI
         // ************************************************************************************
-        await investAssertion( investor2, 20, 100 );
+        await investAssert( investor2, 20 );
         await rftSupplyChangeAssert(20);
         await daiBalanceContractChangeAssert(20);
 
         // Investor 3: Invests 30 Wei of DAI
         // ************************************************************************************
-        await investAssertion( investor3, 30, 100 ); 
+        await investAssert( investor3, 30 ); 
         await rftSupplyChangeAssert(30);
         await daiBalanceContractChangeAssert(30);
 
         // Admin: Invests 40 Wei of DAI
         // ************************************************************************************
-        await investAssertion( admin, 40, 100 ); 
+        await investAssert( admin, 40 ); 
         await rftSupplyChangeAssert(40);
         await daiBalanceContractChangeAssert(40);
+
+
+
     });
 
 
