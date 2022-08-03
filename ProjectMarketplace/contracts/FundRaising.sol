@@ -16,7 +16,9 @@ contract FundRaising is ERC20 {
     IERC20 public DAI;
     IERC721 public immutable NFT; // The NFT that creates the FundRaisingCampaigns
     uint256 public targetAmount; // Target amount for the fundraising
+    uint256 public amountRaised;
     bool public _paused; // = false by default
+    bool public istargetRaised;
     address admin;
 
     constructor(uint256 amount, string memory name, string memory symbol, address _admin, address daiAddress) ERC20(name, symbol) {
@@ -27,29 +29,13 @@ contract FundRaising is ERC20 {
     }
 
     modifier onlyOwner(){
-            require(msg.sender == admin);
+            require(msg.sender == admin, "Only Admin Can Pause/Unpause");
             _;
     }
 
     // Enables this contract to recieve ERC-721 token
     function onERC721Received(address /*operator*/, address /*from*/, uint256 /*tokenId*/, bytes calldata /*data*/) external pure returns (bytes4) {
         return IERC721Receiver.onERC721Received.selector;
-    }
-
-    function invest(uint256 value) external {
-        require(value <= targetAmount - totalSupply(), "Not enough shares left!");
-        require( !_paused, "Paused" );
-        DAI.transferFrom(msg.sender, address(this), value);
-        _mint(msg.sender, value);
-        if (targetAmount == totalSupply()) { 
-            DAI.transfer(admin, targetAmount); // How deal with this money
-        }
-    }
-
-    function withdrawInvestment(uint256 value) external {
-        require(value <= balanceOf(msg.sender), "Not enough shares balance!");
-        DAI.transfer(msg.sender, value);
-        _burn(msg.sender, value);
     }
 
     function pause() onlyOwner external {
@@ -59,4 +45,46 @@ contract FundRaising is ERC20 {
     function unpause() onlyOwner external{
         _paused = false;
     }
+
+    function amountUntilReachTarget() public view returns (uint256){
+        return (targetAmount - amountRaised) ;
+    }
+
+    function invest(uint256 value) external {
+        require( !istargetRaised, "Target Already Raised" );
+        require(value <= targetAmount - totalSupply(), "Not enough shares left!");
+        require( !_paused, "Contract Is Paused" );
+
+        DAI.transferFrom(msg.sender, address(this), value);
+        amountRaised += value;
+        _mint(msg.sender, value);
+
+        if (targetAmount == totalSupply()) { 
+            DAI.transfer(admin, targetAmount); // How deal with this money
+            istargetRaised = true; // QUESTION: Should I burn their ERC-20 tokens too? & HOW BEST TO TEST THIS?
+            // if ( balanceOf(msg.sender) == targetAmount ){ 
+            //     NFT.safeTransferFrom( address(this), msg.sender, uint256(uint160(address(this))));
+            // }
+        }
+    }
+
+    function withdrawInvestment(uint256 value) external {
+        require( !istargetRaised, "Target Already Raised" );
+        require(value <= balanceOf(msg.sender), "Not Great Enough Balance!"); // As DAI instatneously removed when targetRaised, this require should also cover that s
+        DAI.transfer(msg.sender, value);
+        amountRaised -= value;
+        _burn(msg.sender, value);
+    }
+
 }
+
+// Unit tests:
+
+// Invest:
+
+// CanInvestIfContracUnpausedAndEnoughShares
+// When the contract is activated
+    // when value <= number shares left
+        // When the contract is NOT paused
+            // balanceOf DAI should be += value
+            // Donor should recieve correspodning ERC-20 tokens

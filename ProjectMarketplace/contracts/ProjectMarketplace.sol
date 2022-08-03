@@ -10,19 +10,28 @@ import "./FundRaising.sol";
 
 // The terms "project" and "projectMarketPlace" are synonymous
 contract ProjectMarketPlace is  ERC721Enumerable {
-    string public baseURI;
+    // string public baseURI;
+    mapping(uint256 => string ) public idToTokenURI;
 
-    constructor(string memory springDAOMetadataURI) ERC721("The Sping DAO Project Marketplace Test", "SpringDAOtest") {
-        baseURI = springDAOMetadataURI;
+    constructor() ERC721("The Sping DAO Project Marketplace Test", "SpringDAOtest") {
+        // baseURI = springDAOMetadataURI;
     }
 
-    function _baseURI() internal view override returns (string memory) {
-        return baseURI;
+    // Can delete this : 
+    // function _baseURI() internal view override returns (string memory) {
+    //     return baseURI;
+    // }
+
+    function createProject(uint256 targetAmount, string calldata projectName, string calldata projectSymbol, string calldata _tokenURI, address DAI) external returns (uint256) {
+        address newProjectAddress = address(new FundRaising(targetAmount, projectName, projectSymbol, msg.sender, DAI));
+        uint256 tokenID = uint256(uint160(newProjectAddress));
+        _safeMint( newProjectAddress , tokenID ); // think should transfer ownership to the projectfundraising contract
+        idToTokenURI[tokenID] = _tokenURI; 
+        return tokenID;
     }
 
-    function createProject(uint256 targetAmount, string calldata projectName, string calldata projectSymbol, address testDAI) external {
-        address newProjectAddress = address(new FundRaising(targetAmount, projectName, projectSymbol, msg.sender, testDAI));
-        _safeMint( newProjectAddress , uint256(uint160(newProjectAddress))); // think should transfer ownership to the projectfundraising contract
+    function tokenURI( uint256 tokenID ) public view virtual override returns (string memory){
+        return idToTokenURI[tokenID];
     }
 
     function findprojectContract( uint256 tokenID ) public pure returns ( address ){
