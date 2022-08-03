@@ -35,14 +35,15 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
     let rftSupply;
     let daiBalanceContract;
 
-    before('Deploy Contract', async () => {
-        _testDAI = await testDAI.new(); // QUESTION: For some reason only working with "this.", how do with const instead?
-    })
+    // before('Deploy Contract', async () => {
+    //     _testDAI = await testDAI.new(); // QUESTION: For some reason only working with "this.", how do with const instead?
+    // })
 
     beforeEach('Deploy Contract', async () => {
+        // Reset testDAI and FundRaising for each test:
+        _testDAI = await testDAI.new();
         fundRaising = await FundRaising.new(targetAmount, _name, _symbol, admin, _testDAI.address); // contract instance is a variable that points at a deployed contract
-
-        console.log("Before Each 1");
+        // console.log("Before Each 1");
     })
 
     describe( 'Contract Initialisation', function() {
@@ -107,8 +108,8 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
     });
 
     describe( 'Investing', function() {
-        beforeEach('Setup FundRaising', async () => {
-            console.log("Before Each 2");
+        beforeEach('Mint DAI & Approve Spending', async () => {
+            // console.log("Before Each 2");
 
             await Promise.all([
                 _testDAI.mint(investor1, daiMintAmount ),
@@ -116,7 +117,7 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
                 _testDAI.mint(investor3, daiMintAmount )
             ]);
 
-            console.log("Investor 1 hsa dai balance of " + (await _testDAI.balanceOf(investor1)).toNumber());
+            // console.log("Investor 1 has dai balance of " + (await _testDAI.balanceOf(investor1)).toNumber());
 
             await Promise.all([
                 // _testDAI.approve(fundRaising.address, daiMintAmount, {from: admin} ),
@@ -151,42 +152,47 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
             context( 'Enough Tokens Available', function() {
                 context ( 'Target Not Raised', function() {
     
-                    describe.only( 'Invest Function', function() {
+                    describe( 'Invest Function', function() {
                         let amountInvest;
 
                         beforeEach('Investment', async () => { // This occurs before the higher level 'BeforeEach', it goes lower level before, upper level before each, lower level before each, test, upperlevel before each, lower lever before each, test, etc...
                             amountInvest = 10;
                             await fundRaising.invest(amountInvest, {from: investor1});
-                            console.log("Before Each 3");
-                            console.log("Investor 1 hsa dai balance of " + (await _testDAI.balanceOf(investor1)).toNumber());
+                            // console.log("Before Each 3");
+                            // console.log("Investor 1 has dai balance of " + (await _testDAI.balanceOf(investor1)).toNumber());
                         })
 
                         // Not sure this test neccessary:
                         it('Investor sends DAI', async () => {
                             let daiBalanceInvestor = (await _testDAI.balanceOf(investor1)).toNumber();
-                            console.log("Investor 1 DAI balance: ", daiBalanceInvestor);
+                            // console.log("Investor 1 RFT balance: "+ (await fundRaising.balanceOf(investor1)).toNumber());
                             assert( daiBalanceInvestor - daiMintAmount == - amountInvest, 'Investor Charged Incorrect DAI' );
                         });
                         
                         it('Contract Recieves Correct DAI', async () => {
                             let daiBalanceContract = (await _testDAI.balanceOf(fundRaising.address)).toNumber();
-                            console.log("Investor 1 DAI balance: ", daiBalanceInvestor);
+                            // console.log("Investor 1 RFT balance: "+ (await fundRaising.balanceOf(investor1)).toNumber());
                             assert( daiBalanceContract == amountInvest );
                         });
             
                         it('Invester Recieves Correct RFTs', async () => {
                             let rftBalanceInvestor = (await fundRaising.balanceOf(investor1)).toNumber();
-                            console.log("Investor 1 DAI balance: ", daiBalanceInvestor);
+                            // console.log("Investor 1 RFT balance: "+ (await fundRaising.balanceOf(investor1)).toNumber());
                             assert( rftBalanceInvestor == amountInvest );
                         });
                         
                         // Not sure this test neccessary:
                         it('RFT Supply Increased Correctly', async () => {
                             let rftSupply = (await fundRaising.totalSupply()).toNumber();
-                            console.log("Investor 1 DAI balance: ", daiBalanceInvestor);
+                            // console.log("Investor 1 RFT balance: "+ (await fundRaising.balanceOf(investor1)).toNumber());
                             assert( rftSupply == amountInvest );
                         });
 
+                        /* PROBLEM:
+                            This test means the DAI for the contract are sent to the admin
+                            This, correctly so, leaves investor 1 with a value of 10 RFTs and investor 3 with value of 990 RFTs that cannot be withdrawn
+                            because their balances of DAI is now 0
+                        */
                         it/*.only*/('Withdraw Funds To Admin Once Target Raised', async () => {
                             // Raise Funds to target:
                             await fundRaising.invest(targetAmount - amountInvest, {from: investor3});
@@ -194,28 +200,28 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
                             let daiBalanceContract = (await _testDAI.balanceOf(fundRaising.address)).toNumber();
                             let daiBalanceAdmin = (await _testDAI.balanceOf(admin)).toNumber();
                             assert( daiBalanceContract == 0 );
-                            console.log("Admin DAI: ", daiBalanceAdmin);
-                            console.log("Target Amount: ", targetAmount); // NB: MAKE APPROPRIATE CHANGES
+                            // console.log("Admin DAI: ", daiBalanceAdmin);
+                            // console.log("Target Amount: ", targetAmount); // NB: MAKE APPROPRIATE CHANGES
                             assert( daiBalanceAdmin == targetAmount); // Change so admin doesnt get dai
                         });
                     });
 
                     describe('WithdrawInvestment Function', function() {
 
-                        beforeEach('Withdrawing Investment', async () => { // This occurs before the higher level 'BeforeEach', it goes lower level before, upper level before each, lower level before each, test, upperlevel before each, lower lever before each, test, etc...
+                        beforeEach('Invest & Withdraw Investment', async () => { // This occurs before the higher level 'BeforeEach', it goes lower level before, upper level before each, lower level before each, test, upperlevel before each, lower lever before each, test, etc...
                             amountInvest = 20;
                             await fundRaising.invest(amountInvest, {from: investor1});
                             await fundRaising.withdrawInvestment(amountInvest, {from: investor1});
-                            console.log("Before Each 4");
-                            console.log("Investor 1 hsa dai balance of " + (await _testDAI.balanceOf(investor1)).toNumber());
+                            // console.log("Before Each 4");
+                            // console.log("Investor 1 hsa dai balance of " + (await _testDAI.balanceOf(investor1)).toNumber());
 
                         });
 
                         it('Investor Returned Correct DAI', async () => {
                             let daiBalanceInvestor = (await _testDAI.balanceOf(investor1)).toNumber();
-                            console.log(daiBalanceInvestor);
-                            console.log(daiMintAmount);
-                            // assert( daiBalanceInvestor == daiMintAmount, 'Investor Charged Incorrect DAI' );
+                            // console.log(daiBalanceInvestor);
+                            // console.log(daiMintAmount);
+                            assert( daiBalanceInvestor == daiMintAmount, 'Investor Charged Incorrect DAI' );
                         });
 
                         it('Contract Sends Correct DAI', async () => {
@@ -261,7 +267,7 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
 
             beforeEach('Pause Contract', async () => {
                 fundRaising.pause();
-                console.log("Before Each 5");
+                // console.log("Before Each 5");
             })
 
             it('Cannot invest', async () => {
