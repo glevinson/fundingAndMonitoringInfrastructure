@@ -1,19 +1,12 @@
 
-// Need to work out why beforeEach requires the this pointer. It is fine but annoying to change.
-// Update beforeEach
-// Make a describe for all investment tests
 // Test all different investment scenarios: someone invests it all (i.e. get the NFT), the NFT is paused or there isn't enough supply
-// Then need to test withdraw
+// ADD SCENARIO FOR BRING ABLE TO WITHDRAW WHETHER IT IS PAUSED OR NOT, contract paused should be on the inside
 // Then go to ProjectMarketPlace to test createProject & findprojectContract
 // Then see what system / integration tests may need to be done...
 
 
 // A lot of inspiration from: https://www.youtube.com/watch?v=9CBDj5A-zz4 // async addresses, investor consts, ...
 
-// beforeEach({
-                // NOTE: This should deploy testDAI and FundRaising!
-                // Reference [*]: 18:45, https://www.youtube.com/watch?v=v90hvMEjf_Q
-// })
 
 const FundRaising = artifacts.require('FundRaising');
 const testDAI = artifacts.require('testDAI');
@@ -43,7 +36,6 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
         // Reset testDAI and FundRaising for each test:
         _testDAI = await testDAI.new();
         fundRaising = await FundRaising.new(targetAmount, _name, _symbol, admin, _testDAI.address); // contract instance is a variable that points at a deployed contract
-        // console.log("Before Each 1");
     })
 
     describe( 'Contract Initialisation', function() {
@@ -109,7 +101,6 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
 
     describe( 'Investing', function() {
         beforeEach('Mint DAI & Approve Spending', async () => {
-            // console.log("Before Each 2");
 
             await Promise.all([
                 _testDAI.mint(investor1, daiMintAmount ),
@@ -117,36 +108,12 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
                 _testDAI.mint(investor3, daiMintAmount )
             ]);
 
-            // console.log("Investor 1 has dai balance of " + (await _testDAI.balanceOf(investor1)).toNumber());
-
             await Promise.all([
-                // _testDAI.approve(fundRaising.address, daiMintAmount, {from: admin} ),
                 _testDAI.approve(fundRaising.address, daiMintAmount, {from: investor1} ),
                 _testDAI.approve(fundRaising.address, daiMintAmount, {from: investor2} ),
                 _testDAI.approve(fundRaising.address, daiMintAmount, {from: investor3} )
             ]);
         })
-
-        // afterEach('Reset User Balances', async () => {
-
-        //     console.log((await fundRaising.balanceOf(investor1)).toNumber());
-        //     console.log((await fundRaising.balanceOf(investor2)).toNumber());
-        //     console.log((await fundRaising.balanceOf(investor3)).toNumber());
-
-        //     await fundRaising.withdrawInvestment( (await fundRaising.balanceOf(investor3)).toNumber(), {from: investor3})
-
-
-
-            // await Promise.all([
-
-            //     // fundRaising.withdrawInvestment(10, {from:investor1});
-            //     fundRaising.withdrawInvestment( (await fundRaising.balanceOf(investor1)).toNumber(), {from: investor1}),
-            //     fundRaising.withdrawInvestment( (await fundRaising.balanceOf(investor2)).toNumber(), {from: investor2}),
-            //     fundRaising.withdrawInvestment( (await fundRaising.balanceOf(investor3)).toNumber(), {from: investor3})
-            // ]);
-        // })
-
-        // NB: NEED AN AFTER EACH, BURN ALL INVESTORS TOKENS
 
         context( 'Contract unpaused', function() {
             context( 'Enough Tokens Available', function() {
@@ -158,50 +125,47 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
                         beforeEach('Investment', async () => { // This occurs before the higher level 'BeforeEach', it goes lower level before, upper level before each, lower level before each, test, upperlevel before each, lower lever before each, test, etc...
                             amountInvest = 10;
                             await fundRaising.invest(amountInvest, {from: investor1});
-                            // console.log("Before Each 3");
-                            // console.log("Investor 1 has dai balance of " + (await _testDAI.balanceOf(investor1)).toNumber());
                         })
 
                         // Not sure this test neccessary:
-                        it('Investor sends DAI', async () => {
+                        it('Investor Charged Correct DAI', async () => {
                             let daiBalanceInvestor = (await _testDAI.balanceOf(investor1)).toNumber();
-                            // console.log("Investor 1 RFT balance: "+ (await fundRaising.balanceOf(investor1)).toNumber());
                             assert( daiBalanceInvestor - daiMintAmount == - amountInvest, 'Investor Charged Incorrect DAI' );
                         });
                         
                         it('Contract Recieves Correct DAI', async () => {
                             let daiBalanceContract = (await _testDAI.balanceOf(fundRaising.address)).toNumber();
-                            // console.log("Investor 1 RFT balance: "+ (await fundRaising.balanceOf(investor1)).toNumber());
                             assert( daiBalanceContract == amountInvest );
                         });
             
-                        it('Invester Recieves Correct RFTs', async () => {
+                        it('Investor Recieves Correct RFTs (Their Investment < Target Amount)', async () => {
                             let rftBalanceInvestor = (await fundRaising.balanceOf(investor1)).toNumber();
-                            // console.log("Investor 1 RFT balance: "+ (await fundRaising.balanceOf(investor1)).toNumber());
                             assert( rftBalanceInvestor == amountInvest );
                         });
+
+                        // it.only('Investor Recieves Project NFT (Their Investment = Target Amount)', async () =>{ // NEED TO CONFIRM
+                        //     await fundRaising.invest(targetAmount - amountInvest, {from: investor1});
+                        //     console.log(await fundRaising.NFT.owner()) // NEED TO SOMEHOW CONFIRM NFT OWNERSH
+                        // })
                         
                         // Not sure this test neccessary:
                         it('RFT Supply Increased Correctly', async () => {
                             let rftSupply = (await fundRaising.totalSupply()).toNumber();
-                            // console.log("Investor 1 RFT balance: "+ (await fundRaising.balanceOf(investor1)).toNumber());
                             assert( rftSupply == amountInvest );
                         });
 
-                        /* PROBLEM:
+                        /* PROBLEM - Think fixed?:
                             This test means the DAI for the contract are sent to the admin
                             This, correctly so, leaves investor 1 with a value of 10 RFTs and investor 3 with value of 990 RFTs that cannot be withdrawn
                             because their balances of DAI is now 0
                         */
-                        it/*.only*/('Send Funds To Admin Once Target Raised', async () => {
+                        it('Send Funds To Admin Once Target Raised', async () => {
                             // Raise Funds to target:
                             await fundRaising.invest(targetAmount - amountInvest, {from: investor3});
 
                             let daiBalanceContract = (await _testDAI.balanceOf(fundRaising.address)).toNumber();
                             let daiBalanceAdmin = (await _testDAI.balanceOf(admin)).toNumber();
                             assert( daiBalanceContract == 0 );
-                            // console.log("Admin DAI: ", daiBalanceAdmin);
-                            // console.log("Target Amount: ", targetAmount); // NB: MAKE APPROPRIATE CHANGES
                             assert( daiBalanceAdmin == targetAmount); // Change so admin doesnt get dai
                         });
                     });
@@ -214,15 +178,10 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
                                 amountInvest = 20;
                                 await fundRaising.invest(amountInvest, {from: investor1});
                                 await fundRaising.withdrawInvestment(amountInvest, {from: investor1});
-                                // console.log("Before Each 4");
-                                // console.log("Investor 1 hsa dai balance of " + (await _testDAI.balanceOf(investor1)).toNumber());
-
                             });
 
                             it('Investor Returned Correct DAI', async () => {
                                 let daiBalanceInvestor = (await _testDAI.balanceOf(investor1)).toNumber();
-                                // console.log(daiBalanceInvestor);
-                                // console.log(daiMintAmount);
                                 assert( daiBalanceInvestor == daiMintAmount, 'Investor Charged Incorrect DAI' );
                             });
 
@@ -231,7 +190,7 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
                                 assert( daiBalanceContract == 0 );
                             });
 
-                            it ('Investor Sends Correct RFTs', async () =>{
+                            it ('Investor Charged Correct RFTs', async () =>{
                                 let rftBalanceInvestor = (await fundRaising.balanceOf(investor1)).toNumber();
                                 assert( rftBalanceInvestor == 0 ); 
                             });
@@ -289,8 +248,7 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
 
             beforeEach('Pause Contract', async () => {
                 fundRaising.pause();
-                // console.log("Before Each 5");
-            })
+            });
 
             it('Cannot invest', async () => {
                 await truffleAssert.reverts( 
