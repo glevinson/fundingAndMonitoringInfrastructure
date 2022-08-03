@@ -115,12 +115,15 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
             ]);
         })
 
-        context( 'Contract unpaused', function() {
-            context( 'Enough Tokens Available', function() {
-                context ( 'Target Not Raised', function() {
-    
-                    describe( 'Invest Function', function() {
-                        let amountInvest;
+        describe( 'Invest Function', function() {
+            let amountInvest;
+
+            context( 'Contract unpaused', function() {
+                context( 'Enough Tokens Available', function() {
+                    context ( 'Target Not Raised', function() {
+        
+                        // describe( 'Invest Function', function() {
+                        //     let amountInvest;
 
                         beforeEach('Investment', async () => { // This occurs before the higher level 'BeforeEach', it goes lower level before, upper level before each, lower level before each, test, upperlevel before each, lower lever before each, test, etc...
                             amountInvest = 10;
@@ -170,68 +173,16 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
                         });
                     });
 
-                    describe('WithdrawInvestment Function', function() {
+                    context ( 'Target Raised', function() {
 
-                        context('Withdrawal Value <= Amount Invested', function(){
-
-                            beforeEach('Invest & Withdraw Investment', async () => { // This occurs before the higher level 'BeforeEach', it goes lower level before, upper level before each, lower level before each, test, upperlevel before each, lower lever before each, test, etc...
-                                amountInvest = 20;
-                                await fundRaising.invest(amountInvest, {from: investor1});
-                                await fundRaising.withdrawInvestment(amountInvest, {from: investor1});
-                            });
-
-                            it('Investor Returned Correct DAI', async () => {
-                                let daiBalanceInvestor = (await _testDAI.balanceOf(investor1)).toNumber();
-                                assert( daiBalanceInvestor == daiMintAmount, 'Investor Charged Incorrect DAI' );
-                            });
-
-                            it('Contract Sends Correct DAI', async () => {
-                                let daiBalanceContract = (await _testDAI.balanceOf(fundRaising.address)).toNumber();
-                                assert( daiBalanceContract == 0 );
-                            });
-
-                            it ('Investor Charged Correct RFTs', async () =>{
-                                let rftBalanceInvestor = (await fundRaising.balanceOf(investor1)).toNumber();
-                                assert( rftBalanceInvestor == 0 ); 
-                            });
-
-                            it('RFT Supply Decreased Correctly', async () => {
-                                let rftSupply = (await fundRaising.totalSupply()).toNumber();
-                                assert( rftSupply == 0 );
-                            });
-                        });
-
-                        context( 'Withdrawal Value > Amount Invested', function() {
-                            it('Cannot Withdraw', async () => {
-                                amountInvest = 20;
-                                await fundRaising.invest(amountInvest, {from: investor1});
-                                await truffleAssert.reverts( 
-                                    fundRaising.withdrawInvestment((amountInvest + 1), {from: investor1}));
-                            });
+                        it('Cannot Invest', async () => {
+                            await fundRaising.invest(500, {from: investor1});
+                            await fundRaising.invest(500, {from: investor2});
+                            await truffleAssert.reverts( 
+                            fundRaising.invest(1, {from: investor1}), "Target Already Raised");
                         });
                     });
                 });
-
-                context ( 'Target Raised', function() {
-
-                    beforeEach('Invest & Withdraw Investment', async () => { 
-                        await fundRaising.invest(500, {from: investor1});
-                        await fundRaising.invest(500, {from: investor2});
-                    });
-
-                    it('Cannot Invest', async () => {
-                        await truffleAssert.reverts( 
-                        fundRaising.invest(1, {from: investor1}), "Target Already Raised");
-                    });
-
-                    it('Cannot Withdraw Investment', async () => {
-                        await truffleAssert.reverts( 
-                            fundRaising.withdrawInvestment(500, {from: investor1}), "Target Already Raised");
-                        await truffleAssert.reverts( 
-                            fundRaising.withdrawInvestment(500, {from: investor2}), "Target Already Raised");
-                    });
-                });
-
             });
 
             context( 'Not Enough Tokens Available', function() {
@@ -246,13 +197,77 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
         });
         context ( 'Contract Paused', function() {
 
-            beforeEach('Pause Contract', async () => {
-                fundRaising.pause();
-            });
-
             it('Cannot invest', async () => {
+                fundRaising.pause();
                 await truffleAssert.reverts( 
                 fundRaising.invest(1, {from: investor1}), "Contract Is Paused");
+            });
+        });
+    });
+
+    describe( 'Withdraw Investment Function', function() {
+
+        beforeEach('Mint DAI & Approve Spending', async () => {
+
+            await Promise.all([
+                _testDAI.mint(investor1, daiMintAmount ),
+                _testDAI.mint(investor2, daiMintAmount ),
+                _testDAI.mint(investor3, daiMintAmount )
+            ]);
+
+            await Promise.all([
+                _testDAI.approve(fundRaising.address, daiMintAmount, {from: investor1} ),
+                _testDAI.approve(fundRaising.address, daiMintAmount, {from: investor2} ),
+                _testDAI.approve(fundRaising.address, daiMintAmount, {from: investor3} )
+            ]);
+        })
+
+        context('Withdrawal Value <= Amount Invested', function(){
+
+            beforeEach('Invest & Withdraw Investment', async () => { // This occurs before the higher level 'BeforeEach', it goes lower level before, upper level before each, lower level before each, test, upperlevel before each, lower lever before each, test, etc...
+                amountInvest = 20;
+                await fundRaising.invest(amountInvest, {from: investor1});
+                await fundRaising.withdrawInvestment(amountInvest, {from: investor1});
+            });
+
+            it('Investor Returned Correct DAI', async () => {
+                let daiBalanceInvestor = (await _testDAI.balanceOf(investor1)).toNumber();
+                assert( daiBalanceInvestor == daiMintAmount, 'Investor Charged Incorrect DAI' );
+            });
+
+            it('Contract Sends Correct DAI', async () => {
+                let daiBalanceContract = (await _testDAI.balanceOf(fundRaising.address)).toNumber();
+                assert( daiBalanceContract == 0 );
+            });
+
+            it ('Investor Charged Correct RFTs', async () =>{
+                let rftBalanceInvestor = (await fundRaising.balanceOf(investor1)).toNumber();
+                assert( rftBalanceInvestor == 0 ); 
+            });
+
+            it('RFT Supply Decreased Correctly', async () => {
+                let rftSupply = (await fundRaising.totalSupply()).toNumber();
+                assert( rftSupply == 0 );
+            });
+        });
+
+        context( 'Withdrawal Value > Amount Invested', function() {
+            it('Cannot Withdraw', async () => {
+                amountInvest = 20;
+                await fundRaising.invest(amountInvest, {from: investor1});
+                await truffleAssert.reverts( 
+                    fundRaising.withdrawInvestment((amountInvest + 1), {from: investor1}));
+            });
+        });
+
+        context( 'Target Raised', function () {
+            it('Cannot Withdraw Investment', async () => {
+                await fundRaising.invest(500, {from: investor1});
+                await fundRaising.invest(500, {from: investor2});
+                await truffleAssert.reverts( 
+                    fundRaising.withdrawInvestment(500, {from: investor1}), "Target Already Raised");
+                await truffleAssert.reverts( 
+                    fundRaising.withdrawInvestment(500, {from: investor2}), "Target Already Raised");
             });
         });
     });
