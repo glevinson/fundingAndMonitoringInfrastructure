@@ -193,7 +193,7 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
                             This, correctly so, leaves investor 1 with a value of 10 RFTs and investor 3 with value of 990 RFTs that cannot be withdrawn
                             because their balances of DAI is now 0
                         */
-                        it/*.only*/('Withdraw Funds To Admin Once Target Raised', async () => {
+                        it/*.only*/('Send Funds To Admin Once Target Raised', async () => {
                             // Raise Funds to target:
                             await fundRaising.invest(targetAmount - amountInvest, {from: investor3});
 
@@ -208,48 +208,70 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
 
                     describe('WithdrawInvestment Function', function() {
 
-                        beforeEach('Invest & Withdraw Investment', async () => { // This occurs before the higher level 'BeforeEach', it goes lower level before, upper level before each, lower level before each, test, upperlevel before each, lower lever before each, test, etc...
-                            amountInvest = 20;
-                            await fundRaising.invest(amountInvest, {from: investor1});
-                            await fundRaising.withdrawInvestment(amountInvest, {from: investor1});
-                            // console.log("Before Each 4");
-                            // console.log("Investor 1 hsa dai balance of " + (await _testDAI.balanceOf(investor1)).toNumber());
+                        context('Withdrawal Value <= Amount Invested', function(){
 
+                            beforeEach('Invest & Withdraw Investment', async () => { // This occurs before the higher level 'BeforeEach', it goes lower level before, upper level before each, lower level before each, test, upperlevel before each, lower lever before each, test, etc...
+                                amountInvest = 20;
+                                await fundRaising.invest(amountInvest, {from: investor1});
+                                await fundRaising.withdrawInvestment(amountInvest, {from: investor1});
+                                // console.log("Before Each 4");
+                                // console.log("Investor 1 hsa dai balance of " + (await _testDAI.balanceOf(investor1)).toNumber());
+
+                            });
+
+                            it('Investor Returned Correct DAI', async () => {
+                                let daiBalanceInvestor = (await _testDAI.balanceOf(investor1)).toNumber();
+                                // console.log(daiBalanceInvestor);
+                                // console.log(daiMintAmount);
+                                assert( daiBalanceInvestor == daiMintAmount, 'Investor Charged Incorrect DAI' );
+                            });
+
+                            it('Contract Sends Correct DAI', async () => {
+                                let daiBalanceContract = (await _testDAI.balanceOf(fundRaising.address)).toNumber();
+                                assert( daiBalanceContract == 0 );
+                            });
+
+                            it ('Investor Sends Correct RFTs', async () =>{
+                                let rftBalanceInvestor = (await fundRaising.balanceOf(investor1)).toNumber();
+                                assert( rftBalanceInvestor == 0 ); 
+                            });
+
+                            it('RFT Supply Decreased Correctly', async () => {
+                                let rftSupply = (await fundRaising.totalSupply()).toNumber();
+                                assert( rftSupply == 0 );
+                            });
                         });
 
-                        it('Investor Returned Correct DAI', async () => {
-                            let daiBalanceInvestor = (await _testDAI.balanceOf(investor1)).toNumber();
-                            // console.log(daiBalanceInvestor);
-                            // console.log(daiMintAmount);
-                            assert( daiBalanceInvestor == daiMintAmount, 'Investor Charged Incorrect DAI' );
+                        context( 'Withdrawal Value > Amount Invested', function() {
+                            it('Cannot Withdraw', async () => {
+                                amountInvest = 20;
+                                await fundRaising.invest(amountInvest, {from: investor1});
+                                await truffleAssert.reverts( 
+                                    fundRaising.withdrawInvestment((amountInvest + 1), {from: investor1}));
+                            });
                         });
-
-                        it('Contract Sends Correct DAI', async () => {
-                            let daiBalanceContract = (await _testDAI.balanceOf(fundRaising.address)).toNumber();
-                            assert( daiBalanceContract == 0 );
-                        });
-
-                        it ('Investor Sends Correct RFTs', async () =>{
-                            let rftBalanceInvestor = (await fundRaising.balanceOf(investor1)).toNumber();
-                            assert( rftBalanceInvestor == 0 ); 
-                        });
-
-                        it('RFT Supply Decreased Correctly', async () => {
-                            let rftSupply = (await fundRaising.totalSupply()).toNumber();
-                            assert( rftSupply == 0 );
-                        });
-                    } )
+                    });
                 });
 
                 context ( 'Target Raised', function() {
 
-                    it('Cannot invest', async () => {
+                    beforeEach('Invest & Withdraw Investment', async () => { 
                         await fundRaising.invest(500, {from: investor1});
                         await fundRaising.invest(500, {from: investor2});
+                    });
+
+                    it('Cannot Invest', async () => {
                         await truffleAssert.reverts( 
                         fundRaising.invest(1, {from: investor1}), "Target Already Raised");
                     });
-                })
+
+                    it('Cannot Withdraw Investment', async () => {
+                        await truffleAssert.reverts( 
+                            fundRaising.withdrawInvestment(500, {from: investor1}), "Target Already Raised");
+                        await truffleAssert.reverts( 
+                            fundRaising.withdrawInvestment(500, {from: investor2}), "Target Already Raised");
+                    });
+                });
 
             });
 
