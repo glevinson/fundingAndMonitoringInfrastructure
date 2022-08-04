@@ -99,8 +99,9 @@ app.get('/accessData/:sig', async function (req, res) {
     const rftAddress = "0x" + tokenID.toString(16);
     const rft = new ethers.Contract(rftAddress, abiRFT, provider);
     const balanceRFT = (await rft.balanceOf(signingAddress));
+    const dataAccessThreshold = (await rft.dataAccessThreshold());
 
-    if ( (await projectMarketPlace.ownerOf(tokenID)) == signingAddress || balanceRFT > 50 /* Data Access Threshold */ ){ // I.e. if user owns the NFT itself or has above threshold of RFT...
+    if ( (await projectMarketPlace.ownerOf(tokenID)) == signingAddress || balanceRFT >= dataAccessThreshold /* Data Access Threshold */ ){ // I.e. if user owns the NFT itself or has above threshold of RFT...
       const projectName = await rft.name();
       data.push(" < " + projectName + " > Data ") // NB: Look into what data could dump here....
       // data["<Project Name>"] = "https://www.facebook.com/pages/category/Food---beverage/Fasdfasd-2407435632608750/"
