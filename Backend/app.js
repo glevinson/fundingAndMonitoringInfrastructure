@@ -31,6 +31,21 @@ const provider = ethers.getDefaultProvider("rinkeby")
 // Project MarketPlace contract address (once deployed):
 const projectMarketplaceAddress = "0x424d7a8947E558513eF4F900bc2Dab2B42272517"; // Test ProjectMarketplace address on Rinkenby: name: The Sping DAO Project Marketplace Test 1, Symbol: SpringDAOtest1
 
+/* Deployed Test Projects from the above contract on Rinkenby:
+
+  Project 1 data: 1000, "Test Project", "TP1", "Test  Project Token URI" , 0x6B175474E89094C44Da98b954EedeAC495271d0F
+            contract address: 0x53F85c097Da547E9BfBf46EDf958f7a6295f2eb3
+
+  Project 2 data: 2000, "Test Project 2", "TP2", "Test  Project 2 Token URI" , 0x6B175474E89094C44Da98b954EedeAC495271d0F
+            contract address: 0x81a81f4E331DDE0FD6083ff468Bd033F9a6c50a6
+
+  Project 3 data: 3000, "Test Project 3", "TP3", "Test  Project 3 Token URI" , 0x6B175474E89094C44Da98b954EedeAC495271d0F
+            contract address: 0xe8A641b27E947E6545F3A5552b74a9Cd62FC0b4c
+
+  Project 4 data: 4000, "Test Project 4", "TP4", "Test  Project 4 Token URI" , 0x6B175474E89094C44Da98b954EedeAC495271d0F
+            contract address: 0xa966b727b2Bf433f566748F44DB8BA69Bb138538
+*/
+
 // Creating an instance of the NFT contract - object with  shape of the ABI (has all listed functions) & is deployed on specified network with address you specified
 const projectMarketPlace = new ethers.Contract(projectMarketplaceAddress, abiNFT, provider);
 
@@ -48,20 +63,26 @@ app.get('/accessData/:sig', async function (req, res) {
     Signature is calculated off-chain; same for mainnet as Rinkeby & other testnets
   */
   const signingAddress = ethers.utils.verifyMessage("I would like to see my Spring DAO data", req.params.sig); // Finding the users address
-  // const projectMarketplaceSupply = (await projectMarketPlace.totalSupply()).toNumber()
+  const projectMarketplaceSupply = (await projectMarketPlace.totalSupply()).toNumber() // promise returns {"type":"BigNumber","hex":"0x01"} where 1 is supply at time of testing.
+                                                                                       // BigNumber is a ethers data type, .toNumber() converts a BigNumber to a JS 'number' data type
 
-  // res.send(signingAddress + projectMarketplaceSupply)
-  res.send(signingAddress)
+  /* My accounts signiture for this message (verified by etherscan) is: 
+     0xb036622d4db705e108c89f67210a2fb1f140a345afe0f6bf8b80ede4ae0b1846462d2d32f68acfa7961bac57c1600331d73521103ed8d4dcabca72e2c1dcc2361c */
 
-  // // Data that is returned:
-  // const data = []
+  // res.send(("Project MarketPlace Supply: " + projectMarketplaceSupply))
 
-  // // Iterate through all NFTs and their RFTs - grant access if balance above threshold
-  // for(let i = 0; i < projectMarketplaceSupply; i++){
+  // res.send(signingAddress)
 
-  //   let tokenID = await projectMarketPlace.tokenByIndex(i);
+  // Data that is returned:
+  const data = []
 
-  //   const rftAddress = hexZeroPad(tokenID.toHexString(), 20).toLowerCase() // Converting NFT tokenID to RFT address
+  // Iterate through all NFTs and their RFTs - grant access if balance above threshold
+  for(let i = 0; i < projectMarketplaceSupply; i++){
+    let tokenID = (await projectMarketPlace.tokenByIndex(i));
+    // data.push("Token index: " + i + " has an ID of: " + tokenID);
+    data.push(Number(tokenID))
+
+    // const rftAddress = hexZeroPad(tokenID.toHexString(), 20).toLowerCase() // Converting NFT tokenID to RFT address
   //   const rft = new ethers.Contract(rftAddress, abiRFT, provider);
   //   const balanceRFT = (await rft.balanceOf(signingAddress)).toNumber();
 
@@ -73,7 +94,8 @@ app.get('/accessData/:sig', async function (req, res) {
   //     data.push(" < " + projectName + " > Data ") // NB: DATA SGtokenURI 
   //     // data["<Project Name>"] = "https://www.facebook.com/pages/category/Food---beverage/Fasdfasd-2407435632608750/"
   //   }
-  // }
+  }
+  res.send(data)
   // res.send(data)
 });
 
