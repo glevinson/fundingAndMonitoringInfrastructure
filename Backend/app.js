@@ -26,10 +26,10 @@ const abiRFT = [
 //*************************************************************************************************************** */
 
 // Specfifying which blockchain:
-const provider = ethers.getDefaultProvider(/*"rinkeby"*/) // PROVIDER IS RINKENBY
+const provider = ethers.getDefaultProvider("rinkeby")
 
 // Project MarketPlace contract address (once deployed):
-const projectMarketplaceAddress = "0x764a06fDdcE6b8895b6E7F9ba2874711BF31edEa"; // NFT ADDRESS IS ON RINKEBY
+const projectMarketplaceAddress = "0x424d7a8947E558513eF4F900bc2Dab2B42272517"; // Test ProjectMarketplace address on Rinkenby: name: The Sping DAO Project Marketplace Test 1, Symbol: SpringDAOtest1
 
 // Creating an instance of the NFT contract - object with  shape of the ABI (has all listed functions) & is deployed on specified network with address you specified
 const projectMarketPlace = new ethers.Contract(projectMarketplaceAddress, abiNFT, provider);
@@ -45,11 +45,12 @@ app.get('/accessData/:sig', async function (req, res) {
     NB: The signiture is a hash of the message and the users signiture
     By getting the user to sign this particular message, we can deduce their account address which we know to be theirs
     (Rather than user specifying their address - would allow "pretending" to be a different address)
+    Signature is calculated off-chain; same for mainnet as Rinkeby & other testnets
   */
- // SIGNATURE IS ON MAINNET
   const signingAddress = ethers.utils.verifyMessage("I would like to see my Spring DAO data", req.params.sig); // Finding the users address
   // const projectMarketplaceSupply = (await projectMarketPlace.totalSupply()).toNumber()
 
+  // res.send(signingAddress + projectMarketplaceSupply)
   res.send(signingAddress)
 
   // // Data that is returned:
