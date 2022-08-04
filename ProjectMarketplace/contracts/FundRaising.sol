@@ -17,12 +17,14 @@ contract FundRaising is ERC20 {
     IERC721 public immutable NFT; // The NFT that creates the FundRaisingCampaigns
     uint256 public targetAmount; // Target amount for the fundraising
     uint256 public amountRaised;
+    uint256 public dataAccessThreshold; // The minimum number of ERC20 tokens required to access the corresponding projects data
     bool public _paused; // = false by default
     bool public istargetRaised;
     address admin;
 
-    constructor(uint256 amount, string memory name, string memory symbol, address _admin, address daiAddress) ERC20(name, symbol) {
+    constructor(uint256 amount, string memory name, string memory symbol, uint256 _dataAccessThreshold, address _admin, address daiAddress) ERC20(name, symbol) {
         targetAmount = amount;
+        dataAccessThreshold = _dataAccessThreshold;
         admin = _admin;
         DAI = IERC20(daiAddress);
         NFT = IERC721(msg.sender);
@@ -74,6 +76,13 @@ contract FundRaising is ERC20 {
         DAI.transfer(msg.sender, value);
         amountRaised -= value;
         _burn(msg.sender, value);
+    }
+
+    /* If a user has invested the full target amount, they can redeem their RFT supply for the project's NFT*/
+    function redeemNFT() external {
+        require( balanceOf(msg.sender) == targetAmount, "Do Not Have RFT Supply" );
+        _burn(msg.sender, totalSupply() );
+        NFT.safeTransferFrom( address(this), msg.sender, uint256(uint160(address(this))));
     }
 
 }

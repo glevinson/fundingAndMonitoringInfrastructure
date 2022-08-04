@@ -11,10 +11,10 @@ contract testERC721 is  ERC721Enumerable {
         // baseURI = springDAOMetadataURI;
     }
 
-    function createProject(uint256 targetAmount, string calldata projectName, string calldata projectSymbol, address DAI) external returns (address) {
-        address newProjectAddress = address(new FundRaising(targetAmount, projectName, projectSymbol, msg.sender, DAI));
+    function createProject(uint256 targetAmount, string calldata projectName, string calldata projectSymbol, string calldata _tokenURI, uint256 dataAccessThreshold, address DAI) external returns (address) {
+        address newProjectAddress = address(new FundRaising(targetAmount, projectName, projectSymbol, dataAccessThreshold, msg.sender, DAI));
         uint256 tokenID = uint256(uint160(newProjectAddress));
-        _safeMint( newProjectAddress , tokenID );
+        _safeMint( newProjectAddress , tokenID ); // think should transfer ownership to the projectfundraising contract
         return newProjectAddress;
     }
 }
