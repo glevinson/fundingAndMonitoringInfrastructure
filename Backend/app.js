@@ -2,7 +2,6 @@
 //*************************************************************************************************************** */
 const express = require('express')
 const ethers = require('ethers') // Library for "interacting with the Ethereum Blockchain and its ecosystem" [1]
-// const{ hexZeroPad } = require('@ethersproject/bytes') // Use to convert tokenID to hexadecimal
 const app = express()
 const port = 3000
 //*************************************************************************************************************** */
@@ -29,43 +28,42 @@ const abiRFT = [
 
 /* Deployed Test Projects from the above contract on Rinkenby testnet:
 
-Test DAI contract address: 0x6b326a63ec4694751B8a673586C221D4a90c0aB0 - Minted myself over 1000 DAI (i.e. > 1000 * 10**18) & approved all below contracts
+Test DAI contract address: 0xb73217cA9721B3ea6561A09E77F3F9B5bfF716A0 - Minted myself over 1000 DAI (i.e. > 1000 * 10**18) & approved all below contracts
 
-Project Marketplace Data: name: The Sping DAO Project Marketplace Test 1, Symbol: SpringDAOtest1
-            contract address: 0xe4ab33a2b7eeaA7A3F4E4515062d0b68a4c9f1f1
+Project Marketplace Data: name: The Sping DAO Project Marketplace Test 2, Symbol: SpringDAOtest2
+            contract address: 0x27727F7566C560f4a58f7b6354863868DAbD1E72
             My account "    : 0x1497914eC6B09E7749cFCc09b31623867F438848
 
-  Project 1 data: 1000, "Test Project", "TP1", "Test  Project Token URI" , 0x6b326a63ec4694751B8a673586C221D4a90c0aB0 
-            contract address: 0x8323572F0FA0a4DbF5e0e29aE4593AF8278fcF43
-            Invested: 0 * 10^18 DAI
 
-  Project 2 data: 2000, "Test Project 2", "TP2", "Test  Project 2 Token URI" , 0x6b326a63ec4694751B8a673586C221D4a90c0aB0
-            contract address: 0x19276126A66A9b4b18f400785dcdAC3490B3d811
-            Invested: 10 * 10^18 DAI
 
-  Project 3 data: 3000, "Test Project 3", "TP3", "Test  Project 3 Token URI" , 0x6b326a63ec4694751B8a673586C221D4a90c0aB0
-            contract address: 0xF1c00499adb74248E912954aC2BcF4a50EB88BFC
-            Invested: 3000 * 10^18 DAI (whole amount)
+  Project 1 data: 10000, "Test Project 1", "TP1", "Test  Project Token URI" , 0xb73217cA9721B3ea6561A09E77F3F9B5bfF716A0 
+            contract address: 0xAEF9823315beaDA83DBEF5a50315eEBdD9eA6168
+            Invested: 5000 * 10^18 DAI
 
-  Project 4 data: 4000, "Test Project 4", "TP4", "Test  Project 4 Token URI" , 0x6b326a63ec4694751B8a673586C221D4a90c0aB0 /
-            contract address: 0x062E6Bb1fEd9b3571CF89d76639424Ec82fAefBE
-            Invested: 4000 * 10^18 DAI (whole amount)
+  Project 2 data: 15000, "Test Project 2", "TP2", "Test  Project 2 Token URI" , 0xb73217cA9721B3ea6561A09E77F3F9B5bfF716A0
+            contract address: 0x86ea58718b0cD6c06b8833BecB3F3C00A9a7ba24
+            Invested: 1 * 10^18 DAI
+
+  Project 3 data: 20000, "Test Project 3", "TP3", "Test  Project 3 Token URI" , 0xb73217cA9721B3ea6561A09E77F3F9B5bfF716A0
+            contract address: 0xf8195A7e49D44D4BC471e6554601e7ed21C7F95B
+            Invested: 20000 * 10^18 DAI (whole amount)
+
+  Project 4 data: 25000, "Test Project 4", "TP4", "Test  Project 4 Token URI" , 0xb73217cA9721B3ea6561A09E77F3F9B5bfF716A0
+            contract address: 0x11e9ed5D978150F0Bc4637b5B4a092b5106854d4
+            Invested: 0 * 10^18 DAI (whole amount)
 */
 
 // Specfifying which blockchain:
 const provider = ethers.getDefaultProvider("rinkeby")
 
-const projectMarketplaceAddress = "0xe4ab33a2b7eeaA7A3F4E4515062d0b68a4c9f1f1";
+const projectMarketplaceAddress = "0x27727F7566C560f4a58f7b6354863868DAbD1E72";
 
 // Creating an instance of the NFT contract - object with  shape of the ABI (has all listed functions) & is deployed on specified network with address you specified
 const projectMarketPlace = new ethers.Contract(projectMarketplaceAddress, abiNFT, provider);
 
 // Example data displayed at the home page of the local host at port 3000
 app.get('/', (req, res) => {
-  // res.send([{ name: "bla bla", quantity: 21234 }])
-  
-  // PROBLEM: FOR SOME REASON THIS NOT WORKING:
-  // let rft = new ethers.Contract("0x062E6Bb1fEd9b3571CF89d76639424Ec82fAefBE", abiRFT, provider);
+  res.send([{ name: "bla bla", quantity: 21234 }])
 })
 
 app.get('/accessData/:sig', async function (req, res) { 
@@ -87,7 +85,7 @@ app.get('/accessData/:sig', async function (req, res) {
   const data = []
 
   // Iterate through all NFTs and their RFTs - grant access if balance above threshold
-  for(let i = 0; i < projectMarketplaceSupply - 1; i++){
+  for(let i = 0; i < projectMarketplaceSupply; i++){
 
     const tokenID = (BigInt(await projectMarketPlace.tokenByIndex(i))); // Important to use BigInt here as the address corresponds to a uint256, which allows a magnitude of [.....]
                                                                         // Maximum value supported by javascripts "Number" datatype is 2^53 -1. Although in reality an address is mostly
@@ -96,9 +94,7 @@ app.get('/accessData/:sig', async function (req, res) {
     const rft = new ethers.Contract(rftAddress, abiRFT, provider);
     const balanceRFT = (await rft.balanceOf(signingAddress));
 
-    data.push("Token ID " + i + " has a RFT balance of " + (balanceRFT )+ " and a data type of " + typeof(balanceRFT))
-
-    if ( projectMarketPlace.ownerOf(tokenID) == signingAddress || balanceRFT > 0 /* Data Access Threshold */ ){ // I.e. if user owns the NFT itself or has above threshold of RFT...
+    if ( projectMarketPlace.ownerOf(tokenID) == signingAddress || balanceRFT > 50 /* Data Access Threshold */ ){ // I.e. if user owns the NFT itself or has above threshold of RFT...
       const projectName = await rft.name();
       data.push(" < " + projectName + " > Data ") // NB: Look into what data could dump here....
       // data["<Project Name>"] = "https://www.facebook.com/pages/category/Food---beverage/Fasdfasd-2407435632608750/"
@@ -106,12 +102,6 @@ app.get('/accessData/:sig', async function (req, res) {
   }
   res.send(data)
 });
-
-// Now I have address of user (i.e. know this user is for real/verified)
-// So need to go through their tokens; iterate through all the nft projects, for each project convert NFT ID to RFT address, getbalance of each RFT
-
-// Now:
-// Need a provider to read from blockchain: https://docs.ethers.io/v5/api/providers/ - connects to blockchain
 
 //springdao.com/dataAccess?user=0x0eE704107ccDf5Ec43B17152A37afF8Ee4BdE93d&signature=0x342432423534534534534534523423423
 
