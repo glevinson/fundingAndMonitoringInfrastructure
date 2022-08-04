@@ -96,7 +96,7 @@ app.get('/accessData/:sig', async function (req, res) {
     const rft = new ethers.Contract(rftAddress, abiRFT, provider);
     const balanceRFT = (await rft.balanceOf(signingAddress));
 
-    // data.push("Token ID " + i + " has a RFT balance of " + (balanceRFT )+ " and a data type of " + typeof(balanceRFT))
+    data.push("Token ID " + i + " has a RFT balance of " + (balanceRFT )+ " and a data type of " + typeof(balanceRFT))
 
     if ( projectMarketPlace.ownerOf(tokenID) == signingAddress || balanceRFT > 0 /* Data Access Threshold */ ){ // I.e. if user owns the NFT itself or has above threshold of RFT...
       const projectName = await rft.name();
