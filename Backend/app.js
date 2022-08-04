@@ -45,7 +45,7 @@ Project Marketplace Data: name: The Sping DAO Project Marketplace Test 1, Symbol
 
   Project 3 data: 3000, "Test Project 3", "TP3", "Test  Project 3 Token URI" , 0x6b326a63ec4694751B8a673586C221D4a90c0aB0
             contract address: 0xF1c00499adb74248E912954aC2BcF4a50EB88BFC
-            Invested: 20 * 10^18 DAI
+            Invested: 3000 * 10^18 DAI (whole amount)
 
   Project 4 data: 4000, "Test Project 4", "TP4", "Test  Project 4 Token URI" , 0x6b326a63ec4694751B8a673586C221D4a90c0aB0 /
             contract address: 0x062E6Bb1fEd9b3571CF89d76639424Ec82fAefBE
@@ -64,7 +64,8 @@ const projectMarketPlace = new ethers.Contract(projectMarketplaceAddress, abiNFT
 app.get('/', (req, res) => {
   // res.send([{ name: "bla bla", quantity: 21234 }])
   
-  let rft = new ethers.Contract("0x062E6Bb1fEd9b3571CF89d76639424Ec82fAefBE", abiRFT, provider);
+  // PROBLEM: FOR SOME REASON THIS NOT WORKING:
+  // let rft = new ethers.Contract("0x062E6Bb1fEd9b3571CF89d76639424Ec82fAefBE", abiRFT, provider);
 })
 
 app.get('/accessData/:sig', async function (req, res) { 
@@ -86,36 +87,24 @@ app.get('/accessData/:sig', async function (req, res) {
   const data = []
 
   // Iterate through all NFTs and their RFTs - grant access if balance above threshold
-  for(let i = 0; i < projectMarketplaceSupply - 1; i++){
+  for(let i = 0; i < projectMarketplaceSupply - 2; i++){
 
     const tokenID = (BigInt(await projectMarketPlace.tokenByIndex(i))); // Important to use BigInt here as the address corresponds to a uint256, which allows a magnitude of [.....]
                                                                         // Maximum value supported by javascripts "Number" datatype is 2^53 -1. Although in reality an address is mostly
                                                                         // prefixed by zeros (so tokenID doesn't go above 2^53 -1), it is important that we can cater for one that might
     const rftAddress = "0x" + tokenID.toString(16);
-    const rft = new ethers.Contract(rftAddress, abiRFT, provider); // It's not picking up 
-    // data.push("rft " + i + " has a value of " + (await rft.name() )+ " and a data type of " + typeof((await rft.name())))
-    // IT ALL WORKS, APART FROM CONTRACT 4
+    const rft = new ethers.Contract(rftAddress, abiRFT, provider);
     const balanceRFT = (await rft.balanceOf(signingAddress));
-    // data.push((await rft.name()) + " => ")
-    // data.push((await projectMarketPlace.totalSupply()).toNumber())
-
-    // const rftSupply = (await rft.totalSupply());
 
     // data.push("Token ID " + i + " has a RFT balance of " + (balanceRFT )+ " and a data type of " + typeof(balanceRFT))
-    // data.push("Token ID " + i + " has a RFT supply of " + (rftSupply )+ " and a data type of " + typeof(rftSupply))
-    
 
-    if ( projectMarketPlace.ownerOf(tokenID) == signingAddress || balanceRFT > 0 /* Access Threshold */ ){ // I.e. if user owns the NFT itself or has above threshold of RFT...
-      // Project Name, save images to a google drive and heres the link
-      // const projectName = await nft.tokenURI( tokenID )
-      // ata.push(tokenURI) // NB: DATA SGtokenURI 
+    if ( projectMarketPlace.ownerOf(tokenID) == signingAddress || balanceRFT > 0 /* Data Access Threshold */ ){ // I.e. if user owns the NFT itself or has above threshold of RFT...
       const projectName = await rft.name();
-      data.push(" < " + projectName + " > Data ") // NB: DATA SGtokenURI 
+      data.push(" < " + projectName + " > Data ") // NB: Look into what data could dump here....
       // data["<Project Name>"] = "https://www.facebook.com/pages/category/Food---beverage/Fasdfasd-2407435632608750/"
     }
   }
   res.send(data)
-  // res.send(data)
 });
 
 // Now I have address of user (i.e. know this user is for real/verified)
