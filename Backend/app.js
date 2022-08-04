@@ -17,6 +17,7 @@ const abiRFT = [
   "function balanceOf(address owner) view returns (uint256)",
   "function decimals() view returns (uint8)",
   "function symbol() view returns (string)",
+  "function name() public view returns (string memory)",
 
   // Authenticated Functions
   "function transfer(address to, uint amount) returns (bool)",
@@ -81,18 +82,19 @@ app.get('/accessData/:sig', async function (req, res) {
   for(let i = 0; i < projectMarketplaceSupply; i++){
 
     // NEED TO CONVERT TOKENID TO A LARGE INTEGER AND CONVERT THAT TO A HEXADECIMAL STRING (THIS SHOULD BE USEABLE AS THE ADDRESS)
-    const tokenID = /*ethers.utils.BigNumber*/(BigInt(await projectMarketPlace.tokenByIndex(i))); // Important to use BigNumber here as the address corresponds to a uint256, which allows any magnitude [check]
+    const tokenID = /*ethers.utils.BigNumber*/(BigInt(await projectMarketPlace.tokenByIndex(i))); // Important to use BigInt here as the address corresponds to a uint256, which allows a magnitude of [.....]
                                                                         // Maximum value supported by javascripts "Number" datatype is 2^53 -1. Although in reality an address is mostly
                                                                         // prefixed by zeros (so tokenID doesn't go above 2^53 -1), it is important that we can cater for one that might
     // data.push("Token index: " + i + " has an ID of: " + tokenID);
     const rftAddress = "0x" + tokenID.toString(16);
-    data.push("Token ID " + i + " has a value of " + tokenID + " and a data type of " + typeof(tokenID) + " which equates to a hexadecimal value of: " + rftAddress + " which is a data type of: " + typeof(rftAddress) )
+    // data.push("rft address of token  " + i + " is " + rftAddress + " and a data type of " + typeof(rftAddress) )
     // const rftAddress = tokenID.toHexString() // Converting NFT tokenID to RFT address
 
     // data.push((rftAddress) + " " + typeof(rftAddress))
     // const rftAddress = hexZeroPad(tokenID.toHexString(), 20).toLowerCase() // Converting NFT tokenID to RFT address
-  //   const rft = new ethers.Contract(rftAddress, abiRFT, provider);
-  //   const balanceRFT = (await rft.balanceOf(signingAddress)).toNumber();
+    const rft = new ethers.Contract(rftAddress, abiRFT, provider);
+    data.push("rft " + i + " has a value of " + (await rft.name() )+ " and a data type of " + typeof((await rft.name())))
+    // const balanceRFT = (await rft.balanceOf(signingAddress)).toNumber();
 
   //   if ( projectMarketPlace.ownerOf(tokenID) == signingAddress || balanceRFT >= 0 /* Access Threshold */ ){ // I.e. if user owns the NFT itself or has above threshold of RFT...
   //     // Project Name, save images to a google drive and heres the link
