@@ -87,7 +87,7 @@ app.get('/accessData/:sig', async function (req, res) {
   const data = []
 
   // Iterate through all NFTs and their RFTs - grant access if balance above threshold
-  for(let i = 0; i < projectMarketplaceSupply - 2; i++){
+  for(let i = 0; i < projectMarketplaceSupply - 1; i++){
 
     const tokenID = (BigInt(await projectMarketPlace.tokenByIndex(i))); // Important to use BigInt here as the address corresponds to a uint256, which allows a magnitude of [.....]
                                                                         // Maximum value supported by javascripts "Number" datatype is 2^53 -1. Although in reality an address is mostly
