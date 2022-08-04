@@ -39,18 +39,24 @@ Project Marketplace Data: name: The Sping DAO Project Marketplace Test 2, Symbol
   Project 1 data: 10000, "Test Project 1", "TP1", "Test  Project Token URI" , 0xb73217cA9721B3ea6561A09E77F3F9B5bfF716A0 
             contract address: 0xAEF9823315beaDA83DBEF5a50315eEBdD9eA6168
             Invested: 5000 * 10^18 DAI
+            Corresponding tokenID: 998928621658257890679642152570123416578288148840
 
   Project 2 data: 15000, "Test Project 2", "TP2", "Test  Project 2 Token URI" , 0xb73217cA9721B3ea6561A09E77F3F9B5bfF716A0
             contract address: 0x86ea58718b0cD6c06b8833BecB3F3C00A9a7ba24
             Invested: 1 * 10^18 DAI
+            Corresponding tokenID: 770230842184749473687259574749180065129567861284
 
   Project 3 data: 20000, "Test Project 3", "TP3", "Test  Project 3 Token URI" , 0xb73217cA9721B3ea6561A09E77F3F9B5bfF716A0
             contract address: 0xf8195A7e49D44D4BC471e6554601e7ed21C7F95B
             Invested: 20000 * 10^18 DAI (whole amount)
+            Corresponding tokenID: 1416395112873723536423559337374454453661927471451
+            Redeemed the NFT: 
+              Ownership of NFT has been transfered to me!
 
   Project 4 data: 25000, "Test Project 4", "TP4", "Test  Project 4 Token URI" , 0xb73217cA9721B3ea6561A09E77F3F9B5bfF716A0
             contract address: 0x11e9ed5D978150F0Bc4637b5B4a092b5106854d4
-            Invested: 0 * 10^18 DAI (whole amount)
+            Invested: 25000 * 10^18 DAI (whole amount)
+            Corresponding tokenID: 102269594194673733253742275103562263623608325332
 */
 
 // Specfifying which blockchain:
@@ -94,7 +100,7 @@ app.get('/accessData/:sig', async function (req, res) {
     const rft = new ethers.Contract(rftAddress, abiRFT, provider);
     const balanceRFT = (await rft.balanceOf(signingAddress));
 
-    if ( projectMarketPlace.ownerOf(tokenID) == signingAddress || balanceRFT > 50 /* Data Access Threshold */ ){ // I.e. if user owns the NFT itself or has above threshold of RFT...
+    if ( (await projectMarketPlace.ownerOf(tokenID)) == signingAddress || balanceRFT > 50 /* Data Access Threshold */ ){ // I.e. if user owns the NFT itself or has above threshold of RFT...
       const projectName = await rft.name();
       data.push(" < " + projectName + " > Data ") // NB: Look into what data could dump here....
       // data["<Project Name>"] = "https://www.facebook.com/pages/category/Food---beverage/Fasdfasd-2407435632608750/"
