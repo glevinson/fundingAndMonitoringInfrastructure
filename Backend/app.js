@@ -99,18 +99,18 @@ app.get('/accessData/:sig', async function (req, res) {
 
     // const rftSupply = (await rft.totalSupply());
 
-    data.push("Token ID " + i + " has a RFT balance of " + (balanceRFT )+ " and a data type of " + typeof(balanceRFT))
+    // data.push("Token ID " + i + " has a RFT balance of " + (balanceRFT )+ " and a data type of " + typeof(balanceRFT))
     // data.push("Token ID " + i + " has a RFT supply of " + (rftSupply )+ " and a data type of " + typeof(rftSupply))
     
 
-  //   if ( projectMarketPlace.ownerOf(tokenID) == signingAddress || balanceRFT >= 0 /* Access Threshold */ ){ // I.e. if user owns the NFT itself or has above threshold of RFT...
-  //     // Project Name, save images to a google drive and heres the link
-  //     // const projectName = await nft.tokenURI( tokenID )
-  //     // ata.push(tokenURI) // NB: DATA SGtokenURI 
-  //     const projectName = await projectMarketPlace.getName();
-  //     data.push(" < " + projectName + " > Data ") // NB: DATA SGtokenURI 
-  //     // data["<Project Name>"] = "https://www.facebook.com/pages/category/Food---beverage/Fasdfasd-2407435632608750/"
-  //   }
+    if ( projectMarketPlace.ownerOf(tokenID) == signingAddress || balanceRFT > 0 /* Access Threshold */ ){ // I.e. if user owns the NFT itself or has above threshold of RFT...
+      // Project Name, save images to a google drive and heres the link
+      // const projectName = await nft.tokenURI( tokenID )
+      // ata.push(tokenURI) // NB: DATA SGtokenURI 
+      const projectName = await rft.name();
+      data.push(" < " + projectName + " > Data ") // NB: DATA SGtokenURI 
+      // data["<Project Name>"] = "https://www.facebook.com/pages/category/Food---beverage/Fasdfasd-2407435632608750/"
+    }
   }
   res.send(data)
   // res.send(data)
