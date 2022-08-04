@@ -3,6 +3,7 @@
 const express = require('express')
 const ethers = require('ethers') // Library for "interacting with the Ethereum Blockchain and its ecosystem" [1]
 const{ hexZeroPad } = require('@ethersproject/bytes') // Use to convert tokenID to hexadecimal
+const BigNumber = require('bignumber.js');
 const app = express()
 const port = 3000
 //*************************************************************************************************************** */
@@ -78,10 +79,17 @@ app.get('/accessData/:sig', async function (req, res) {
 
   // Iterate through all NFTs and their RFTs - grant access if balance above threshold
   for(let i = 0; i < projectMarketplaceSupply; i++){
-    let tokenID = (await projectMarketPlace.tokenByIndex(i));
-    // data.push("Token index: " + i + " has an ID of: " + tokenID);
-    data.push(Number(tokenID))
 
+    // NEED TO CONVERT TOKENID TO A LARGE INTEGER AND CONVERT THAT TO A HEXADECIMAL STRING (THIS SHOULD BE USEABLE AS THE ADDRESS)
+    const tokenID = /*ethers.utils.BigNumber*/(BigInt(await projectMarketPlace.tokenByIndex(i))); // Important to use BigNumber here as the address corresponds to a uint256, which allows any magnitude [check]
+                                                                        // Maximum value supported by javascripts "Number" datatype is 2^53 -1. Although in reality an address is mostly
+                                                                        // prefixed by zeros (so tokenID doesn't go above 2^53 -1), it is important that we can cater for one that might
+    // data.push("Token index: " + i + " has an ID of: " + tokenID);
+    const rftAddress = "0x" + tokenID.toString(16);
+    data.push("Token ID " + i + " has a value of " + tokenID + " and a data type of " + typeof(tokenID) + " which equates to a hexadecimal value of: " + rftAddress + " which is a data type of: " + typeof(rftAddress) )
+    // const rftAddress = tokenID.toHexString() // Converting NFT tokenID to RFT address
+
+    // data.push((rftAddress) + " " + typeof(rftAddress))
     // const rftAddress = hexZeroPad(tokenID.toHexString(), 20).toLowerCase() // Converting NFT tokenID to RFT address
   //   const rft = new ethers.Contract(rftAddress, abiRFT, provider);
   //   const balanceRFT = (await rft.balanceOf(signingAddress)).toNumber();
