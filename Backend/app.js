@@ -96,6 +96,8 @@ app.get('/accessData/:sig', async function (req, res) {
     const tokenID = (BigInt(await projectMarketPlace.tokenByIndex(i))); // Important to use BigInt here as the address corresponds to a uint256, which allows a magnitude of [.....]
                                                                         // Maximum value supported by javascripts "Number" datatype is 2^53 -1. Although in reality an address is mostly
                                                                         // prefixed by zeros (so tokenID doesn't go above 2^53 -1), it is important that we can cater for one that might
+    const rftAddress = "0x" + tokenID.toString(16);
+    const rft = new ethers.Contract(rftAddress, abiRFT, provider);
 
   }
   res.send(data)
