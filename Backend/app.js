@@ -87,6 +87,18 @@ app.get('/accessData/:sig', async function (req, res) {
   /* My accounts signiture for this message (verified by etherscan) is: 
      0xb036622d4db705e108c89f67210a2fb1f140a345afe0f6bf8b80ede4ae0b1846462d2d32f68acfa7961bac57c1600331d73521103ed8d4dcabca72e2c1dcc2361c */
 
+  // Data that is returned:
+  const data = []
+
+  // Iterate through all NFTs and their RFTs - grant access if balance above threshold
+  for(let i = 0; i < projectMarketplaceSupply; i++){
+
+    const tokenID = (BigInt(await projectMarketPlace.tokenByIndex(i))); // Important to use BigInt here as the address corresponds to a uint256, which allows a magnitude of [.....]
+                                                                        // Maximum value supported by javascripts "Number" datatype is 2^53 -1. Although in reality an address is mostly
+                                                                        // prefixed by zeros (so tokenID doesn't go above 2^53 -1), it is important that we can cater for one that might
+
+  }
+  res.send(data)
 });
 
 //springdao.com/dataAccess?user=0x0eE704107ccDf5Ec43B17152A37afF8Ee4BdE93d&signature=0x342432423534534534534534523423423
