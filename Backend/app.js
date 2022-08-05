@@ -72,46 +72,6 @@ app.get('/', (req, res) => {
   res.send([{ name: "bla bla", quantity: 21234 }])
 })
 
-app.get('/accessData/:sig', async function (req, res) { 
-  // ":sig" means <... filled with sig value >, req = request (an object containing info about the HTTP request that raised the event) & res = response (HTTP response)
-  /* 
-    NB: The signiture is a hash of the message and the users signiture
-    By getting the user to sign this particular message, we can deduce their account address which we know to be theirs
-    (Rather than user specifying their address - would allow "pretending" to be a different address)
-    Signature is calculated off-chain; same for mainnet as Rinkeby & other testnets
-  */
-  const signingAddress = ethers.utils.verifyMessage("I would like to see my Spring DAO data", req.params.sig); // Finding the users address
-  const projectMarketplaceSupply = (await projectMarketPlace.totalSupply()).toNumber() // promise returns {"type":"BigNumber","hex":"0x01"} where 1 is supply at time of testing.
-                                                                                       // BigNumber is a ethers data type, .toNumber() converts a BigNumber to a JS 'number' data type
-
-  /* My accounts signiture for this message (verified by etherscan) is: 
-     0xb036622d4db705e108c89f67210a2fb1f140a345afe0f6bf8b80ede4ae0b1846462d2d32f68acfa7961bac57c1600331d73521103ed8d4dcabca72e2c1dcc2361c */
-
-  // Data that is returned:
-  const data = []
-
-  // Iterate through all NFTs and their RFTs - grant access if balance above threshold
-  for(let i = 0; i < projectMarketplaceSupply; i++){
-
-    const tokenID = (BigInt(await projectMarketPlace.tokenByIndex(i))); // Important to use BigInt here as the address corresponds to a uint256, which allows a magnitude of [.....]
-                                                                        // Maximum value supported by javascripts "Number" datatype is 2^53 -1. Although in reality an address is mostly
-                                                                        // prefixed by zeros (so tokenID doesn't go above 2^53 -1), it is important that we can cater for one that might
-    const rftAddress = "0x" + tokenID.toString(16);
-    const rft = new ethers.Contract(rftAddress, abiRFT, provider);
-    const balanceRFT = (await rft.balanceOf(signingAddress));
-    const dataAccessThreshold = (await rft.dataAccessThreshold());
-
-    if ( (await projectMarketPlace.ownerOf(tokenID)) == signingAddress || balanceRFT >= dataAccessThreshold /* Data Access Threshold */ ){ // I.e. if user owns the NFT itself or has above threshold of RFT...
-      const projectName = await rft.name();
-      data.push(" < " + projectName + " > Data ") // NB: Look into what data could dump here....
-      // data["<Project Name>"] = "https://www.facebook.com/pages/category/Food---beverage/Fasdfasd-2407435632608750/"
-    }
-  }
-  res.send(data)
-});
-
-//springdao.com/dataAccess?user=0x0eE704107ccDf5Ec43B17152A37afF8Ee4BdE93d&signature=0x342432423534534534534534523423423
-
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
