@@ -19,7 +19,7 @@ export default function SignMessage() {
     const getData = () => {
         const options = {
             method: 'GET',
-            url: 'http://localhost:8000/',
+            url: 'http://localhost:8000/accessData',
             params: {signature: sig2},
         }
     

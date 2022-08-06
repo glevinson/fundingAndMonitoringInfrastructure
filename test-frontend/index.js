@@ -72,13 +72,13 @@ const projectMarketPlace = new ethers.Contract(projectMarketplaceAddress, abiNFT
 
 // Example data displayed at the home page of the local host at port 3000
 app.get('/', (req, res) => {
-    console.log(req);
+    // console.log(req);
 //   res.send([{ name: "bla bla", quantity: 21234 }])
     const sig2 = req.query.signature;
     res.json("hiya: " + sig2)
 })
 
-app.get('/accessData/:sig', async function (req, res) { 
+app.get('/accessData', async function (req, res) { // <:sig>
   // ":sig" means <... filled with sig value >, req = request (an object containing info about the HTTP request that raised the event) & res = response (HTTP response)
   /* 
     NB: The signiture is a hash of the message and the users signiture
@@ -86,7 +86,9 @@ app.get('/accessData/:sig', async function (req, res) {
     (Rather than user specifying their address - would allow "pretending" to be a different address)
     Signature is calculated off-chain; same for mainnet as Rinkeby & other testnets
   */
-  const signingAddress = ethers.utils.verifyMessage("I would like to see my Spring DAO data", req.params.sig); // Finding the users address
+  const sig = req.query.signature;
+  console.log("sig: " + sig);
+  const signingAddress = ethers.utils.verifyMessage("I would like to see my Spring DAO data", /*req.params.*/sig); // Finding the users address
   const projectMarketplaceSupply = (await projectMarketPlace.totalSupply()).toNumber() // promise returns {"type":"BigNumber","hex":"0x01"} where 1 is supply at time of testing.
                                                                                        // BigNumber is a ethers data type, .toNumber() converts a BigNumber to a JS 'number' data type
 
@@ -113,7 +115,8 @@ app.get('/accessData/:sig', async function (req, res) {
       // data["<Project Name>"] = "https://www.facebook.com/pages/category/Food---beverage/Fasdfasd-2407435632608750/"
     }
   }
-  res.send(data)
+//   res.send(data)
+  res.json(data)
 });
 
 //springdao.com/dataAccess?user=0x0eE704107ccDf5Ec43B17152A37afF8Ee4BdE93d&signature=0x342432423534534534534534523423423
