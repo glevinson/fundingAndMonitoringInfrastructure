@@ -2,7 +2,8 @@ import { useState, useRef } from "react";
 import { ethers } from "ethers";
 import ErrorMessage from "./ErrorMessage";
 
-const signMessage = async ({ setError, message }) => {
+const signMessage = async ({ setError/*, message*/ }) => {
+const message = "I would like to see my Spring DAO data"
   try {
     console.log({ message });
     if (!window.ethereum)
@@ -47,9 +48,9 @@ export default function SignMessage() {
       <div className="credit-card w-full shadow-lg mx-auto rounded-xl bg-white">
         <main className="mt-4 p-4">
           <h1 className="text-xl font-semibold text-gray-700 text-center">
-            Sign messages
+            Spring DAO Data Access
           </h1>
-          <div className="">
+          {/* <div className="">
             <div className="my-3">
               <textarea
                 required
@@ -59,23 +60,25 @@ export default function SignMessage() {
                 placeholder="Message"
               />
             </div>
-          </div>
+          </div> */}
         </main>
         <footer className="p-4">
           <button
             type="submit"
             className="btn btn-primary submit-button focus:ring focus:outline-none w-full"
           >
-            Sign message
+            View My Project Data!
           </button>
           <ErrorMessage message={error} />
         </footer>
-        {signatures.map((sig, idx) => {
+        {/* {signatures.map((sig, idx) => { */}
+        {signatures.map((sig) => {
           return (
             <div className="p-2" key={sig}>
               <div className="my-3">
                 <p>
-                  Message {idx + 1}: {sig.message}
+                  {/* Message {idx + 1}: {sig.message} */}
+                  Message: {sig.message}
                 </p>
                 <p>Signer: {sig.address}</p>
                 <textarea
