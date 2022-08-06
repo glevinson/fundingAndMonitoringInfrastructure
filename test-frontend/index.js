@@ -1,12 +1,12 @@
 // This is the backend:
 // Packages:
 //*************************************************************************************************************** */
-const express = require('express')
-const ethers = require('ethers') // Library for "interacting with the Ethereum Blockchain and its ecosystem" [1]
-const app = express()
-const port = 8000
-const cors = require('cors')
-app.use(cors())
+const express = require('express');
+const ethers = require('ethers'); // Library for "interacting with the Ethereum Blockchain and its ecosystem" [1]
+const app = express();
+const port = 8000;
+const cors = require('cors');
+app.use(cors());
 //*************************************************************************************************************** */
 
 // ABIs, one for NFT & one for RFT:
@@ -72,13 +72,10 @@ const projectMarketPlace = new ethers.Contract(projectMarketplaceAddress, abiNFT
 
 // Example data displayed at the home page of the local host at port 3000
 app.get('/', (req, res) => {
-    // console.log(req);
-//   res.send([{ name: "bla bla", quantity: 21234 }])
-    const sig2 = req.query.signature;
-    res.json("hiya: " + sig2)
+    res.json("Backend Local Server");
 })
 
-app.get('/accessData', async function (req, res) { // <:sig>
+app.get('/accessData/', async function (req, res) { // <:sig>
   // ":sig" means <... filled with sig value >, req = request (an object containing info about the HTTP request that raised the event) & res = response (HTTP response)
   /* 
     NB: The signiture is a hash of the message and the users signiture
@@ -87,7 +84,6 @@ app.get('/accessData', async function (req, res) { // <:sig>
     Signature is calculated off-chain; same for mainnet as Rinkeby & other testnets
   */
   const sig = req.query.signature;
-  console.log("sig: " + sig);
   const signingAddress = ethers.utils.verifyMessage("I would like to see my Spring DAO data", /*req.params.*/sig); // Finding the users address
   const projectMarketplaceSupply = (await projectMarketPlace.totalSupply()).toNumber() // promise returns {"type":"BigNumber","hex":"0x01"} where 1 is supply at time of testing.
                                                                                        // BigNumber is a ethers data type, .toNumber() converts a BigNumber to a JS 'number' data type

@@ -69,6 +69,7 @@ export default function SignMessage() {
     if (sig) {
       setSignatures([...signatures, sig]);
       setSig2(sig.signature);
+      console.log(sig2)
     }
   };
   // ******************************************************************************
@@ -101,8 +102,8 @@ export default function SignMessage() {
           </button>
           <ErrorMessage message={error} />
         </footer>
-        {/* {signatures.map((sig, idx) => { */}
-        {signatures.map((sig) => {
+        {signatures.map((sig, idx) => {
+        // {signatures.map((sig) => {
           return (
             <div className="p-2" key={sig}>
               <div className="my-3">
@@ -127,26 +128,3 @@ export default function SignMessage() {
     </form>
   );
 }
-
-
-       // const data = {
-        //   method: 'GET',
-        //   url: 'http://localhost:8000/',
-        //   params: {sig: signature }
-        // }
-    
-        //   const getData = () => {
-    //     const options = {
-    //         method: 'GET',
-    //         url: 'http://localhost:8000/',
-    //         params: {level: chosenLevel, area: 'sat'},
-    //     }
-    
-    //     axios.request(options).then((response) => {
-    //         console.log(response.data)
-    //         setWords(response.data)
-    
-    //     }).catch((error) => {
-    //         console.error(error)
-    //     })
-    // }
