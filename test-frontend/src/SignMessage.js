@@ -7,26 +7,31 @@ export default function SignMessage() {
   const resultBox = useRef();
   const [signatures, setSignatures] = useState([]);
   const [error, setError] = useState();
-  const [data, setData] = useState(null);
+  const [data, setData] = useState(null); // Just did null as this funciton equivalent to their setWords
+  const [sig2, setSig2] = useState(null) // As this equivalent to their chosen level
 
   const signMessage = async ({ setError/*, message*/ }) => {
     const message = "I would like to see my Spring DAO data"
     
+    // This requests the data from the backend with the sig2 state & updates the 
+    // data state accordingly
+    // *********************************************************************************
     const getData = () => {
         const options = {
             method: 'GET',
             url: 'http://localhost:8000/',
-            // params: {},
+            params: {signature: sig2},
         }
     
         axios.request(options).then((response) => {
             console.log("response.data: " + response.data)
-            setData(response.data)
+            setData(response.data) // Saves GET response to State variable 'data'
     
         }).catch((error) => {
             console.error(error)
         })
     }
+    // *********************************************************************************
     
       try {
         console.log({ message });
@@ -38,19 +43,21 @@ export default function SignMessage() {
         const signer = provider.getSigner();
         const signature = await signer.signMessage(message);
         const address = await signer.getAddress();
-    
-        const data = getData()   
+        getData()   
+
         return {
           message,
           signature,
-          address,
-          data
+          address
         };
       } catch (err) {
         setError(err.message);
       }
     };
 
+  // Calls signMessage &, if there is a signature, sets signatures state &
+  // sets sig2 state
+  // ******************************************************************************
   const handleSign = async (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
@@ -61,8 +68,10 @@ export default function SignMessage() {
     });
     if (sig) {
       setSignatures([...signatures, sig]);
+      setSig2(sig.signature);
     }
   };
+  // ******************************************************************************
 
   return (
     <form className="m-4" onSubmit={handleSign}>

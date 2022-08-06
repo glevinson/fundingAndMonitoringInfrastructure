@@ -72,8 +72,10 @@ const projectMarketPlace = new ethers.Contract(projectMarketplaceAddress, abiNFT
 
 // Example data displayed at the home page of the local host at port 3000
 app.get('/', (req, res) => {
+    console.log(req);
 //   res.send([{ name: "bla bla", quantity: 21234 }])
-    res.json("hi")
+    const sig2 = req.query.signature;
+    res.json("hiya: " + sig2)
 })
 
 app.get('/accessData/:sig', async function (req, res) { 
