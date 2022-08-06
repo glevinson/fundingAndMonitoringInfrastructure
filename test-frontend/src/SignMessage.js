@@ -1,34 +1,55 @@
 import { useState, useRef } from "react";
 import { ethers } from "ethers";
 import ErrorMessage from "./ErrorMessage";
-
-const signMessage = async ({ setError/*, message*/ }) => {
-const message = "I would like to see my Spring DAO data"
-  try {
-    console.log({ message });
-    if (!window.ethereum)
-      throw new Error("No crypto wallet found. Please install it.");
-
-    await window.ethereum.send("eth_requestAccounts");
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const signature = await signer.signMessage(message);
-    const address = await signer.getAddress();
-
-    return {
-      message,
-      signature,
-      address
-    };
-  } catch (err) {
-    setError(err.message);
-  }
-};
+import axios from "axios";
 
 export default function SignMessage() {
   const resultBox = useRef();
   const [signatures, setSignatures] = useState([]);
   const [error, setError] = useState();
+  const [data, setData] = useState(null);
+
+  const signMessage = async ({ setError/*, message*/ }) => {
+    const message = "I would like to see my Spring DAO data"
+    
+    const getData = () => {
+        const options = {
+            method: 'GET',
+            url: 'http://localhost:8000/',
+            // params: {},
+        }
+    
+        axios.request(options).then((response) => {
+            console.log("response.data: " + response.data)
+            setData(response.data)
+    
+        }).catch((error) => {
+            console.error(error)
+        })
+    }
+    
+      try {
+        console.log({ message });
+        if (!window.ethereum)
+          throw new Error("No crypto wallet found. Please install it.");
+    
+        await window.ethereum.send("eth_requestAccounts");
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const signature = await signer.signMessage(message);
+        const address = await signer.getAddress();
+    
+        const data = getData()   
+        return {
+          message,
+          signature,
+          address,
+          data
+        };
+      } catch (err) {
+        setError(err.message);
+      }
+    };
 
   const handleSign = async (e) => {
     e.preventDefault();
@@ -87,7 +108,7 @@ export default function SignMessage() {
                   ref={resultBox}
                   className="textarea w-full h-24 textarea-bordered focus:ring focus:outline-none"
                   placeholder="Generated signature"
-                  value={sig.signature}
+                  value={data}
                 />
               </div>
             </div>
@@ -97,3 +118,26 @@ export default function SignMessage() {
     </form>
   );
 }
+
+
+       // const data = {
+        //   method: 'GET',
+        //   url: 'http://localhost:8000/',
+        //   params: {sig: signature }
+        // }
+    
+        //   const getData = () => {
+    //     const options = {
+    //         method: 'GET',
+    //         url: 'http://localhost:8000/',
+    //         params: {level: chosenLevel, area: 'sat'},
+    //     }
+    
+    //     axios.request(options).then((response) => {
+    //         console.log(response.data)
+    //         setWords(response.data)
+    
+    //     }).catch((error) => {
+    //         console.error(error)
+    //     })
+    // }

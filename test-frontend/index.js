@@ -5,6 +5,8 @@ const express = require('express')
 const ethers = require('ethers') // Library for "interacting with the Ethereum Blockchain and its ecosystem" [1]
 const app = express()
 const port = 8000
+const cors = require('cors')
+app.use(cors())
 //*************************************************************************************************************** */
 
 // ABIs, one for NFT & one for RFT:
@@ -70,7 +72,8 @@ const projectMarketPlace = new ethers.Contract(projectMarketplaceAddress, abiNFT
 
 // Example data displayed at the home page of the local host at port 3000
 app.get('/', (req, res) => {
-  res.send([{ name: "bla bla", quantity: 21234 }])
+//   res.send([{ name: "bla bla", quantity: 21234 }])
+    res.json("hi")
 })
 
 app.get('/accessData/:sig', async function (req, res) { 
