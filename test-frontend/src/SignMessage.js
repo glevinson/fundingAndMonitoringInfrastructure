@@ -5,71 +5,72 @@ import axios from "axios";
 
 export default function SignMessage() {
   const resultBox = useRef();
-  const [signatures, setSignatures] = useState([]);
+  // const [signatures, setSignatures] = useState([]);
   const [error, setError] = useState();
   const [data, setData] = useState(null); // Just did null as this funciton equivalent to their setWords
-  const [sig2, setSig2] = useState(null) // As this equivalent to their chosen level
+  // const [sig2, setSig2] = useState(null) // As this equivalent to their chosen level
 
-  const signMessage = async ({ setError/*, message*/ }) => {
-    const message = "I would like to see my Spring DAO data"
-    
-    // This requests the data from the backend with the sig2 state & updates the 
-    // data state accordingly
-    // *********************************************************************************
-    const getData = () => {
-        const options = {
-            method: 'GET',
-            url: 'http://localhost:8000/accessData',
-            params: {signature: sig2},
-        }
-    
-        axios.request(options).then((response) => {
-            console.log("response.data: " + response.data)
-            setData(response.data) // Saves GET response to State variable 'data'
-    
-        }).catch((error) => {
-            console.error(error)
-        })
+  // This requests the data from the backend with the sig2 state & updates the 
+  // data state accordingly
+  // *********************************************************************************
+  const getData = (sig) => {
+    const options = {
+      method: 'GET',
+      url: 'http://localhost:8000/accessData',
+      params: { signature: sig },
     }
-    // *********************************************************************************
-    
-      try {
-        console.log({ message });
-        if (!window.ethereum)
-          throw new Error("No crypto wallet found. Please install it.");
-    
-        await window.ethereum.send("eth_requestAccounts");
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const signature = await signer.signMessage(message);
-        const address = await signer.getAddress();
-        getData()   
 
-        return {
-          message,
-          signature,
-          address
-        };
-      } catch (err) {
-        setError(err.message);
-      }
-    };
+    axios.request(options).then((response) => {
+      console.log("response.data: " + response.data)
+      setData(response.data) // Saves GET response to State variable 'data'
+
+    }).catch((error) => {
+      console.error(error)
+    })
+  }
+  // *********************************************************************************
+
+  // const signMessage = async (/* setError/*, message*/) => {
+
+  // };
 
   // Calls signMessage &, if there is a signature, sets signatures state &
   // sets sig2 state
   // ******************************************************************************
   const handleSign = async (e) => {
     e.preventDefault();
-    const data = new FormData(e.target);
-    setError();
-    const sig = await signMessage({
-      setError,
-      message: data.get("message")
-    });
-    if (sig) {
-      setSignatures([...signatures, sig]);
-      setSig2(sig.signature);
-      console.log(sig2)
+    // const data = new FormData(e.target);
+    setError(); // Clearing the error (assume)
+    /*const sig = */
+    // await signMessage();
+    // setError,
+    // message: data.get("message"));
+    // if (sig) {
+    //   // setSignatures([...signatures, sig]);
+    //   // setSig2(sig.signature);
+    //   // console.log(sig2)
+    // }
+    const message = "I would like to see my Spring DAO data"
+
+    try {
+      console.log({ message });
+      if (!window.ethereum)
+        throw new Error("No crypto wallet found. Please install it.");
+
+      await window.ethereum.send("eth_requestAccounts");
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const signature = await signer.signMessage(message);
+      // const address = await signer.getAddress();
+      getData(signature)
+
+      // return {
+      //   message,
+      //   // signature,
+      //   // address
+      // };
+    } catch (err) {
+      setError(err.message);
     }
   };
   // ******************************************************************************
@@ -102,28 +103,17 @@ export default function SignMessage() {
           </button>
           <ErrorMessage message={error} />
         </footer>
-        {signatures.map((sig, idx) => {
-        // {signatures.map((sig) => {
-          return (
-            <div className="p-2" key={sig}>
-              <div className="my-3">
-                <p>
-                  {/* Message {idx + 1}: {sig.message} */}
-                  Message: {sig.message}
-                </p>
-                <p>Signer: {sig.address}</p>
-                <textarea
-                  type="text"
-                  readOnly
-                  ref={resultBox}
-                  className="textarea w-full h-24 textarea-bordered focus:ring focus:outline-none"
-                  placeholder="Generated signature"
-                  value={data}
-                />
-              </div>
-            </div>
-          );
-        })}
+        { data ?
+          <textarea
+            type="text"
+            readOnly
+            ref={resultBox}
+            className="textarea w-full h-24 textarea-bordered focus:ring focus:outline-none"
+            // placeholder="Loading Data..."
+            value={data}
+          />
+          : null
+        }
       </div>
     </form>
   );

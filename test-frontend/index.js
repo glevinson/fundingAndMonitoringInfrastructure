@@ -83,6 +83,7 @@ app.get('/accessData/', async function (req, res) { // <:sig>
     (Rather than user specifying their address - would allow "pretending" to be a different address)
     Signature is calculated off-chain; same for mainnet as Rinkeby & other testnets
   */
+ try{
   const sig = req.query.signature;
   const signingAddress = ethers.utils.verifyMessage("I would like to see my Spring DAO data", /*req.params.*/sig); // Finding the users address
   const projectMarketplaceSupply = (await projectMarketPlace.totalSupply()).toNumber() // promise returns {"type":"BigNumber","hex":"0x01"} where 1 is supply at time of testing.
@@ -113,6 +114,10 @@ app.get('/accessData/', async function (req, res) { // <:sig>
   }
 //   res.send(data)
   res.json(data)
+  }
+  catch (e){
+    console.error("Error: ", e)
+  }
 });
 
 //springdao.com/dataAccess?user=0x0eE704107ccDf5Ec43B17152A37afF8Ee4BdE93d&signature=0x342432423534534534534534523423423
