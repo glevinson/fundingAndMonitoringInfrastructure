@@ -1,13 +1,13 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { ethers } from "ethers";
 import ErrorMessage from "./ErrorMessage";
 import axios from "axios";
 
 export default function SignMessage() {
-  const resultBox = useRef();
+  // const resultBox = useRef();
   // const [signatures, setSignatures] = useState([]);
-  const [error, setError] = useState();
-  const [data, setData] = useState(null); // Just did null as this funciton equivalent to their setWords
+  const [error, setError] = useState();// Start from empty array of projects
+  const [data, setData] = useState([]); // Just did null as this funciton equivalent to their setWords
   // const [sig2, setSig2] = useState(null) // As this equivalent to their chosen level
 
   // This requests the data from the backend with the sig2 state & updates the 
@@ -20,6 +20,7 @@ export default function SignMessage() {
       params: { signature: sig },
     }
 
+    // setData("Requesting Data...")
     axios.request(options).then((response) => {
       console.log("response.data: " + response.data)
       setData(response.data) // Saves GET response to State variable 'data'
@@ -103,17 +104,20 @@ export default function SignMessage() {
           </button>
           <ErrorMessage message={error} />
         </footer>
-        { data ?
-          <textarea
-            type="text"
-            readOnly
-            ref={resultBox}
-            className="textarea w-full h-24 textarea-bordered focus:ring focus:outline-none"
-            // placeholder="Loading Data..."
-            value={data}
-          />
-          : null
-        }
+        {data.map((project) => {
+          return (
+            <div className="p-2" key = {project.name}>
+              <div className="my-3">
+                <p>Project Name: {project.name}</p>
+                <img
+                  crossOrigin=""
+                  src={project.url}
+                  alt="new"
+                />
+              </div>
+            </div>
+          );
+        })}
       </div>
     </form>
   );

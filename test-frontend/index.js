@@ -37,8 +37,6 @@ Project Marketplace Data: name: The Sping DAO Project Marketplace Test 2, Symbol
             contract address: 0x27727F7566C560f4a58f7b6354863868DAbD1E72
             My account "    : 0x1497914eC6B09E7749cFCc09b31623867F438848
 
-
-
   Project 1 data: 10000, "Test Project 1", "TP1", "Test  Project Token URI" , 0xb73217cA9721B3ea6561A09E77F3F9B5bfF716A0 
             contract address: 0xAEF9823315beaDA83DBEF5a50315eEBdD9eA6168
             Invested: 5000 * 10^18 DAI
@@ -108,12 +106,18 @@ app.get('/accessData/', async function (req, res) { // <:sig>
 
     if ( (await projectMarketPlace.ownerOf(tokenID)) == signingAddress || balanceRFT >= 50 /* dataAccessThreshold */ ){ // I.e. if user owns the NFT itself or has above threshold of RFT...
       const projectName = await rft.name();
-      data.push(" < " + projectName + " > Data ") // NB: Look into what data could dump here....
+      // data.push(" < " + projectName + " > Data ") // NB: Look into what data could dump here....
+      data.push({ name: projectName, url: "https://drive.google.com/file/d/1919NmzdO7PoCHSo_1k6xckAuZCqJCm51/view?usp=sharing" })
       // data["<Project Name>"] = "https://www.facebook.com/pages/category/Food---beverage/Fasdfasd-2407435632608750/"
     }
   }
 //   res.send(data)
+  // if (data.length > 0){
   res.json(data)
+  // }
+  // else{
+  //   res.send("No Data For This Address / Invalid Signature")
+  // }
   }
   catch (e){
     console.error("Error: ", e)
