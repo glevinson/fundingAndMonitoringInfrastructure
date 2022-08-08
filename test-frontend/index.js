@@ -73,7 +73,7 @@ app.get('/', (req, res) => {
     res.json("Backend Local Server");
 })
 
-app.get('/accessData/', async function (req, res) { // <:sig>
+app.get('/accessData/', async function (req, res) {
   // ":sig" means <... filled with sig value >, req = request (an object containing info about the HTTP request that raised the event) & res = response (HTTP response)
   /* 
     NB: The signiture is a hash of the message and the users signiture
