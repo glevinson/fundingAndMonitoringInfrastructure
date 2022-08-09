@@ -14,7 +14,7 @@ export default function AccessData() {
   // data state accordingly
   // *********************************************************************************
   const getData = (sig) => {
-    const options = {
+    const options = { 
       method: 'GET',
       url: 'http://localhost:8000/accessData',
       params: { signature: sig },
@@ -33,6 +33,7 @@ export default function AccessData() {
     // .then(data => {
     //   console.log
     // })
+
   }
   // *********************************************************************************
   // Calls signMessage &, if there is a signature, sets signatures state &
@@ -89,11 +90,12 @@ export default function AccessData() {
                   // alt="Image Data"
                   alt={project.url}
                 />
+                {/* <img src="https://i.ibb.co/D7K5sJ5/Screenshot-2022-08-09-at-14-41-09.png" alt="Screenshot-2022-08-09-at-14-41-09" border="0" /></a> */}
               </div>
             </div>
           );
         })}
       </div>
     </form>
-  );
+  ); 
 }

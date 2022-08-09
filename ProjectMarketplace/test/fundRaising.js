@@ -47,22 +47,19 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
         // Reset testDAI and FundRaising for each test:
         _testDAI = await testDAI.new();
         projectMarketPlace = await ProjectMarketPlace.new();
-        tokenID = await projectMarketPlace.createProject(targetAmount, _name, _symbol, _tokenURI, dataAccessThreshold, _testDAI.address);
-        // console.log("Token ID value: " + tokenID + " & data type: " + typeof(tokenID))
-        const tokenID2 = JSON.stringify(tokenID, null, 4)
-        const tokenID3 = JSON.parse(tokenID2)
-        console.log(tokenID3.1)
-        // const fundraisingAddress = "0x" + tokenID.toString(16);
-        // fundraising = await FundRaising.at(fundraisingAddress);
+        tokenID = await projectMarketPlace.createProject.call(targetAmount, _name, _symbol, _tokenURI, dataAccessThreshold, _testDAI.address); // call this but dont actually do transaction, simulate the transaction and give me just the return
+        await projectMarketPlace.createProject(targetAmount, _name, _symbol, _tokenURI, dataAccessThreshold, _testDAI.address);
+        const fundraisingAddress = "0x" + tokenID.toString(16);
+        fundRaising = await FundRaising.at(fundraisingAddress);
         // const _testERC721 = await testERC721.new();
         // const fundraisingAddress = await _testERC721.createProject(targetAmount, _name, _symbol, _testDAI.address);
         // fundraising = await fundraisingAddress.deployed();
-        fundRaising = await FundRaising.new(targetAmount, _name, _symbol, dataAccessThreshold, admin, _testDAI.address); // contract instance is a variable that points at a deployed contract
+        // fundRaising = await FundRaising.new(targetAmount, _name, _symbol, dataAccessThreshold, admin, _testDAI.address); // contract instance is a variable that points at a deployed contract
     })
 
     describe( 'Contract Initialisation', function() {
 
-        it.only('Correct Name', async () => {
+        it('Correct Name', async () => {
             const name = await fundRaising.name();
             assert ( name == _name, 'Incorrect Name' );
         });

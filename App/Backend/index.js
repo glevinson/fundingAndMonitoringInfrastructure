@@ -124,7 +124,7 @@ app.get('/accessData/', async function (req, res) {
       // data.push({ name: projectName, url: "village" })
       // const response = await fetch("https://drive.google.com/file/d/1919NmzdO7PoCHSo_1k6xckAuZCqJCm51/view?usp=sharing")
       // data.push({ name: projectName, url: await response.json() })
-      data.push({ name: projectName, url: "https://drive.google.com/file/d/1919NmzdO7PoCHSo_1k6xckAuZCqJCm51/view?usp=sharing" })
+      data.push({ name: projectName, url: "https://i.ibb.co/D7K5sJ5/Screenshot-2022-08-09-at-14-41-09.png" })
       // data["<Project Name>"] = "https://www.facebook.com/pages/category/Food---beverage/Fasdfasd-2407435632608750/"
     }
   }
