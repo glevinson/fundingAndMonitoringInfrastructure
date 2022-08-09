@@ -1,10 +1,3 @@
-
-// Need to add scenario for investing the whole amount and therefore getting the NFT. Need to simulate a ERC-721 contract calling fundraising. 
-// This could be a testERC-721 that just calls fundraising. Therefore th
-// Then go to ProjectMarketPlace to test createProject & findprojectContract
-// Then see what system / integration tests may need to be done...
-
-
 // A lot of inspiration from: https://www.youtube.com/watch?v=9CBDj5A-zz4 // async addresses, investor consts, ...
 
 const testERC721 = artifacts.require('testERC721');
@@ -32,36 +25,23 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
     let tokenID;
     let projectMarketPlace;
 
-    // before('Deploy Contract', async () => {
-    //     _testDAI = await testDAI.new(); // QUESTION: For some reason only working with "this.", how do with const instead?
-    // })
-
-    // const fs = require('fs');
-    // const abiFundRaising = JSON.parse(fs.readFileSync('./build/contracts/FundRaising.json', 'utf8'));
-    // console.log(JSON.stringify(contract.abi));
-
     //********************************************************************************************************* */
-    // JUST WANT TO TEST THE MAIN USER FLOWS!
-    // SHOULD JUST BE CREATING A PROJECTMARKETPLACE, RETURNS TOKENID, NEED TO CONVERT THAT TO ERC20 ADDRESS
     beforeEach('Deploy Contract', async () => {
         // Reset testDAI and FundRaising for each test:
         _testDAI = await testDAI.new();
         projectMarketPlace = await ProjectMarketPlace.new();
-        tokenID = await projectMarketPlace.createProject.call(targetAmount, _name, _symbol, _tokenURI, dataAccessThreshold, _testDAI.address); // call this but dont actually do transaction, simulate the transaction and give me just the return
-        await projectMarketPlace.createProject(targetAmount, _name, _symbol, _tokenURI, dataAccessThreshold, _testDAI.address);
+
+        tokenID = await projectMarketPlace.createProject.call(targetAmount, _name, _symbol, _tokenURI, dataAccessThreshold, _testDAI.address); // call this but dont actually do transaction, simulate the transaction and give me just the return, without call it would return the transaction
+        await projectMarketPlace.createProject(targetAmount, _name, _symbol, _tokenURI, dataAccessThreshold, _testDAI.address); 
         const fundraisingAddress = "0x" + tokenID.toString(16);
         fundRaising = await FundRaising.at(fundraisingAddress);
-        // const _testERC721 = await testERC721.new();
-        // const fundraisingAddress = await _testERC721.createProject(targetAmount, _name, _symbol, _testDAI.address);
-        // fundraising = await fundraisingAddress.deployed();
-        // fundRaising = await FundRaising.new(targetAmount, _name, _symbol, dataAccessThreshold, admin, _testDAI.address); // contract instance is a variable that points at a deployed contract
     })
 
     describe( 'Contract Initialisation', function() {
 
         it('Correct Name', async () => {
             const name = await fundRaising.name();
-            assert ( name == _name, 'Incorrect Name' );
+            assert ( name == _name, 'Incorrect Name' ); // WHY DID ABOVE FUNCTION CALL RETURN TRANSACTION INFO WHEREAS THIS JUST RETURNS THE NAME AS WANTED?
         });
 
         it('Correct Symbol', async () => {
@@ -320,32 +300,21 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
             ]);
         })
 
-
-        // PROBLEM: GET FOLLOWING ERROR: "Error: Returned error: VM Exception while processing transaction: revert" For the line that sends investor 1 the NFT
-        // PROBLEM IS THAT FOR CREATE PROJECT, THE NFT USES THE MSG SENDER ADDRESS FOR ITS INSTANCE, IN REALITY THIS COMES FROM PROJECTMARKETPLACE
-        // HOWEVER, HERE, IT COMES FROM ADMIN. SO CANNOT CALL ANY ERC721 FUNCTIONS (like here safeTransferFrom) because, in this test script, 
-        // fundraising.nft isnt actually an NFT, it's nothing!
         context ('Single Investor Invests Target Amount (Owns Total RFT Supply)', function() {
 
             beforeEach('Invest Full Target Amount', async () => {
                 await fundRaising.invest(targetAmount, {from: investor1});
-                console.log((await fundRaising.totalSupply()).toNumber())
-                console.log((await fundRaising.balanceOf(investor1)).toNumber())
-                console.log(targetAmount)
-                // await fundRaising.redeemNFT({from: investor1});
-                console.log((await fundRaising.totalSupply()).toNumber())
-                console.log((await fundRaising.balanceOf(investor1)).toNumber())
+                await fundRaising.redeemNFT({from: investor1});
             })
 
             it('RFTs burned', async () => {
-                // console.log(await fundRaising.totalSupply())
-                // assert( (await fundRaising.totalSupply()) == 0 )
+                assert( (await fundRaising.totalSupply()) == 0 )
             })
 
-            // it('NFT Transfered to Investor', async () => {
-            //     const tokenID = parseInt(fundRaising.address, 16) // Convert address to tokenID
-            //     assert(fundRaising.NFT.ownerOf(tokenID) == investor1)
-            // })
+            it.only('NFT Transfered to Investor', async () => {
+                const nftOwner = await projectMarketPlace.ownerOf(tokenID)
+                assert(nftOwner == investor1);
+            })
         })
 
         context ('Single Investor Does Not Invest Target Amount (Not Own Total RFT Supply', async() => {
