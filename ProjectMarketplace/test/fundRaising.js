@@ -9,6 +9,7 @@
 
 const testERC721 = artifacts.require('testERC721');
 const FundRaising = artifacts.require('FundRaising');
+const ProjectMarketPlace = artifacts.require('ProjectMarketplace');
 const testDAI = artifacts.require('testDAI');
 const truffleAssert = require('truffle-assertions');
 
@@ -21,12 +22,15 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
     const _symbol = "testP"; // This should applied to the code from the ref below [*]
     let targetAmount = 1000;
     let dataAccessThreshold = 50 // Equivalent to $50
+    let _tokenURI = "Test Project URI"
     
     let _testDAI;
     let fundRaising; // Not sure how to make consts
     const daiMintAmount = 1000;
     let rftSupply;
     let daiBalanceContract;
+    let tokenID;
+    let projectMarketPlace;
 
     // before('Deploy Contract', async () => {
     //     _testDAI = await testDAI.new(); // QUESTION: For some reason only working with "this.", how do with const instead?
@@ -36,9 +40,20 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
     // const abiFundRaising = JSON.parse(fs.readFileSync('./build/contracts/FundRaising.json', 'utf8'));
     // console.log(JSON.stringify(contract.abi));
 
+    //********************************************************************************************************* */
+    // JUST WANT TO TEST THE MAIN USER FLOWS!
+    // SHOULD JUST BE CREATING A PROJECTMARKETPLACE, RETURNS TOKENID, NEED TO CONVERT THAT TO ERC20 ADDRESS
     beforeEach('Deploy Contract', async () => {
         // Reset testDAI and FundRaising for each test:
         _testDAI = await testDAI.new();
+        projectMarketPlace = await ProjectMarketPlace.new();
+        tokenID = await projectMarketPlace.createProject(targetAmount, _name, _symbol, _tokenURI, dataAccessThreshold, _testDAI.address);
+        // console.log("Token ID value: " + tokenID + " & data type: " + typeof(tokenID))
+        const tokenID2 = JSON.stringify(tokenID, null, 4)
+        const tokenID3 = JSON.parse(tokenID2)
+        console.log(tokenID3.1)
+        // const fundraisingAddress = "0x" + tokenID.toString(16);
+        // fundraising = await FundRaising.at(fundraisingAddress);
         // const _testERC721 = await testERC721.new();
         // const fundraisingAddress = await _testERC721.createProject(targetAmount, _name, _symbol, _testDAI.address);
         // fundraising = await fundraisingAddress.deployed();
@@ -47,7 +62,7 @@ contract( 'FundRaising', async accounts => {  // is this fine to put async up he
 
     describe( 'Contract Initialisation', function() {
 
-        it('Correct Name', async () => {
+        it.only('Correct Name', async () => {
             const name = await fundRaising.name();
             assert ( name == _name, 'Incorrect Name' );
         });

@@ -8,6 +8,7 @@ contract( 'ProjectMarketPlace', async accounts => {
     let _testDAI;
     let targetAmount = 1000;
     let _tokenID;
+    let dataAccessThreshold = 50;
     const _name = "Test Project";
     const _symbol = "testP"; // This should applied to the code from the ref below [*]
     const _tokenURI = "Test tokenURI"
@@ -20,10 +21,11 @@ contract( 'ProjectMarketPlace', async accounts => {
         projectMarketPlace = await ProjectMarketPlace.new();
     })
 
-    describe.only( 'createProject Function', function() {
+
+    describe( 'createProject Function', function() {
 
         beforeEach('CreateProject', async() => {
-            _tokenID = (await projectMarketPlace.createProject(targetAmount, _name, _symbol, _tokenURI, _testDAI.address ));
+            _tokenID = (await projectMarketPlace.createProject(targetAmount, _name, _symbol, _tokenURI, dataAccessThreshold ,_testDAI.address ));
             console.log("Token ID: " + _tokenID + " of type: " + typeof(_tokenID));
         })
 

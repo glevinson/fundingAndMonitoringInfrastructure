@@ -9,9 +9,9 @@ var FundRaising = artifacts.require("FundRaising.sol");
 // };
 
 module.exports = async (deployer) => {
-    await deployer.deploy(ProjectMarketPlace, "");
+    await deployer.deploy(ProjectMarketPlace);
     _projectMarketPlace = await ProjectMarketPlace.deployed();
-    await _projectMarketPlace.createProject( 1, "Project 1", "P1", "0x6B175474E89094C44Da98b954EedeAC495271d0F" );
+    await _projectMarketPlace.createProject( 1, "Project 1", "P1", "Test Token URI", 50, "0x6B175474E89094C44Da98b954EedeAC495271d0F" );
 };
 
 // I think for this, I need a script for deploying the ProjectMarketPlace, then for creating some projects

@@ -80,11 +80,10 @@ contract FundRaising is ERC20 {
 
     /* If a user has invested the full target amount, they can redeem their RFT supply for the project's NFT*/
     function redeemNFT() external {
-        require( balanceOf(msg.sender) == targetAmount, "Do Not Have RFT Supply" );
+        require( balanceOf(msg.sender) == targetAmount, "Do Not Have RFT Total Supply" );
         _burn(msg.sender, totalSupply() );
         NFT.safeTransferFrom( address(this), msg.sender, uint256(uint160(address(this))));
     }
-
 }
 
 // Unit tests:
