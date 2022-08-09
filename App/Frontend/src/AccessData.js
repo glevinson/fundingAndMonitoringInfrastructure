@@ -88,7 +88,7 @@ export default function AccessData() {
                   // src={village}
                   src={project.url}
                   // alt="Image Data"
-                  alt={project.url}
+                  alt='Project Data'
                 />
                 {/* <img src="https://i.ibb.co/D7K5sJ5/Screenshot-2022-08-09-at-14-41-09.png" alt="Screenshot-2022-08-09-at-14-41-09" border="0" /></a> */}
               </div>

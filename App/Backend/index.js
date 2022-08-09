@@ -68,10 +68,14 @@ Project Marketplace Data: name: The Sping DAO Project Marketplace Test 2, Symbol
 */
 
 // Storing mock data in a map (purely for proof of concept)
+// These images are stored on image hosting website/server @ https://augustus-levinso.imgbb.com/
 //*************************************************************************************************************** */
+const dataMap = new Map();
 
-
-
+dataMap.set('Test Project 1', "https://i.ibb.co/6nqqz1H/Adwumakase-Kese-Ghana.png");
+dataMap.set('Test Project 2', "https://i.ibb.co/qrrgKxc/Endanachan-Tanzania.png");
+dataMap.set('Test Project 3', "https://i.ibb.co/WyjqPyP/Jarreng-The-Gambia.png");
+dataMap.set('Test Project 4', "https://i.ibb.co/F3zNNm0/Ndemban-The-Gambia.png");
 //*************************************************************************************************************** */
 
 // Specfifying which blockchain:
@@ -124,7 +128,7 @@ app.get('/accessData/', async function (req, res) {
       // data.push({ name: projectName, url: "village" })
       // const response = await fetch("https://drive.google.com/file/d/1919NmzdO7PoCHSo_1k6xckAuZCqJCm51/view?usp=sharing")
       // data.push({ name: projectName, url: await response.json() })
-      data.push({ name: projectName, url: "https://i.ibb.co/D7K5sJ5/Screenshot-2022-08-09-at-14-41-09.png" })
+      data.push({ name: projectName, url: dataMap.get(projectName) })
       // data["<Project Name>"] = "https://www.facebook.com/pages/category/Food---beverage/Fasdfasd-2407435632608750/"
     }
   }
