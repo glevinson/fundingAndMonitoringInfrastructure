@@ -1,5 +1,7 @@
 // A lot of inspiration from: https://www.youtube.com/watch?v=9CBDj5A-zz4 // async addresses, investor consts, ...
 
+// One test need to do below (commented out)...
+
 const testERC721 = artifacts.require('testERC721');
 const FundRaising = artifacts.require('FundRaising');
 const ProjectMarketPlace = artifacts.require('ProjectMarketplace');
@@ -44,7 +46,7 @@ contract('FundRaising', async accounts => {  // is this fine to put async up her
 
         it('Correct Symbol', async () => {
             const symbol = await fundRaising.symbol();
-            assert(symbol == _symbol, 'Incorrect Name');
+            assert(symbol == _symbol, 'Incorrect Symbol');
         });
 
         it('Correct Target Amount', async () => {
@@ -56,6 +58,13 @@ contract('FundRaising', async accounts => {  // is this fine to put async up her
             const _dataAccessThreshold = (await fundRaising.dataAccessThreshold()).toNumber();
             assert(_dataAccessThreshold == dataAccessThreshold, 'Incorrect Data Access Threshold')
         })
+
+        // it.only('Correct DAI Address', async () => { // SHOULD DO THIS FOR ANY STABLECOIN
+        //     const testDaiAddress = (await fundRaising.DAI.address);
+        //     console.log(testDaiAddress)
+        //     console.log(_testDAI.address)
+        //     // assert(_testDAI.address == testDaiAddress, 'Incorrect Test DAI Address')
+        // })
 
         it('Has 0 DAI Balance', async () => {
             const daiBalance = (await _testDAI.balanceOf(fundRaising.address)).toNumber();
@@ -101,19 +110,6 @@ contract('FundRaising', async accounts => {  // is this fine to put async up her
 
     });
 
-    async function mintAndApprove() {
-        await Promise.all([
-            _testDAI.mint(investor1, daiMintAmount),
-            _testDAI.mint(investor2, daiMintAmount),
-            _testDAI.mint(investor3, daiMintAmount)
-        ]);
-
-        await Promise.all([
-            _testDAI.approve(fundRaising.address, daiMintAmount, { from: investor1 }),
-            _testDAI.approve(fundRaising.address, daiMintAmount, { from: investor2 }),
-            _testDAI.approve(fundRaising.address, daiMintAmount, { from: investor3 })
-        ]);
-    }
     describe('Investing', function () {
 
         beforeEach('Mint DAI & Approve Spending', async () => {
