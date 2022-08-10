@@ -60,6 +60,45 @@ Project Marketplace Data: name: The Sping DAO Project Marketplace Test 2, Symbol
             Corresponding tokenID: 102269594194673733253742275103562263623608325332
 */
 
+// NEW TEST DATA
+
+/* Deployed Test Projects from the above contract on Goerli testnet:
+
+Test DAI contract address: 0x5d690F5e5D04b93E8791A9cFD95D17A527a5946A  - Minted myself over 1000 DAI (i.e. > 1000 * 10**18) & NEED TO : approved all below contracts
+
+Project Marketplace Data: name: The Sping DAO Project Marketplace Test 2, Symbol: SpringDAOtest2
+            contract address: 0x23D33939c95d0608C1d6Ee9D2240B732319A1Dc4
+            My account "    : 0x1497914eC6B09E7749cFCc09b31623867F438848
+
+  Project 1 data: 50000000000000000000000, "Water System: Ndemban, The Gambia", "waterNDEM", "ipfs://QmcVrb7HMiFWQR5W4muk7MAe5vU8pm16eAodFHtkPpzBNt", 50000000000000000000, 0x5d690F5e5D04b93E8791A9cFD95D17A527a5946A
+            <=> 50k
+            contract address: 0x111d9A74d590ce70766131840F67B42F9F1DD5e5
+            Invested: 0 DAI
+            Corresponding tokenID: 97713019763428154826298704328642032226132678117
+            Link To Show Registered: https://goerli.pixxiti.com/nfts/0x23d33939c95d0608c1d6ee9d2240b732319a1dc4/97713019763428154826298704328642032226132678117
+
+  <Project 2 is misdeploy; has project 1 URI rather than own...>
+
+  Project 3 data: 100000000000000000000000, "Water System: Adwumakase Kese, Ghana", "waterADWU", "ipfs://QmeKFbSjSDT44iZy3FtP5meiyQJnGSoZPrKeqWExs59Puc", 50000000000000000000, 0x5d690F5e5D04b93E8791A9cFD95D17A527a5946A
+            <=> 100k
+            contract address: 0x9456C66600406aE299A83B479665A7901b553Dbc
+            Invested: 0 DAI
+            Corresponding tokenID: 846865781110752272528720200731431149724599926204
+            Link To Show Registered: https://goerli.pixxiti.com/nfts/0x23d33939c95d0608c1d6ee9d2240b732319a1dc4/846865781110752272528720200731431149724599926204
+
+  Project 3 data: 20000, "Test Project 3", "TP3", "Test  Project 3 Token URI" , 
+            contract address: 
+            Invested: 
+            Corresponding tokenID: 
+            Redeemed the NFT: 
+
+
+  Project 4 data: 25000, "Test Project 4", "TP4", "Test  Project 4 Token URI" , 
+            contract address: 
+            Invested: 
+            Corresponding tokenID: 
+*/
+
 // Storing mock data in a map (purely for proof of concept)
 // These images are stored on image hosting website/server @ https://augustus-levinso.imgbb.com/
 //*************************************************************************************************************** */

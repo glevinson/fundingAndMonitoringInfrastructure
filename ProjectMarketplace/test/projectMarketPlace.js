@@ -5,11 +5,12 @@ const testDAI = artifacts.require('testDAI');
 contract( 'ProjectMarketplace', async accounts => {
 
     let projectMarketplace;
+    let fundraising;
     let _testDAI;
     let targetAmount = 1000;
     let tokenID;
     let dataAccessThreshold = 50;
-    const _name = "The Sping DAO Project Marketplace Test";
+    const _name = "The Spring DAO Project Marketplace Test";
     const _symbol = "SpringDAOtest"; // This should applied to the code from the ref below [*]
     const _tokenURI = "Test tokenURI"
 
@@ -98,7 +99,7 @@ contract( 'ProjectMarketplace', async accounts => {
         it('Find Correct Project Fundraise', async () => {
             const fundraisingAddress1 = ("0x" + tokenID.toString(16)).toLowerCase();
             const fundraisingAddress2 = (await projectMarketplace.findProjectFundraise(tokenID)).toLowerCase();
-            assert(fundraisingAddress1 == fundraisingAddress2, 'Incorrect Fundraising Affress');
+            assert(fundraisingAddress1 == fundraisingAddress2, 'Incorrect Fundraising Address');
         });
     })
  })
