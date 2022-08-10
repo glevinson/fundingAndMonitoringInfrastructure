@@ -1,9 +1,12 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.7;
 
+// For Remix Deployment:
+//********************************************************************************************************************************************************** */
 // import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 // import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 // import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+//********************************************************************************************************************************************************** */
 
 import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
@@ -12,22 +15,21 @@ import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/IERC721Rece
 
 
 contract Fundraising is ERC20 {
-    // IERC20 public constant DAI = IERC20(0x6B175474E89094C44Da98b954EedeAC495271d0F); <= Actual DAI address
-    IERC20 public DAI;
-    IERC721 public immutable NFT; // The NFT that creates the FundraisingCampaigns
-    uint256 public targetAmount; // Target amount for the fundraising
+    IERC20 public coin; // The ERC-20 coin that admin has decided to raise funds in
+    IERC721 public immutable projectMarketplace; // ProjectMarketplace contract that has created this Fundraising contract
+    uint256 public targetAmount;
     uint256 public amountRaised;
-    uint256 public dataAccessThreshold; // The minimum number of ERC20 tokens required to access the corresponding projects data
-    bool public _paused; // = false by default
-    bool public istargetRaised;
+    uint256 public dataAccessThreshold; // Minimum number of ERC20 tokens required to access the corresponding projects data
+    bool public _paused = false; 
+    bool public istargetRaised = false;
     address admin;
 
-    constructor(uint256 amount, string memory name, string memory symbol, uint256 _dataAccessThreshold, address _admin, address daiAddress) ERC20(name, symbol) {
+    constructor(uint256 amount, string memory name, string memory symbol, uint256 _dataAccessThreshold, address _admin, address coinAddress) ERC20(name, symbol) {
         targetAmount = amount;
         dataAccessThreshold = _dataAccessThreshold;
         admin = _admin;
-        DAI = IERC20(daiAddress);
-        NFT = IERC721(msg.sender);
+        coin = IERC20(coinAddress);
+        projectMarketplace = IERC721(msg.sender);
     }
 
     modifier onlyOwner(){
@@ -36,7 +38,7 @@ contract Fundraising is ERC20 {
     }
 
     /* Enables this contract to recieve the project ERC-721 token */
-    function onERC721Received(address /*operator*/, address /*from*/, uint256 /*tokenId*/, bytes calldata /*data*/) external pure returns (bytes4) {
+    function onERC721Received(address, address, uint256, bytes calldata) external pure returns (bytes4) {
         return IERC721Receiver.onERC721Received.selector;
     }
 
@@ -58,12 +60,12 @@ contract Fundraising is ERC20 {
         require(value <= targetAmount - totalSupply(), "Not enough shares left!");
         require( !_paused, "Contract Is Paused" );
 
-        DAI.transferFrom(msg.sender, address(this), value);
+        coin.transferFrom(msg.sender, address(this), value);
         amountRaised += value;
         _mint(msg.sender, value);
 
         if (targetAmount == totalSupply()) { 
-            DAI.transfer(admin, targetAmount);
+            coin.transfer(admin, targetAmount);
             istargetRaised = true;
         }
     }
@@ -72,7 +74,7 @@ contract Fundraising is ERC20 {
     function withdrawInvestment(uint256 value) external {
         require( !istargetRaised, "Target Already Raised" );
         require(value <= balanceOf(msg.sender), "Not Great Enough Balance!"); // As DAI instatneously removed when targetRaised, this require should also cover that s
-        DAI.transfer(msg.sender, value);
+        coin.transfer(msg.sender, value);
         amountRaised -= value;
         _burn(msg.sender, value);
     }
@@ -81,6 +83,6 @@ contract Fundraising is ERC20 {
     function redeemNFT() external {
         require( balanceOf(msg.sender) == targetAmount, "Do Not Have RFT Total Supply" );
         _burn(msg.sender, totalSupply() );
-        NFT.safeTransferFrom( address(this), msg.sender, uint256(uint160(address(this))));
+        projectMarketplace.safeTransferFrom( address(this), msg.sender, uint256(uint160(address(this))));
     }
 }

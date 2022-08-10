@@ -57,7 +57,7 @@ contract('Fundraising', async accounts => {  // is this fine to put async up her
         })
 
         it('Correct DAI Address', async () => {
-            const testDaiAddress = (await fundraising.DAI());
+            const testDaiAddress = (await fundraising.coin());
             assert(_testDAI.address == testDaiAddress, 'Incorrect Test DAI Address')
         })
 

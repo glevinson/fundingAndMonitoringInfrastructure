@@ -83,7 +83,7 @@ contract( 'ProjectMarketplace', async accounts => {
                 });
 
                 it('Correct DAI Address', async () => {
-                    const testDaiAddress = (await fundraising.DAI());
+                    const testDaiAddress = (await fundraising.coin());
                     assert(_testDAI.address == testDaiAddress, 'Incorrect Test DAI Address')
                 });
 
