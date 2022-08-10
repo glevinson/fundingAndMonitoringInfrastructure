@@ -1,5 +1,5 @@
-var ProjectMarketPlace = artifacts.require("ProjectMarketPlace"); // contract names
-var FundRaising = artifacts.require("FundRaising.sol");
+var ProjectMarketplace = artifacts.require("ProjectMarketplace"); // contract names
+var Fundraising = artifacts.require("Fundraising.sol");
 
 // module.exports = function(deployer) {
 //     deployer.deploy(ProjectMarketPlace, {overwite: false}); // Cannot redeploy ProjectMarketPlace
@@ -9,9 +9,9 @@ var FundRaising = artifacts.require("FundRaising.sol");
 // };
 
 module.exports = async (deployer) => {
-    await deployer.deploy(ProjectMarketPlace);
-    _projectMarketPlace = await ProjectMarketPlace.deployed();
-    await _projectMarketPlace.createProject( 1, "Project 1", "P1", "Test Token URI", 50, "0x6B175474E89094C44Da98b954EedeAC495271d0F" );
+    await deployer.deploy(ProjectMarketplace);
+    _projectMarketplace = await ProjectMarketplace.deployed();
+    await _projectMarketplace.createProject( 1, "Project 1", "P1", "Test Token URI", 50, "0x6B175474E89094C44Da98b954EedeAC495271d0F" );
 };
 
 // I think for this, I need a script for deploying the ProjectMarketPlace, then for creating some projects
