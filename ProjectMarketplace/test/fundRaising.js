@@ -156,11 +156,6 @@ contract('Fundraising', async accounts => {  // is this fine to put async up her
                             assert(rftSupply == amountInvest);
                         });
 
-                        /* PROBLEM - Think fixed?:
-                            This test means the DAI for the contract are sent to the admin
-                            This, correctly so, leaves investor 1 with a value of 10 RFTs and investor 3 with value of 990 RFTs that cannot be withdrawn
-                            because their balances of DAI is now 0
-                        */
                         it('Send Funds To Admin Once Target Raised', async () => {
                             // Raise Funds to target:
                             await fundraising.invest(targetAmount - amountInvest, { from: investor3 });

@@ -71,7 +71,7 @@ export default function AccessData() {
           console.log("Project: " + project)
           if (project == null){
             return (    
-              <div className="p-4" >
+              <div className="p-" >
                 <footer className="text-2xl font-semibold text-gray-700 text-center">
                   <p>No Data For This Address / Invalid Signature</p>
                 </footer> 

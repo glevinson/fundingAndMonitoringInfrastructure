@@ -8,6 +8,7 @@ pragma solidity 0.8.7;
 // import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 //********************************************************************************************************************************************************** */
 
+// For truffle deployment:
 import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/IERC721.sol";
