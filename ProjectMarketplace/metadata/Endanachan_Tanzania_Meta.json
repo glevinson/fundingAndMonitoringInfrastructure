@@ -1,0 +1,19 @@
+{
+    "name": "Water System: Endanachan, Tanzania",
+    "description": "This NFT corresponds to a water system that has been funded by the SpringDAO. Endanachan <... Information about Endanachan and the project ...>",
+    "image": "ipfs://QmQyHZTxDrLwFWXgHA6dmpbbijSqYvL5ZcrGSTqC3fTp8r",
+    "attributes": [
+      {
+        "trait_type": "Country",
+        "value": "Tanzania"
+      },
+      {
+        "trait_type": "Area",
+        "value": "Endanachan Village"
+      },
+      {
+        "trait_type": "Infrastructure Type",
+        "value": "Water System"
+      }
+    ]
+  }

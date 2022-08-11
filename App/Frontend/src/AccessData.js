@@ -78,14 +78,28 @@ export default function AccessData() {
               </div>       
             ); 
           }
+          else if( project.url == null ){
+            return(
+              <div className="p-2" >
+              <div className="text-2xl font-semibold text-gray-700">
+                <p>{project.name}</p>
+              </div>
+              <div className="p-2" > 
+                <div className="text-l font-semibold text-gray-700">
+                 <i>Do not have enough tokens to view this projects data</i>
+                </div> 
+                </div>
+            </div> 
+            );
+          }
           else{
           return (
             <div className="p-2" key = {project.name}>
               <div className="text-2xl font-semibold text-gray-700">
-                <p>Project Name: {project.name}</p>
+                <p>{project.name}</p>
                 <img
                   src={project.url}
-                  alt='Image Of Project Data'
+                  alt={project.url}
                 />
               </div>
             </div>

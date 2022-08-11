@@ -16,16 +16,63 @@ const abiNFT = [{ "inputs": [{ "internalType": "string", "name": "name", "type":
 const abiRFT = [
   // Read-Only Functions
   "function balanceOf(address owner) view returns (uint256)",
-  "function decimals() view returns (uint8)",
-  "function symbol() view returns (string)",
   "function name() public view returns (string memory)",
+  // "function dataAccessThreshold() public view returns (uint256)",    
   "function totalSupply() public view returns (uint256)",
-
-  // Authenticated Functions
-  "function transfer(address to, uint amount) returns (bool)",
-
-  // Events
-  "event Transfer(address indexed from, address indexed to, uint amount)"
+  "function amountRaised() public view returns (uint256)",
+  "function istargetRaised() public view returns (bool)",
+  "function dataAccessThreshold() public view returns (uint256)"
+  
+  // {
+  //   "inputs": [],
+  //   "name": "dataAccessThreshold",
+  //   "outputs": [
+  //     {
+  //       "internalType": "uint256",
+  //       "name": "",
+  //       "type": "uint256"
+  //     }
+  //   ],
+  //   "stateMutability": "view",
+  //   "type": "function"
+  // }
+  // [
+  //   {
+  //     "inputs": [
+  //       {
+  //         "internalType": "uint256",
+  //         "name": "amount",
+  //         "type": "uint256"
+  //       },
+  //       {
+  //         "internalType": "string",
+  //         "name": "name",
+  //         "type": "string"
+  //       },
+  //       {
+  //         "internalType": "string",
+  //         "name": "symbol",
+  //         "type": "string"
+  //       },
+  //       {
+  //         "internalType": "uint256",
+  //         "name": "_dataAccessThreshold",
+  //         "type": "uint256"
+  //       },
+  //       {
+  //         "internalType": "address",
+  //         "name": "_admin",
+  //         "type": "address"
+  //       },
+  //       {
+  //         "internalType": "address",
+  //         "name": "coinAddress",
+  //         "type": "address"
+  //       }
+  //     ],
+  //     "stateMutability": "nonpayable",
+  //     "type": "constructor"
+  //   }
 ];
 //*************************************************************************************************************** */
 
@@ -64,7 +111,7 @@ Project Marketplace Data: name: The Sping DAO Project Marketplace Test 2, Symbol
 
 /* Deployed Test Projects from the above contract on Goerli testnet:
 
-Test DAI contract address: 0x5d690F5e5D04b93E8791A9cFD95D17A527a5946A  - Minted myself over 1000 DAI (i.e. > 1000 * 10**18) & NEED TO : approved all below contracts
+Test DAI contract address: 0x5d690F5e5D04b93E8791A9cFD95D17A527a5946A  - Minted myself over 1000000 (1 million) DAI (i.e. > 1000 * 10**18) & approved all below contracts
 
 Project Marketplace Data: name: The Sping DAO Project Marketplace Test 2, Symbol: SpringDAOtest2
             contract address: 0x23D33939c95d0608C1d6Ee9D2240B732319A1Dc4
@@ -82,21 +129,25 @@ Project Marketplace Data: name: The Sping DAO Project Marketplace Test 2, Symbol
   Project 3 data: 100000000000000000000000, "Water System: Adwumakase Kese, Ghana", "waterADWU", "ipfs://QmeKFbSjSDT44iZy3FtP5meiyQJnGSoZPrKeqWExs59Puc", 50000000000000000000, 0x5d690F5e5D04b93E8791A9cFD95D17A527a5946A
             <=> 100k
             contract address: 0x9456C66600406aE299A83B479665A7901b553Dbc
-            Invested: 0 DAI
+            Invested: 25000000000000000000 (25) DAI - Should not have access to data
             Corresponding tokenID: 846865781110752272528720200731431149724599926204
             Link To Show Registered: https://goerli.pixxiti.com/nfts/0x23d33939c95d0608c1d6ee9d2240b732319a1dc4/846865781110752272528720200731431149724599926204
 
-  Project 3 data: 20000, "Test Project 3", "TP3", "Test  Project 3 Token URI" , 
-            contract address: 
-            Invested: 
-            Corresponding tokenID: 
+  Project 4 data: 150000000000000000000000, "Water System: Endanachan, Tanzania", "waterENDA", "ipfs://QmYnHab5W8ufsugRKUYRL5sTAd32d9Aq2kHAEBbZmWZM4o", 25000000000000000000, 0x5d690F5e5D04b93E8791A9cFD95D17A527a5946A
+            <=> 150k
+            contract address: 0x6FB276f9aF38beE168De1Fc04b09d8Ad15635ffa
+            Invested: 30000000000000000000 (30) DAI - Should have access to Data
+            Corresponding tokenID: 637677872419743488534908492414663507135982428154
             Redeemed the NFT: 
+            Link To Show Registered: https://goerli.pixxiti.com/nfts/0x23d33939c95d0608c1d6ee9d2240b732319a1dc4/637677872419743488534908492414663507135982428154
 
 
-  Project 4 data: 25000, "Test Project 4", "TP4", "Test  Project 4 Token URI" , 
-            contract address: 
-            Invested: 
-            Corresponding tokenID: 
+  Project 5 data: 200000000000000000000000, "Water System: Jarreng, The Gambia", "waterJAR", "ipfs://QmQ1Ag65PuMnMm6whDqL7msEDnuVT7RvuF45RaUMJ8Xkg1", 25000000000000000000, 0x5d690F5e5D04b93E8791A9cFD95D17A527a5946A
+            <=> 200k
+            contract address: 0x9a9d2626AD68eD9F9f8b92652119446787876d56
+            Invested: 200k DAI (Whole amount) - Should have access to the data
+            Corresponding tokenID: 882689119131137206171968270147289883819851083094
+            Link To Show Registered: https://goerli.pixxiti.com/nfts/0x23d33939c95d0608c1d6ee9d2240b732319a1dc4/882689119131137206171968270147289883819851083094
 */
 
 // Storing mock data in a map (purely for proof of concept)
@@ -104,17 +155,17 @@ Project Marketplace Data: name: The Sping DAO Project Marketplace Test 2, Symbol
 //*************************************************************************************************************** */
 const dataMap = new Map();
 
-dataMap.set('Test Project 1', "https://i.ibb.co/R9gq2k6/Adwumakase-Kese-Ghana.png");
-dataMap.set('Test Project 2', "https://i.ibb.co/GHNScvW/Endanachan-Tanzania.png");
-dataMap.set('Test Project 3', "https://i.ibb.co/RCcNw2k/Jarreng-The-Gambia.png");
-dataMap.set('Test Project 4', "https://i.ibb.co/PzyyvWR/Ndemban-The-Gambia.png");
+dataMap.set('Water System: Adwumakase Kese, Ghana', "https://i.ibb.co/R9gq2k6/Adwumakase-Kese-Ghana.png");
+dataMap.set('Water System: Endanachan, Tanzania', "https://i.ibb.co/GHNScvW/Endanachan-Tanzania.png");
+dataMap.set('Water System: Jarreng, The Gambia', "https://i.ibb.co/RCcNw2k/Jarreng-The-Gambia.png");
+dataMap.set('Water System: Ndemban, The Gambia', "https://i.ibb.co/PzyyvWR/Ndemban-The-Gambia.png");
 
 //*************************************************************************************************************** */
 
 // Specfifying which blockchain:
-const provider = ethers.getDefaultProvider("rinkeby")
+const provider = ethers.getDefaultProvider("goerli")
 
-const projectMarketplaceAddress = "0x27727F7566C560f4a58f7b6354863868DAbD1E72";
+const projectMarketplaceAddress = "0x23D33939c95d0608C1d6Ee9D2240B732319A1Dc4";
 
 // Creating an instance of the NFT contract - object with  shape of the ABI (has all listed functions) & is deployed on specified network with address you specified
 const projectMarketPlace = new ethers.Contract(projectMarketplaceAddress, abiNFT, provider);
@@ -152,28 +203,23 @@ app.get('/accessData/', async function (req, res) {
       // prefixed by zeros (so tokenID doesn't go above 2^53 -1), it is important that we can cater for one that might
       const rftAddress = "0x" + tokenID.toString(16);
       const rft = new ethers.Contract(rftAddress, abiRFT, provider);
-      const balanceRFT = (await rft.balanceOf(signingAddress));
+      const balanceRFT = (await rft.balanceOf(signingAddress)); // By default is a Big Number
+      const threshold = ethers.BigNumber.from(await rft.dataAccessThreshold());
 
-      if ((await projectMarketPlace.ownerOf(tokenID)) == signingAddress || balanceRFT >= 50 /* dataAccessThreshold */) { // I.e. if user owns the NFT itself or has above threshold of RFT...
+      if ((await projectMarketPlace.ownerOf(tokenID)) == signingAddress || balanceRFT.gte(threshold) /* Returns true if balanceRFT >= threshold / balanceRFT >= 50 dataAccessThreshold*/ ) { // I.e. if user owns the NFT itself or has above threshold of RFT...
         const projectName = await rft.name();
         data.push({ name: projectName, url: dataMap.get(projectName) })
       }
-
-      // IN THIS INSTANCE, PUSH PROJECT NAME & NULL FOR URL, THIS CAN BE PICKED UP ON THE FRONTEND
-      // if ( balanceRFT > 0 && balanceRFT < dataAccessThreshold ){
-      //   const projectName = await rft.name();
-      //   data.push
-      // }
+      // If have some RFT with a project but not over the threshold 
+      else if ( balanceRFT.gt(0) ){ 
+        const projectName = await rft.name();
+        data.push({ name: projectName, url: null })
+      }
     }
     if (data.length == 0){
       data.push(null)
     }
-    // if (data.length > 0) {
     res.json(data)
-    // }
-    // else {
-    //   res.json("No Data For This Address / Invalid Signature")
-    // }
   }
   catch (e) {
     console.error("Error: ", e)

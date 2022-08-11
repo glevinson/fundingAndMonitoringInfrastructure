@@ -1,0 +1,19 @@
+{
+    "name": "Water System: Jarreng, The Gambia",
+    "description": "This NFT corresponds to a water system that has been funded by the SpringDAO. Jarreng <... Information about Jarreng and the project ...>",
+    "image": "ipfs://QmNnNxTmkCZWBsm2u1WJLreF44y8bZZqgwmUnm6Ard6Aic",
+    "attributes": [
+      {
+        "trait_type": "Country",
+        "value": "The Gambia"
+      },
+      {
+        "trait_type": "Area",
+        "value": "Jarreng Village"
+      },
+      {
+        "trait_type": "Infrastructure Type",
+        "value": "Water System"
+      }
+    ]
+  }
