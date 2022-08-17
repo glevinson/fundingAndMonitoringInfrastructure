@@ -14,6 +14,10 @@
       {
         "trait_type": "Infrastructure Type",
         "value": "Water System"
+      },
+      {
+        "trait_type": "Proposer",
+        "value": "eWater"
       }
     ]
   }

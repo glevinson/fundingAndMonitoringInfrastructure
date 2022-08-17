@@ -16,7 +16,7 @@ import "./Fundraising.sol";
 contract ProjectMarketplace is  ERC721Enumerable {
     mapping(uint256 => string ) public idToTokenURI;
 
-    constructor() ERC721("The Spring DAO Project Marketplace Test", "SpringDAOtest") {}
+    constructor() ERC721("The Spring DAO Project Marketplace", "SpringDAO") {}
 
     function createProject(uint256 targetAmount, string calldata projectName, string calldata projectSymbol, string calldata _tokenURI, uint256 dataAccessThreshold, address coinAddress) external returns (uint256) {
         address newProjectAddress = address(new Fundraising(targetAmount, projectName, projectSymbol, dataAccessThreshold, msg.sender, coinAddress));

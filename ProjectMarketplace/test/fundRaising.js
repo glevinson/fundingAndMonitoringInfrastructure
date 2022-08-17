@@ -169,7 +169,7 @@ contract('Fundraising', async accounts => {  // is this fine to put async up her
 
                     context('Target Raised', function () {
 
-                        it('Cannot Invest', async () => {
+                        it.only('Cannot Invest', async () => {
                             await fundraising.invest(500, { from: investor1 });
                             await fundraising.invest(500, { from: investor2 });
                             await truffleAssert.reverts(
@@ -239,7 +239,7 @@ contract('Fundraising', async accounts => {  // is this fine to put async up her
             });
 
             context('Target Raised', function () {
-                it('Cannot Withdraw Investment', async () => {
+                it.only('Cannot Withdraw Investment', async () => {
                     await fundraising.invest(500, { from: investor1 });
                     await fundraising.invest(500, { from: investor2 });
                     await truffleAssert.reverts(
