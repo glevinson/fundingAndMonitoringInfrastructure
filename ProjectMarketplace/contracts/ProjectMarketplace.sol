@@ -3,20 +3,20 @@ pragma solidity 0.8.7;
 
 // For Remix Deployment:
 //********************************************************************************************************************************************************** */
-// import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-// import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-// import "./Fundraising.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "./Fundraising.sol";
 //********************************************************************************************************************************************************** */
 
 // For Truffle Deployment:
-import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/IERC721.sol";
-import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-import "./Fundraising.sol";
+// import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/IERC721.sol";
+// import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+// import "./Fundraising.sol";
 
 contract ProjectMarketplace is  ERC721Enumerable {
     mapping(uint256 => string ) public idToTokenURI;
 
-    constructor() ERC721("The Spring DAO Project Marketplace", "SpringDAO") {}
+    constructor() ERC721("The Spring DAO Project Marketplace testywesty2", "SpringDAO") {}
 
     function createProject(uint256 targetAmount, string calldata projectName, string calldata projectSymbol, string calldata _tokenURI, uint256 dataAccessThreshold, address coinAddress) external returns (uint256) {
         address newProjectAddress = address(new Fundraising(targetAmount, projectName, projectSymbol, dataAccessThreshold, msg.sender, coinAddress));
