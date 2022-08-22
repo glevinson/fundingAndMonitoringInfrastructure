@@ -3,34 +3,43 @@ pragma solidity 0.8.7;
 
 // For Remix Deployment:
 //********************************************************************************************************************************************************** */
-// import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-// import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-// import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-// import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 //********************************************************************************************************************************************************** */
 
 // For truffle deployment:
-import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
-import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
-import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/IERC721.sol";
-import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/IERC721Receiver.sol";
+// import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
+// import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
+// import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/IERC721.sol";
+// import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/IERC721Receiver.sol";
 
+// Referenced from: https://ethereum.stackexchange.com/questions/84095/how-to-get-the-decimals-of-erc20-token-in-smart-contract
+abstract contract IERC20Extented is IERC20 {
+    function decimals() public view virtual returns (uint8);
+}
 
 contract Fundraising is ERC20 {
-    IERC20 public coin; // The ERC-20 coin that admin has decided to raise funds in
+    IERC20Extented public coin; // The ERC-20 coin that admin has decided to raise funds in
     IERC721 public immutable projectMarketplace; // ProjectMarketplace contract that has created this Fundraising contract
     uint256 public targetAmount;
     uint256 public amountRaised;
     uint256 public dataAccessThreshold; // Minimum number of ERC20 tokens required to access the corresponding projects data
-    bool public _paused = false; 
+    bool public paused = false; 
+    bool public killed = false;
     address admin;
 
     constructor(uint256 amount, string memory name, string memory symbol, uint256 _dataAccessThreshold, address _admin, address coinAddress) ERC20(name, symbol) {
         targetAmount = amount;
         dataAccessThreshold = _dataAccessThreshold;
         admin = _admin;
-        coin = IERC20(coinAddress);
+        coin = IERC20Extented(coinAddress);
         projectMarketplace = IERC721(msg.sender);
+    }
+
+    function decimals() public view virtual override returns (uint8) {
+        return coin.decimals();
     }
 
     modifier onlyOwner(){
@@ -44,11 +53,16 @@ contract Fundraising is ERC20 {
     }
 
     function pause() onlyOwner external {
-        _paused = true;
+        if (!paused){
+            paused = true;
+        }
+        else{
+            paused = false;
+        }
     }
 
-    function unpause() onlyOwner external{
-        _paused = false;
+    function kill() onlyOwner external {
+        killed = true;
     }
 
     function amountUntilReachTarget() public view returns (uint256){
@@ -57,10 +71,10 @@ contract Fundraising is ERC20 {
 
     /* User's can invest if the specified investment */
     function invest(uint256 value) external {
-        // require( !istargetRaised, "Target Already Raised" );
         require( totalSupply() < targetAmount, "Target Already Raised" );
         require(value <= targetAmount - totalSupply(), "Not enough shares left!");
-        require( !_paused, "Contract Is Paused" );
+        require( !paused, "Contract Is Paused" );
+        require( !killed, "Contract Is Killed");
 
         coin.transferFrom(msg.sender, address(this), value);
         amountRaised += value;
@@ -68,13 +82,12 @@ contract Fundraising is ERC20 {
 
         if (targetAmount == totalSupply()) { 
             coin.transfer(admin, targetAmount);
-            istargetRaised = true;
         }
     }
 
     /* Investor's can withdraw their investment if the target has not already been raised yet */
     function withdrawInvestment(uint256 value) external {
-        require( targetAmount < totalSupply() , "Target Already Raised" );
+        require( totalSupply() < targetAmount , "Target Already Raised" );
         require(value <= balanceOf(msg.sender), "Not Great Enough Balance!"); // As DAI instatneously removed when targetRaised, this require should also cover that s
         coin.transfer(msg.sender, value);
         amountRaised -= value;

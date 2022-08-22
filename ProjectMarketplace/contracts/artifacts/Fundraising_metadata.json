@@ -92,19 +92,6 @@
 				"type": "event"
 			},
 			{
-				"inputs": [],
-				"name": "_paused",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -202,7 +189,7 @@
 				"name": "coin",
 				"outputs": [
 					{
-						"internalType": "contract IERC20",
+						"internalType": "contract IERC20Extented",
 						"name": "",
 						"type": "address"
 					}
@@ -299,7 +286,14 @@
 			},
 			{
 				"inputs": [],
-				"name": "istargetRaised",
+				"name": "kill",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "killed",
 				"outputs": [
 					{
 						"internalType": "bool",
@@ -362,6 +356,19 @@
 				"name": "pause",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "paused",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -473,13 +480,6 @@
 						"type": "bool"
 					}
 				],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "unpause",
-				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -615,11 +615,11 @@
 			]
 		},
 		"ProjectMarketplace/contracts/Fundraising.sol": {
-			"keccak256": "0x62bbe45c3bba0e4fc71f486270bcf73bfec4696fd27b764c6166a6e1ab338e3a",
+			"keccak256": "0x40cf02e05c0a64041658bee31dd139a3d84b3e8b000f37e17567adc369ea29a4",
 			"license": "UNLICENSED",
 			"urls": [
-				"bzz-raw://fcd222987da9969036d753a80894477f20530d2bd44633a8dd38bccf788e4753",
-				"dweb:/ipfs/QmTJrSf2h9LtEoK2Mpoj14aWaEWdvkSW8gHU2kMwf77pF2"
+				"bzz-raw://db81a0f4c34688d75ccd2117b6c1cac4fc00f8e0625149b67ea12e485cb7f1fd",
+				"dweb:/ipfs/Qmb47adpMZVqJJGbesZAFNog2K7xY2VfC5zrdG4gqVayBY"
 			]
 		}
 	},

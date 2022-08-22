@@ -72,7 +72,7 @@ contract('Fundraising', async accounts => {  // is this fine to put async up her
         });
 
         it('Is Paused', async () => {
-            const paused = await fundraising._paused();
+            const paused = await fundraising.paused();
             assert(!paused, 'Contract Initiallised Paused');
         });
 
@@ -80,26 +80,40 @@ contract('Fundraising', async accounts => {  // is this fine to put async up her
 
             it('Admin can pause', async () => {
                 await fundraising.pause({ from: admin });
-                const paused = await fundraising._paused();
+                const paused = await fundraising.paused();
                 assert(paused, "Admin Cannot Pause");
             });
 
             it('Admin can unpause', async () => {
                 await fundraising.pause({ from: admin });
-                await fundraising.unpause({ from: admin });
-                const paused = await fundraising._paused();
+                await fundraising.pause({ from: admin });
+                const paused = await fundraising.paused();
                 assert(!paused, "Admin Cannot Unpause");
             });
 
             it('Non-admin cannot pause', async () => {
                 await truffleAssert.reverts(
-                    fundraising.pause({ from: investor1 }), "Only Admin Can Pause/Unpause");
+                    fundraising.pause({ from: investor1 }));
             });
 
             it('Non-admin cannot unpause', async () => {
                 await fundraising.pause({ from: admin });
                 await truffleAssert.reverts(
-                    fundraising.unpause({ from: investor1 }), "Only Admin Can Pause/Unpause");
+                    fundraising.pause({ from: investor1 }));
+            });
+        });
+
+        describe('Kill Function', function () {
+
+            it('Admin can kill', async () => {
+                await fundraising.kill({ from: admin });
+                const killed = await fundraising.killed();
+                assert(killed, "Admin Cannot Pause");
+            });
+
+            it('Non-admin cannot kill', async () => {
+                await truffleAssert.reverts(
+                    fundraising.pause({ from: investor1 }));
             });
         });
 
@@ -125,51 +139,52 @@ contract('Fundraising', async accounts => {  // is this fine to put async up her
         describe('Invest Function', function () {
             let amountInvest;
 
-            context('Contract unpaused', function () {
-                context('Enough Tokens Available', function () {
-                    context('Target Not Raised', function () {
+            context('Contract Not Killed', function () {
+                context('Contract Unpaused', function () {
+                    context('Enough Tokens Available', function () {
+                        context('Target Not Raised', function () {
 
-                        beforeEach('Investment', async () => { // This occurs before the higher level 'BeforeEach', it goes lower level before, upper level before each, lower level before each, test, upperlevel before each, lower lever before each, test, etc...
-                            amountInvest = 10;
-                            await fundraising.invest(amountInvest, { from: investor1 });
-                        })
+                            beforeEach('Investment', async () => { // This occurs before the higher level 'BeforeEach', it goes lower level before, upper level before each, lower level before each, test, upperlevel before each, lower lever before each, test, etc...
+                                amountInvest = 10;
+                                await fundraising.invest(amountInvest, { from: investor1 });
+                            })
 
-                        // Not sure this test neccessary:
-                        it('Investor Charged Correct DAI', async () => {
-                            let daiBalanceInvestor = (await _testDAI.balanceOf(investor1)).toNumber();
-                            assert(daiBalanceInvestor - daiMintAmount == - amountInvest, 'Investor Charged Incorrect DAI');
-                        });
+                            // Not sure this test neccessary:
+                            it('Investor Charged Correct DAI', async () => {
+                                let daiBalanceInvestor = (await _testDAI.balanceOf(investor1)).toNumber();
+                                assert(daiBalanceInvestor - daiMintAmount == - amountInvest, 'Investor Charged Incorrect DAI');
+                            });
 
-                        it('Contract Recieves Correct DAI', async () => {
-                            let daiBalanceContract = (await _testDAI.balanceOf(fundraising.address)).toNumber();
-                            assert(daiBalanceContract == amountInvest);
-                        });
+                            it('Contract Recieves Correct DAI', async () => {
+                                let daiBalanceContract = (await _testDAI.balanceOf(fundraising.address)).toNumber();
+                                assert(daiBalanceContract == amountInvest);
+                            });
 
-                        it('Investor Recieves Correct RFTs', async () => {
-                            let rftBalanceInvestor = (await fundraising.balanceOf(investor1)).toNumber();
-                            assert(rftBalanceInvestor == amountInvest);
-                        });
+                            it('Investor Recieves Correct RFTs', async () => {
+                                let rftBalanceInvestor = (await fundraising.balanceOf(investor1)).toNumber();
+                                assert(rftBalanceInvestor == amountInvest);
+                            });
 
-                        // Not sure this test neccessary:
-                        it('RFT Supply Increased Correctly', async () => {
-                            let rftSupply = (await fundraising.totalSupply()).toNumber();
-                            assert(rftSupply == amountInvest);
-                        });
+                            // Not sure this test neccessary:
+                            it('RFT Supply Increased Correctly', async () => {
+                                let rftSupply = (await fundraising.totalSupply()).toNumber();
+                                assert(rftSupply == amountInvest);
+                            });
 
-                        it('Send Funds To Admin Once Target Raised', async () => {
-                            // Raise Funds to target:
-                            await fundraising.invest(targetAmount - amountInvest, { from: investor3 });
+                            it('Send Funds To Admin Once Target Raised', async () => {
+                                // Raise Funds to target:
+                                await fundraising.invest(targetAmount - amountInvest, { from: investor3 });
 
-                            let daiBalanceContract = (await _testDAI.balanceOf(fundraising.address)).toNumber();
-                            let daiBalanceAdmin = (await _testDAI.balanceOf(admin)).toNumber();
-                            assert(daiBalanceContract == 0);
-                            assert(daiBalanceAdmin == targetAmount); // Change so admin doesnt get dai
+                                let daiBalanceContract = (await _testDAI.balanceOf(fundraising.address)).toNumber();
+                                let daiBalanceAdmin = (await _testDAI.balanceOf(admin)).toNumber();
+                                assert(daiBalanceContract == 0);
+                                assert(daiBalanceAdmin == targetAmount); // Change so admin doesnt get dai
+                            });
                         });
                     });
-
                     context('Target Raised', function () {
 
-                        it.only('Cannot Invest', async () => {
+                        it('Cannot Invest', async () => {
                             await fundraising.invest(500, { from: investor1 });
                             await fundraising.invest(500, { from: investor2 });
                             await truffleAssert.reverts(
@@ -191,9 +206,17 @@ contract('Fundraising', async accounts => {  // is this fine to put async up her
             context('Contract Paused', function () {
 
                 it('Cannot invest', async () => {
-                    fundraising.pause();
+                    fundraising.pause({from: admin});
                     await truffleAssert.reverts(
                         fundraising.invest(1, { from: investor1 }), "Contract Is Paused");
+                });
+            });
+
+            context('Contract Killed', function () {
+                it('Cannot invest', async () => {
+                    fundraising.kill({from: admin});
+                    await truffleAssert.reverts(
+                        fundraising.invest(1, { from: investor1 }), "Contract Is Killed");
                 });
             });
         });
@@ -239,7 +262,7 @@ contract('Fundraising', async accounts => {  // is this fine to put async up her
             });
 
             context('Target Raised', function () {
-                it.only('Cannot Withdraw Investment', async () => {
+                it('Cannot Withdraw Investment', async () => {
                     await fundraising.invest(500, { from: investor1 });
                     await fundraising.invest(500, { from: investor2 });
                     await truffleAssert.reverts(

@@ -27,7 +27,7 @@ export default function AccessData() {
 
   // Prompts user to sign 'message' using a crypto wallet & displays data corresponding to the account address
   // ***********************************************************************************************************
-  const handleSign = async (e) => {
+  const handleSignature = async (e) => {
     e.preventDefault();
     setError(); // Clearing the error (assume)
     const message = "I would like to see my Spring DAO data"
@@ -51,7 +51,7 @@ export default function AccessData() {
   };
 
   return (
-    <form className="m-4" onSubmit={handleSign}>
+    <form className="m-4" onSubmit={handleSignature}>
       <div style={{width: '100vw', height: '100vh'}} className="credit-card w-full shadow-lg mx-auto rounded-xl bg-white">
         <main className="mt-4 p-4">
           <h1 className="text-5xl font-semibold text-gray-700 text-center">

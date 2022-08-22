@@ -538,7 +538,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"ProjectMarketplace/contracts/ProjectMarketplace.sol": "ProjectMarketplace"
+			"contracts/ProjectMarketplace.sol": "ProjectMarketplace"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -664,20 +664,20 @@
 				"dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy"
 			]
 		},
-		"ProjectMarketplace/contracts/Fundraising.sol": {
-			"keccak256": "0x62bbe45c3bba0e4fc71f486270bcf73bfec4696fd27b764c6166a6e1ab338e3a",
+		"contracts/Fundraising.sol": {
+			"keccak256": "0x40cf02e05c0a64041658bee31dd139a3d84b3e8b000f37e17567adc369ea29a4",
 			"license": "UNLICENSED",
 			"urls": [
-				"bzz-raw://fcd222987da9969036d753a80894477f20530d2bd44633a8dd38bccf788e4753",
-				"dweb:/ipfs/QmTJrSf2h9LtEoK2Mpoj14aWaEWdvkSW8gHU2kMwf77pF2"
+				"bzz-raw://db81a0f4c34688d75ccd2117b6c1cac4fc00f8e0625149b67ea12e485cb7f1fd",
+				"dweb:/ipfs/Qmb47adpMZVqJJGbesZAFNog2K7xY2VfC5zrdG4gqVayBY"
 			]
 		},
-		"ProjectMarketplace/contracts/ProjectMarketplace.sol": {
-			"keccak256": "0xaec4cd7c4b9e13c16cd4982a524b7c32cb4f073b05c422dcbcd71d64bf9c28f9",
+		"contracts/ProjectMarketplace.sol": {
+			"keccak256": "0x6f3a9f1129679629bb68c9de964c313e9e2de0ae7acf44661b547435fc18901f",
 			"license": "UNLICENSED",
 			"urls": [
-				"bzz-raw://4c46b5d2d4da6eb107142b064007f70a44c64d045c47886b3a2ebe6af7749e7f",
-				"dweb:/ipfs/QmUvdoorixBbvi8d5Mrt6NLqqaR4i2V8ijPFpGrxf3J6nm"
+				"bzz-raw://4be3395c54568031c7bb36716bb68744cf09912c0444a218c8ef4bdeccbf9a26",
+				"dweb:/ipfs/QmbFE3grDop8iuULeTr4hhwJarSyDh7zBJzom3zQP54x4A"
 			]
 		}
 	},
