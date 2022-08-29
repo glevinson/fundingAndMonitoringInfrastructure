@@ -1,0 +1,23 @@
+{
+    "name": "Water System: Adwumakase Kese, Ghana",
+    "description": "This NFT corresponds to a water system that has been funded by the SpringDAO. Adwumakase Kese <... Information about Adwumakase Kese and the project ...>",
+    "image": "ipfs://QmSN7ZY2PWit59e4JzTUgUK3Lpb5GK4UaBXkRyVU3Fb5ba",
+    "attributes": [
+      {
+        "trait_type": "Country",
+        "value": "Ghana"
+      },
+      {
+        "trait_type": "Area",
+        "value": "Adwumakase Kese Village"
+      },
+      {
+        "trait_type": "Infrastructure Type",
+        "value": "Water System"
+      },
+      {
+        "trait_type": "Proposer",
+        "value": "eWater"
+      }
+    ]
+  }

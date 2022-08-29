@@ -1,0 +1,23 @@
+{
+    "name": "Water System: Ndemban, The Gambia",
+    "description": "This NFT corresponds to a water system that has been funded by the SpringDAO. Ndemban <... Information about Ndemban and the project ...>",
+    "image": "ipfs://QmWiEY42p9Tj5QjRaXrEMdKo4b4cxnUPaz4WfWHYQdL1V6",
+    "attributes": [
+      {
+        "trait_type": "Country",
+        "value": "The Gambia"
+      },
+      {
+        "trait_type": "Area",
+        "value": "Ndemban Village"
+      },
+      {
+        "trait_type": "Infrastructure Type",
+        "value": "Water System"
+      },
+      {
+        "trait_type": "Proposer",
+        "value": "eWater"
+      }
+    ]
+  }

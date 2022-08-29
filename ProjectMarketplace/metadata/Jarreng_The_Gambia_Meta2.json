@@ -1,0 +1,41 @@
+{
+    "name": "Water System: Jarreng, The Gambia",
+    "description": 
+    "This NFT corresponds to a water system proposed by eWater and being funded on the Spring DAO for the people of Jarreng, The Gambia. 
+    
+    Jarreng is a village of almost 16,000 inhabitants in eastern The Gambia that needs a clean and consistently running water system. Having scoped the area, we have calculated the total cost of the project to be £52,000. 
+    
+    Breakdown of cost: 
+    
+    Taps (18)     - £20,000
+    Borehole	    -	£5,000
+    Piping		    -	£10,000
+    Pump          -	£5,000
+    Tank		      -	£5,000
+    Solar Panels	-	£5,000
+    Transport	    -	£2,000
+    
+    Sustainability:
+    
+    Each household in Jarreng will be given a fob (an electronic tag). These fobs can be taken to a shop in the village (this shop will be selected by the villagers) to be topped up with credit in exchange for Gambian Dalasi. Once it has credit, a fob can be used at the water systems smart taps to release water up to the value of credit on the fob. The cost of the water is equivalent to 1 p per litre. The funds we receive for the credit go towards maintaining the system. 
+    ",
+    "image": "ipfs://QmNnNxTmkCZWBsm2u1WJLreF44y8bZZqgwmUnm6Ard6Aic",
+    "attributes": [
+      {
+        "trait_type": "Country",
+        "value": "The Gambia"
+      },
+      {
+        "trait_type": "Area",
+        "value": "Jarreng Village"
+      },
+      {
+        "trait_type": "Infrastructure Type",
+        "value": "Water System"
+      },
+      {
+        "trait_type": "Proposer",
+        "value": "eWater"
+      }
+    ]
+  }
