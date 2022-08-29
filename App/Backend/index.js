@@ -37,8 +37,7 @@ dataMap.set('Water System: Ndemban, The Gambia', "https://i.ibb.co/PzyyvWR/Ndemb
 // Specfifying which blockchain:
 const provider = ethers.getDefaultProvider("rinkeby")
 
-// const projectMarketplaceAddress = "0xF7c86f0648272b8A1F8ff6b34365af55dEcBA41C";
-const projectMarketplaceAddress = "0xf1513Ad998ab7b69D5096AbC3bb8552C51a4881c";
+const projectMarketplaceAddress = "0xF7c86f0648272b8A1F8ff6b34365af55dEcBA41C";
 
 // Creating an instance of the NFT contract
 const projectMarketPlace = new ethers.Contract(projectMarketplaceAddress, abiNFT, provider);
@@ -61,7 +60,8 @@ app.get('/accessData/', async function (req, res) {
     // Iterate through all project's granting user access if they hold sufficient tokens
     for (let i = 0; i < projectMarketplaceSupply; i++) {
 
-      const tokenID = (BigInt(await projectMarketPlace.tokenByIndex(i))); // BigInt as precaution against overflow (tokenID is 256-bit unisgned integer)
+      // Use BigInt in line 64 as precaution against overflow (tokenID is 256-bit unisgned integer)
+      const tokenID = (BigInt(await projectMarketPlace.tokenByIndex(i)));
       const rftAddress = "0x" + tokenID.toString(16);
       const rft = new ethers.Contract(rftAddress, abiRFT, provider);
       const balanceRFT = (await rft.balanceOf(signingAddress));
