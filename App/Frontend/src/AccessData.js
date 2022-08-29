@@ -4,11 +4,12 @@ import ErrorMessage from "./ErrorMessage";
 import axios from "axios";
 
 export default function AccessData() {
-  const [error, setError] = useState();// Start from empty array of projects
-  const [data, setData] = useState([]); // Just did null as this funciton equivalent to their setWords
+  const [error, setError] = useState();
+  const [data, setData] = useState([]);
 
-  // Requests specified signature's data from the backend & updates 'data'/'error' accordingly:
-  // ***********************************************************************************************************
+  // Passes backend user's signature of message and requests data. 
+  // Then updates 'data'/'error' accordingly: 
+  // **************************************************************************
   const getData = (sig) => {
     const options = { 
       method: 'GET',
@@ -17,23 +18,21 @@ export default function AccessData() {
     }
 
     axios.request(options).then((response) => {
-      console.log("response.data: " + response.data)
-      setData(response.data) // Saves GET response to State variable 'data'
-
+      setData(response.data)
     }).catch((error) => {
       console.error(error)
     })
   }
 
-  // Prompts user to sign 'message' using a crypto wallet & displays data corresponding to the account address
-  // ***********************************************************************************************************
+  /* Prompts user to sign 'message' using a crypto wallet, calls getData & 
+     displays data corresponding to the account address */
+  // **************************************************************************
   const handleSignature = async (e) => {
     e.preventDefault();
-    setError(); // Clearing the error (assume)
+    setError();
     const message = "I would like to see my Spring DAO data"
 
     try {
-      console.log({ message });
       // Checking user has a crpto wallet:
       if (!window.ethereum)
         throw new Error("No crypto wallet found. Please install it.");
@@ -68,7 +67,6 @@ export default function AccessData() {
           <ErrorMessage message={error} />
         </div>
         {data.map((project) => {
-          console.log("Project: " + project)
           if (project == null){
             return (    
               <div className="p-" >
@@ -109,3 +107,8 @@ export default function AccessData() {
     </form>
   ); 
 }
+
+// References:
+
+  // "handleSignature" was adapted from code demonstrated in: https://www.youtube.com/watch?v=vhUjCLYlnMM
+  // "getData" was adapted from code demonstrated in: https://www.youtube.com/watch?v=YLq6JOsTok8

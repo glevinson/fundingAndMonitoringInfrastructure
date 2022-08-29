@@ -2,12 +2,12 @@
 pragma solidity 0.8.7;
 
 // For Remix Deployment:
-//********************************************************************************************************************************************************** */
+//*****************************************************************************
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
-//********************************************************************************************************************************************************** */
+//*****************************************************************************
 
 // For truffle deployment:
 // import "../node_modules/openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
@@ -15,7 +15,6 @@ import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 // import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/IERC721.sol";
 // import "../node_modules/openzeppelin-solidity/contracts/token/ERC721/IERC721Receiver.sol";
 
-// Referenced from: https://ethereum.stackexchange.com/questions/84095/how-to-get-the-decimals-of-erc20-token-in-smart-contract
 abstract contract IERC20Extented is IERC20 {
     function decimals() public view virtual returns (uint8);
 }
@@ -69,7 +68,7 @@ contract Fundraising is ERC20 {
         return (targetAmount - amountRaised) ;
     }
 
-    /* User's can invest if the specified investment */
+    /* User's can invest if conditions satisfied */
     function invest(uint256 value) external {
         require( totalSupply() < targetAmount, "Target Already Raised" );
         require(value <= targetAmount - totalSupply(), "Not enough shares left!");
@@ -85,11 +84,10 @@ contract Fundraising is ERC20 {
         }
     }
 
-    /* Investor's can withdraw their investment if the target has not already been raised yet */
+    /* Users can withdraw up to their net investment if the target has not already been raised yet */
     function withdrawInvestment(uint256 value) external {
         require( totalSupply() < targetAmount , "Target Already Raised" );
-        require(value <= balanceOf(msg.sender), "Not Great Enough Balance!"); // As DAI instatneously removed when targetRaised, this require should also cover that s
-        coin.transfer(msg.sender, value);
+        require(value <= balanceOf(msg.sender), "Not Great Enough Balance!");
         amountRaised -= value;
         _burn(msg.sender, value);
     }
@@ -101,3 +99,6 @@ contract Fundraising is ERC20 {
         projectMarketplace.safeTransferFrom( address(this), msg.sender, uint256(uint160(address(this))));
     }
 }
+
+//References:
+// The interface IERC20Extended is from: // https://ethereum.stackexchange.com/questions/84095/how-to-get-the-decimals-of-erc20-token-in-smart-contract
