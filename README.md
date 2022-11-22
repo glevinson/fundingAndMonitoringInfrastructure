@@ -12,11 +12,11 @@ In this thesis, I propose an alternative financing pathway. I present a technica
 
 My eco-system of smart contracts allow capital to be raised in a cryptocurrency chosen by the entity that proposes the project. Consequently, capital raised bypasses third party institutions and reaches the desired entities much faster. Investors are granted access to data associated with projects that they have invested in. This data enables investors to monitor a successfully funded project’s progress and, upon completion, maintenance.
 
-My architecture has been well received by experts in smart contracts, in applying blockchain and in building infrastructure in underdeveloped nations respectively. I also demonstrate that My smart contract gas fees are low considering each transaction’s particular use case."
+My architecture has been well received by experts in smart contracts, in applying blockchain and in building infrastructure in underdeveloped nations respectively. I also demonstrate that my smart contract gas fees are low considering each transaction’s particular use case."
 
 ## Implemented by the 'Spring DAO'
 
-This architecture is being implemented by the 'Spring DAO'; a DAO which is under development and who's founders I have worked closely with throughout my thesis. The Spring DAO aims to provide an alternative pathway for financing, constructing & monitoring infrastructure in developing countries. It is supported by Brevan Howard & Imperial. My technical architecture addresses the financing & monitoring stages of the Spring DAO's project lifecycle. However, my architecture is not limited to the Spring DAO and has been designed flexibly so that other DAOs aiming to finance and monitor funded infrastructure projects can straightforwardly implement it.
+This architecture is being implemented by the 'Spring DAO'; a DAO which is under development and who's founders I have worked closely with throughout my thesis. The Spring DAO aims to provide an alternative pathway for financing, constructing & monitoring infrastructure in developing countries. It is supported by Brevan Howard & Imperial. My technical architecture addresses the financing & monitoring stages of the Spring DAO's project lifecycle. However, my architecture is not limited to the Spring DAO and has been designed so that other DAOs aiming to finance and monitor funded infrastructure projects can also straightforwardly implement it.
 
 ## Link To Paper
 
