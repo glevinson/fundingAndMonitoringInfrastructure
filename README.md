@@ -10,7 +10,7 @@ The thesis is being submitted for publishing in the ACM acadmeic journal: 'Distr
 
 In this thesis, I propose an alternative financing pathway. I present a technical architecture that enables the proposal, fundraising and monitoring of infrastructure projects on the Ethereum blockchain. The architecture is intended to be implemented by decentralized autonomous organizations with a focus in financing infrastructure development in the Global South.
 
-My eco-system of smart contracts allows capital to be raised in a cryptocurrency chosen by the entity that proposes the project. Consequently, capital raised bypasses third party institutions and reaches the desired entities much faster. Investors are granted access to data associated with projects that they have invested in. This data enables investors to monitor a successfully funded project’s progress and, upon completion, maintenance.
+My eco-system of smart contracts allow capital to be raised in a cryptocurrency chosen by the entity that proposes the project. Consequently, capital raised bypasses third party institutions and reaches the desired entities much faster. Investors are granted access to data associated with projects that they have invested in. This data enables investors to monitor a successfully funded project’s progress and, upon completion, maintenance.
 
 My architecture has been well received by experts in smart contracts, in applying blockchain and in building infrastructure in underdeveloped nations respectively. I also demonstrate that My smart contract gas fees are low considering each transaction’s particular use case."
 
