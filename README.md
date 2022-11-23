@@ -1,8 +1,6 @@
 # infrastructure-funding-and-monitoring
 
-This repository contains the technical architecture for my MSc Computing thesis at Imperial College London: 'DAOs for Funding & Monitoring Infrastructure in Developing Countries'.
-
-The thesis is being submitted for publishing in the ACM acadmeic journal: 'Distributed Ledger Technology: Research and Practice'. It is supported by Dr Catherine Mulligan, the ‘European Research Area Chair in Blockchain’, and Professor William Knottenbelt, Director of the ‘Centre for Cryptocurrency Research and Engineering’, who will be my co-authors. I have included a link below to my original submission.
+This repository contains the technical architecture for my MSc Computing thesis at Imperial College London: 'DAOs for Funding & Monitoring Infrastructure in Developing Countries'. I have included a link below to my original submission.
 
 ## Abstract
 
@@ -14,15 +12,20 @@ My eco-system of smart contracts allow capital to be raised in a cryptocurrency 
 
 My architecture has been well received by experts in smart contracts, in applying blockchain and in building infrastructure in underdeveloped nations respectively. I also demonstrate that my smart contract gas fees are low considering each transaction’s particular use case."
 
+## Published
+
+The thesis is being submitted for publishing in the ACM acadmeic journal: 'Distributed Ledger Technology: Research and Practice'. It is supported by Dr Catherine Mulligan, the ‘European Research Area Chair in Blockchain’, and Professor William Knottenbelt, Director of the ‘Centre for Cryptocurrency Research and Engineering’, who will be my co-authors. 
+
+
+## Implemented by the 'Spring DAO'
+
+This architecture is being implemented by the 'Spring DAO'; a DAO which is under development and who's founders I have worked closely with throughout my thesis. The Spring DAO aims to provide an alternative pathway for financing, constructing & monitoring infrastructure in developing countries. It is supported by Brevan Howard & Imperial. My technical architecture addresses the financing & monitoring stages of the Spring DAO's project lifecycle. However, my architecture is not limited to the Spring DAO and has been designed so that other DAOs aiming to finance and monitor funded infrastructure projects can also straightforwardly implement it.
+
 ## User Requirements
 
 In order to increase my understanding around the context of implementing infrastructure projects in developing countries and how such project’s stakeholders operate, I secured funding for and organized a solo research trip to The Gambia with the charity eWater. eWater build water systems in Western Africa and would like to fund their projects using my technical architecture. 
 
 During the trip I visited numerous remote Gambian villages in which eWater had either previously installed water systems (and were now maintaining) or were planning to soon. This allowed me to see various stages of a project’s lifecycle and the funding requirements within that. It also allowed me to observe how all the stakeholders involved in a project operate and understand their requirements as the intended beneficiaries of this project.
-
-## Implemented by the 'Spring DAO'
-
-This architecture is being implemented by the 'Spring DAO'; a DAO which is under development and who's founders I have worked closely with throughout my thesis. The Spring DAO aims to provide an alternative pathway for financing, constructing & monitoring infrastructure in developing countries. It is supported by Brevan Howard & Imperial. My technical architecture addresses the financing & monitoring stages of the Spring DAO's project lifecycle. However, my architecture is not limited to the Spring DAO and has been designed so that other DAOs aiming to finance and monitor funded infrastructure projects can also straightforwardly implement it.
 
 ## Link To Paper
 
