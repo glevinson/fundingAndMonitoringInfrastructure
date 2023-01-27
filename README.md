@@ -6,7 +6,7 @@ The proposed system includes an eco-system of smart contracts, written in Solidi
 
 ## Published
 
-The thesis is being re-formatted and submitted for publishing in the ACM acadmeic journal: ['Distributed Ledger Technology: Research and Practice'](https://dl.acm.org/journal/dlt), where it will be co-authored by [Dr Catherine Mulligan](https://www.imperial.ac.uk/people/c.mulligan), the ‘European Research Area Chair in Blockchain’, and [Professor William Knottenbelt](https://www.imperial.ac.uk/people/w.knottenbelt), Director of the ‘Centre for Cryptocurrency Research and Engineering’.
+The thesis is being re-formatted and submitted for publishing in the ACM acadmeic journal: ['Distributed Ledger Technology: Research and Practice'](https://dl.acm.org/journal/dlt), where it is co-authored by [Dr Catherine Mulligan](https://www.imperial.ac.uk/people/c.mulligan), the ‘European Research Area Chair in Blockchain’, and [Professor William Knottenbelt](https://www.imperial.ac.uk/people/w.knottenbelt), Director of the ‘Centre for Cryptocurrency Research and Engineering’.
 
 
 ## Implemented by the 'Spring DAO'
