@@ -11,4 +11,4 @@ The thesis is being re-formatted and submitted for publishing in the ACM acadmei
 
 ## Implemented by the 'Spring DAO'
 
-This architecture is being implemented by the 'Spring DAO'; a DAO which is under development and who's founders I have worked closely with throughout my thesis. It is supported by Brevan Howard & Imperial College London. However, my architecture is not limited to the Spring DAO and has been designed so that other DAOs can also straightforwardly implement it.
+This architecture is being implemented by the 'Spring DAO'; a DAO which is under development and who's founders I have worked closely with throughout my thesis. It is supported by [Brevan Howard](https://www.brevanhoward.com/) & Imperial College London. However, my architecture is not limited to the Spring DAO and has been designed so that other DAOs can also straightforwardly implement it.
