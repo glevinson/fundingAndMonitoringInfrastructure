@@ -1,6 +1,8 @@
 # infrastructure-funding-and-monitoring
 
-This repository contains the technical architecture for my MSc Computing thesis at Imperial College London: 'DAOs for Funding & Monitoring Infrastructure in Developing Countries'. The proposed system includes an eco-system of smart contracts, written in Solidity, for Ethereum which providea an alternative pathway for financing, constructing and monitoring infrastructure projects in developing countries. It also includes a web application for viewing data associated with the infrastructure projects that is written in JavaScript. For more information, [here is a link to the original paper](https://drive.google.com/file/d/15Ij9gEIJHgMeb3I2yotvqxlnJzJ_2Fcu/view?usp=sharing).
+This repository contains the technical architecture for my MSc Computing thesis at Imperial College London: 'DAOs for Funding & Monitoring Infrastructure in Developing Countries'. 
+
+The proposed system includes an eco-system of smart contracts, written in Solidity, for Ethereum which providea an alternative pathway for financing, constructing and monitoring infrastructure projects in developing countries. It also includes a web application for viewing data associated with the infrastructure projects that is written in JavaScript. For more information, [here is a link to the original paper](https://drive.google.com/file/d/15Ij9gEIJHgMeb3I2yotvqxlnJzJ_2Fcu/view?usp=sharing).
 
 ## Published
 
