@@ -1,4 +1,4 @@
-## Web App for Viewing Project Data
+## App
 This directory contains a web app that allows users to view data associated with projects for which they have invested over the 'data access threshold'. The threshold is set by the project creator and is the minimum value a user must invest in order to view a project's data. An authentication mechanism is included in the App's backend which determines whether a user has invested enough into a project to access its data.
 
 ## Web App
