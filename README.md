@@ -2,7 +2,7 @@
 
 This repository contains the technical architecture for my MSc Computing thesis at Imperial College London: 'DAOs for Funding & Monitoring Infrastructure in Developing Countries'. I propose a novel financing pathway for building infrastructure in developing countries that is faster and offers greater accountability than existing approaches. My work recieved a distinction (75%) and is under publication.
 
-I designed and developed an ecosystem of Ethereum smart contracts, in Solidity, that enables users to create on-chain fundraises for infrastructure projects using a stable type of cryptocurrency. These smart contracts are in the [ProjectMarketplace direcotry](ProjectMarketplace). I also developed a web application, written in JavaScript, that enables investors to monitor their projects using data that project proposers are required to supply. This web app can be found in the [App directory](App). Please view the [final report](final_report.pdf) for more information.
+I designed and developed an ecosystem of Ethereum smart contracts, in Solidity, that enables users to create on-chain fundraises for infrastructure projects using stablecoins. These smart contracts are in the [ProjectMarketplace direcotry](ProjectMarketplace). I also developed a web application, written in JavaScript, that enables investors to monitor their projects using data that project proposers are required to supply. This web app can be found in the [App directory](App). Please view the [final report](final_report.pdf) for more information.
 
 ## Publication
 
