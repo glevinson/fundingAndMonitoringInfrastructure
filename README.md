@@ -4,7 +4,7 @@ This repository contains the technical architecture for my MSc Computing thesis 
 
 I designed and developed an ecosystem of Ethereum smart contracts, in Solidity, that enables users to create on-chain fundraises for infrastructure projects using stablecoins. These smart contracts are in the [ProjectMarketplace directory](ProjectMarketplace). I also developed a web application, written in JavaScript, that enables investors to monitor their projects using data that project proposers are required to supply. This web app can be found in the [App directory](App). Please view the [final report](final_report.pdf) for more information.
 
-## RFTs
+## RFT
 In the description of this system, I will refer to Re-fungible tokens or "RFTs" a lot. RFTs represent making the ownership of non-fungible tokens divisble. The concept is to have an ERC-721 NFT that is owned by a fungible token contract, such as an ERC-20. If the fungible token supply is limited, these fungible tokens represent the shared ownership of the NFT held by the fungible token contract and are referred to as RFTs. One RFT is equivalent to $\frac{1}{supply}$ proportional ownership of the corresponding NFT.
 
 ## Publication
