@@ -35,9 +35,9 @@ dataMap.set('Water System: Ndemban, The Gambia', "https://i.ibb.co/PzyyvWR/Ndemb
 //*************************************************************************************************************** */
 
 // Specfifying which blockchain:
-const provider = ethers.getDefaultProvider("rinkeby")
+const provider = ethers.getDefaultProvider("goerli");
 
-const projectMarketplaceAddress = "0xF7c86f0648272b8A1F8ff6b34365af55dEcBA41C";
+const projectMarketplaceAddress = "0xd7bb862c137906160045814766af449A10c1FDFB";
 
 // Creating an instance of the NFT contract
 const projectMarketPlace = new ethers.Contract(projectMarketplaceAddress, abiNFT, provider);
