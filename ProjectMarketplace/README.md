@@ -1,8 +1,8 @@
-## ProjectMarketplace
+## ProjectMarketplace.sol
 
 I have designed and developed an ERC-721 compliant smart contract in Solidity called ‘ProjectMarketplace’ for project proposers to interact with. The contract’s main function is called ‘createProject’. The entity that calls the function specifies the details of the project in the function’s parameters, such as the name of the project, the amount it is aiming to raise, the cryptocurrency that funds are raised in and the ‘data access threshold’ (minimum amount of investment required to view a project’s data). When ‘createProject’ is called, a smart contract that represents the project’s fundraise is deployed and a NFT minted which is owned by the fundraising contract. The NFT represents the project and its ownership.
 
-## Fundraise
+## Fundraise.sol
 
 I have developed an ERC-20 smart contract in Solidity called ‘Fundraise’ which is deployed when a new project is created. The contract is interacted with by investors and holds the capital raised until the project’s target amount is reached, at which point the funds are immediately sent to the proposing entity. In reality, when a DAO implements this technical architecture, this feature should be changed so that the project proposer has staggered access to the raised capital and access be granted upon the receipt of data that proves a project’s progress, which ensures that the project is being correctly implemented. This staggered data access mechanism is a topic of future work.
 
