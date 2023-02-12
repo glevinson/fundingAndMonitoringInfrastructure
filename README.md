@@ -7,7 +7,11 @@ I designed and developed an ecosystem of Ethereum smart contracts, in Solidity, 
 In the description of this system, I will refer to Re-fungible tokens or "RFTs" a lot. RFTs represent making the ownership of non-fungible tokens divisble. The concept is to have an ERC-721 NFT that is owned by a fungible token contract, such as an ERC-20. If the fungible token supply is limited, these fungible tokens represent the shared ownership of the NFT held by the fungible token contract and are referred to as RFTs. One RFT is equivalent to $\frac{1}{supply}$ proportional ownership of the corresponding NFT.
 
 ## Prototype that can interact with
-I have deployed a mock system and created 4 mock on-chain project fundraises on the Ethereum Goerli testnet. These can be viewed on [OpenSea](https://testnets.opensea.io/collection/the-springdao-projectmarketplace-v2).
+I have deployed a mock system and created 4 mock on-chain project fundraises on the Ethereum Goerli testnet. These can be viewed on [OpenSea](https://testnets.opensea.io/collection/the-springdao-projectmarketplace-v2). The associated contracts have the following addresses:
+
+- ProjectMarketplace: 0xd7bb862c137906160045814766af449A10c1FDFB
+- Endanchan Fundraise: 0x832d15990cE4C5EA34424A1CA22b325daA635Dbb
+- 
 
 ## Publication
 
