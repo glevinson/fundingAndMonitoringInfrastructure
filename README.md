@@ -45,11 +45,34 @@ To invest in a project's Fundraising smart contract you must first go to the sma
 
 ## Installation
 
+1. Clone the repo
+   ```sh
+   git clone https://github.com/glevinson/fundingAndMonitoringInfrastructure.git
+   ```
+2. Install NPM packages
+   ```sh
+   npm install
+   ```
 
-## How to use
+## How to use
+
+1. Open terminal window
+2. Run backend
+   ```sh
+  cd < 'Backend' directory >
+  npm run start
+   ```
+3. Open another terminal window
+4. Run in localhost
+   ```sh
+  cd < 'Frontend' directory >
+  npm run start
+   ```
+
+You will now be able to interact with the app at http://localhost:3000/
 
 
-#Outcomes
+# Outcomes
 
 ## Publication
 
