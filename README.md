@@ -63,7 +63,7 @@ To invest in a project's Fundraising smart contract you must first go to the sma
   npm run start
   ```
 3. Open another terminal window
-4. Run in localhost
+4. Run localhost
   ```sh
   cd < Frontend directory >
   npm run start
