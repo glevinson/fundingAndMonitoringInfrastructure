@@ -18,7 +18,7 @@ There are 2 main smart contracts:
 You can either interact with a mock system that is deployed in the Ethereum Goerli testnet or deploy your own.
 
 ### Goerli Deployed System
-I have deployed a ProjectMarketplace smart contract and created 3 mock project fundraises on the Ethereum Goerli testnet. These can be viewed on [OpenSea](https://testnets.opensea.io/collection/the-springdao-projectmarketplace-v2). Funds are raised in a mock coin called testUSDT. The system, thus far, has the following addresses:
+I have deployed a ProjectMarketplace smart contract and created 3 mock project fundraises on the Ethereum Goerli testnet. These can be viewed on [OpenSea](https://testnets.opensea.io/collection/the-springdao-projectmarketplace-v2). Funds are raised in a mock coin that I have named 'testUSDT'. The system, thus far, has the following addresses:
 
 - ProjectMarketplace: "0xd7bb862c137906160045814766af449A10c1FDFB"
 - 'Water System: Endanachan, Tanzania' Project Fundraise: "0x832d15990cE4C5EA34424A1CA22b325daA635Dbb"
