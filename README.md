@@ -27,6 +27,8 @@ I have deployed a ProjectMarketplace smart contract and created 3 mock project f
 ### Creating On-chain Infrastructure Project Fundraises
 You can create a project by calling the 'createProject' function in the ProjectMarketplace smart contract. You must specify the details of the project in the function’s parameters, such as the name of the project, the amount it is aiming to raise, the cryptocurrency that funds are raised in (must be ERC-20 based) and the ‘data access threshold’ (minimum amount of investment required to view a project’s data). When ‘createProject’ is called, a Fundraising smart contract is deployed and a NFT minted which is owned by the fundraising contract. The NFT represents the project and its ownership.
 
+To find the address of the newly deployed Fundraising smart contract, first view the transaction on Etherscan. The address of the Fundraising smart contract is the address that the newly minted ERC-721 project NFT has been transferred to.
+
 ### Investing in Project Fundraises
 To invest in a project's Fundraising smart contract you must first go to the smart contract of the ERC-20 that funds are being raised in and approve the Fundraising contract's address. You can then interact with the Fundraising contract's investment functions. In return for investment, users receive the Fundraising contract’s ERC-20 tokens in a 1:1 ratio in the net value of their contribution. This means a Fundraising smart contract's supply limit equals the amount that the project is aiming to raise. 
 
@@ -36,7 +38,6 @@ As the Fundraising smart contract owns the project NFT, the token that the contr
 The web app contains a access control module in its backend which grants the user access to projects 
 
 ## Installation
-
 1. Clone the repo
    ```sh
    git clone https://github.com/glevinson/fundingAndMonitoringInfrastructure.git
@@ -47,7 +48,6 @@ The web app contains a access control module in its backend which grants the use
    ```
 
 ## How to use
-
 1. Open terminal window
 2. Run backend
   ```sh
@@ -66,10 +66,8 @@ You will now be able to interact with the app at http://localhost:3000/
 # Outcomes
 
 ## Publication
-
 My thesis is under publication in the ACM acadmeic journal: ['Distributed Ledger Technology: Research and Practice'](https://dl.acm.org/journal/dlt), with the co-authors: [Dr Catherine Mulligan](https://www.imperial.ac.uk/people/c.mulligan), the ‘European Research Area Chair in Blockchain’, and [Professor William Knottenbelt](https://www.imperial.ac.uk/people/w.knottenbelt), Director of the ‘Centre for Cryptocurrency Research and Engineering’.
 
 
 ## Implemented by a DAO
-
 This architecture is being implemented by a DAO which is under development and who's founders I have worked closely with throughout my thesis. The DAO is financially backed by [Brevan Howard](https://www.brevanhoward.com/) & Imperial College London. However, my architecture is not limited to the aforementioned DAO and has been designed so that other DAOs can also straightforwardly implement it.
