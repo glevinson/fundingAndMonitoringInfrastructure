@@ -35,7 +35,11 @@ To invest in a project's Fundraising smart contract you must first go to the sma
 As the Fundraising smart contract owns the project NFT, the token that the contract mints represent a share of the project NFT’s ownership and, thus, the project itself. Tokens minted by a Fundraising contract can therefore be referred to as re-fungible tokens (RFTs) as they enable the ownership of a successfully fund raised ProjectNFT to be divisible. Each RFT can be thought of as $\frac{1}{target amount}$ proportional ownership of the project NFT and, therefore, the project itself. 
 
 # Web Application
-The web app contains a access control module in its backend which grants the user access to projects 
+The web app that allows users to view data associated with projects for which they have invested over the 'data access threshold'. The threshold is set by the project creator and is the minimum value a user must invest in order to view a project's data. An authentication mechanism is included in the App's backend which determines whether a user has invested enough into a project to access its data.
+
+The frontend was built using the React JavaScript library and the backend with Express.js. When a user requests to view their project data, they are prompted to sign a message with a cryptocurrency wallet (such a wallet must be installed). The signature is passed as a parameter to the back-end in a GET request. The signature and contents of the message signed are then passed to the access control mechanism. The project names that access is granted to is then returned by the access control module to the frontend and displayed on the user interface. It is assumed that project names are unique.
+
+The data access control module was developed in JavaScript using the Express.js framework and Ethers library. As investment into a project is represented by ownership of the project’s RFTs or NFT, the authentication mechanism uses these tokens to grant access to the project’s data. The mechanism is passed the user’s signature of a message and the message’s contents as parameters. The mechanism subsequently determines the user’s Ethereum account address. By interacting with the ‘ProjectMarketplace’ smart contract, the mechanism iterates through all the successfully fundraised projects and grants access to a particular project’s data if the user holds at least the data access threshold, specified when the project is created, of corresponding RFTs or the project NFT itself.
 
 ## Installation
 1. Clone the repo
