@@ -7,14 +7,12 @@ I designed and developed an ecosystem of Ethereum smart contracts, in Solidity, 
 In the description of this system, I make reference to Re-fungible tokens or "RFTs". RFTs represent making the ownership of non-fungible tokens divisble. The concept is to have an ERC-721 NFT that is owned by a fungible token contract, such as an ERC-20. If the fungible token supply is limited, these fungible tokens represent the shared ownership of the NFT held by the fungible token contract and are referred to as RFTs. One RFT is equivalent to $\frac{1}{supply}$ proportional ownership of the corresponding NFT.
 
 # Fundraising system
-
-The smart contracts
 There are 2 main smart contracts:
 
 1. ProjectMarketplace: ERC-721 compliant smart contract for project proposers to interact with
 2. Fundraising: ERC-20 compliant smart contract that represents a project's fundraise and is interacted with by investors
 
-## How to use Fundraising System
+## How to use
 You can either interact with a mock system that is deployed in the Ethereum Goerli testnet or deploy your own.
 
 ### Goerli Deployed System
@@ -26,22 +24,16 @@ I have deployed a ProjectMarketplace smart contract and created 3 mock project f
 - 'Water System: Adwumakase Kese, Ghana' Project Fundraise: "0x832d15990cE4C5EA34424A1CA22b325daA635Dbb"
 - testUDT: "0xdcE77e597F228D7352eFD4aaF4185118BaE210cE"
 
-### Creating Projects
-You can create a project by calling the 'createProject' function in the ProjectMarketplace smart contract. The function takes as parameters:
+### Creating On-chain Infrastructure Project Fundraises
+You can create a project by calling the 'createProject' function in the ProjectMarketplace smart contract. You must specify the details of the project in the function’s parameters, such as the name of the project, the amount it is aiming to raise, the cryptocurrency that funds are raised in (must be ERC-20 based) and the ‘data access threshold’ (minimum amount of investment required to view a project’s data). When ‘createProject’ is called, a Fundraising smart contract is deployed and a NFT minted which is owned by the fundraising contract. The NFT represents the project and its ownership.
 
-- Target raise amount (uint256)
-- Project name (string)
-- Project Symbol (string)
-- Project NFT URI (string)
-- Project data access threshold (uint256)
-- Address of ERC-20 based coin that funds are raised in (address)
+### Investing in Project Fundraises
+To invest in a project's Fundraising smart contract you must first go to the smart contract of the ERC-20 that funds are being raised in and approve the Fundraising contract's address. You can then interact with the Fundraising contract's investment functions. In return for investment, users receive the Fundraising contract’s ERC-20 tokens in a 1:1 ratio in the net value of their contribution. This means a Fundraising smart contract's supply limit equals the amount that the project is aiming to raise. 
 
-When you create a project, a Fundraise smart contract will automatically be deployed. 
-
-### Investing in Projects
-To invest in a project's Fundraising smart contract you must first go to the smart contract of the ERC-20 that funds are being raised in and approve the Fundraising contract's address. You can then interact with the Fundraising contract's investment functions.
+As the Fundraising smart contract owns the project NFT, the token that the contract mints represent a share of the project NFT’s ownership and, thus, the project itself. Tokens minted by a Fundraising contract can therefore be referred to as re-fungible tokens (RFTs) as they enable the ownership of a successfully fund raised ProjectNFT to be divisible. Each RFT can be thought of as $\frac{1}{target amount}$ proportional ownership of the project NFT and, therefore, the project itself. 
 
 # Web Application
+The web app contains a access control module in its backend which grants the user access to projects 
 
 ## Installation
 
@@ -70,7 +62,6 @@ To invest in a project's Fundraising smart contract you must first go to the sma
   ```
 
 You will now be able to interact with the app at http://localhost:3000/
-
 
 # Outcomes
 
