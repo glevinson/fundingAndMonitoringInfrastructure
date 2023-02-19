@@ -7,10 +7,11 @@ I designed and developed an ecosystem of Ethereum smart contracts, in Solidity, 
 In the description of this system, I make reference to Re-fungible tokens or "RFTs". RFTs represent making the ownership of non-fungible tokens divisble. The concept is to have an ERC-721 NFT that is owned by a fungible token contract, such as an ERC-20. If the fungible token supply is limited, these fungible tokens represent the shared ownership of the NFT held by the fungible token contract and are referred to as RFTs. One RFT is equivalent to $\frac{1}{supply}$ proportional ownership of the corresponding NFT.
 
 # Fundraising system
-There are 2 main smart contracts:
+There are 3 main components:
 
 1. ProjectMarketplace: ERC-721 compliant smart contract for project proposers to interact with
 2. Fundraising: ERC-20 compliant smart contract that represents a project's fundraise and is interacted with by investors
+3. Project NFTs: represents project and its ownership
 
 ## How to use
 You can either interact with a mock system that is deployed in the Ethereum Goerli testnet or deploy your own.
