@@ -75,4 +75,4 @@ My thesis is under publication in the ACM acadmeic journal: ['Distributed Ledger
 
 
 ## Implemented by a DAO
-This architecture is being implemented by a DAO which is under development and who's founders I have worked closely with throughout my thesis. The DAO is financially backed by [Brevan Howard](https://www.brevanhoward.com/) & Imperial College London. However, my architecture is not limited to the aforementioned DAO and has been designed so that other DAOs can also straightforwardly implement it.
+This architecture is being implemented by a DAO which is under development and who's founders I have worked closely with throughout my thesis. The DAO is financially backed by [Brevan Howard](https://www.brevanhoward.com/). However, my architecture is not limited to the aforementioned DAO and has been designed so that other DAOs can also straightforwardly implement it.
