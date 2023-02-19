@@ -9,9 +9,9 @@ In the description of this system, I make reference to Re-fungible tokens or "RF
 # Fundraising system
 There are 3 main components:
 
-1. ProjectMarketplace: ERC-721 compliant smart contract for project proposers to interact with
-2. Fundraising: ERC-20 compliant smart contract that represents a project's fundraise and is interacted with by investors
-3. Project NFTs: represents project and its ownership
+1. 'ProjectMarketplace': ERC-721 compliant smart contract for project proposers to interact with
+2. 'Fundraising': ERC-20 compliant smart contract that represents a project's fundraise and is interacted with by investors
+3. 'Project NFTs': represents project and its ownership
 
 ## How to use
 You can either interact with a mock system that I have deployed on the Ethereum Goerli testnet or deploy your own.
@@ -26,21 +26,25 @@ I have deployed a ProjectMarketplace smart contract and created 3 mock project f
 - testUDT: "0xdcE77e597F228D7352eFD4aaF4185118BaE210cE"
 
 ### Creating On-chain Infrastructure Project Fundraises
-You can create a project by calling the 'createProject' function in the [ProjectMarketplace](ProjectMarketplace/contracts/ProjectMarketplace.sol) smart contract. You must specify the details of the project in the function’s parameters, such as the name of the project, the amount it is aiming to raise, the cryptocurrency that funds are raised in (must be ERC-20 based) and the ‘data access threshold’ (minimum amount of investment required to view a project’s data). When ‘createProject’ is called, a Fundraising smart contract is deployed and a NFT minted which is owned by the fundraising contract. The NFT represents the project and its ownership.
+You can create a project by calling the 'createProject' function in the [ProjectMarketplace smart contract](ProjectMarketplace/contracts/ProjectMarketplace.sol). You must specify the details of the project in the function’s parameters, such as the name of the project, the amount it is aiming to raise, the cryptocurrency that funds are raised in (must be ERC-20 based) and the ‘data access threshold’ (minimum amount of investment required to view a project’s data). When ‘createProject’ is called, a [Fundraising smart contract](ProjectMarketplace/contracts/Fundraising.sol) is deployed and a NFT minted which is owned by the Fundraising contract. The NFT represents the project and its ownership.
 
 To find the address of the newly deployed Fundraising smart contract, first view the transaction on Etherscan. The address of the Fundraising smart contract is the address that the newly minted ERC-721 project NFT has been transferred to.
 
+When a new project is created, view the transaction on Etherscan to obtain the address of the corresponding Fundraising smart contract. The Fundraising contract address is the address that the newly minted ERC-721 project NFT has been transferred to.
+
 ### Investing in Project Fundraises
-To invest in a project's Fundraising smart contract you must first go to the smart contract of the ERC-20 that funds are being raised in and approve the Fundraising contract's address. You can then interact with the Fundraising contract's investment functions. In return for investment, users receive the Fundraising contract’s ERC-20 tokens in a 1:1 ratio in the net value of their contribution. This means a Fundraising smart contract's supply limit equals the amount that the project is aiming to raise. 
+To invest in a project's Fundraising smart contract you must first go to the smart contract of the ERC-20 that funds are being raised in and approve the Fundraising contract's address. You can then interact with the Fundraising contract's investment functions. In return for investment, users receive the Fundraising contract’s ERC-20 tokens in a 1:1 ratio to the net value of their contribution. This means a Fundraising smart contract's supply limit equals the amount that the project is aiming to raise. 
 
 As the Fundraising smart contract owns the project NFT, the token that the contract mints represent a share of the project NFT’s ownership and, thus, the project itself. Tokens minted by a Fundraising contract can therefore be referred to as re-fungible tokens (RFTs) as they enable the ownership of a successfully fund raised ProjectNFT to be divisible. Each RFT can be thought of as $\frac{1}{target amount}$ proportional ownership of the project NFT and, therefore, the project itself. 
 
-# Web Application
-The web app that allows users to view data associated with projects for which they have invested over the 'data access threshold'. The threshold is set by the project creator and is the minimum value a user must invest in order to view a project's data. An authentication mechanism is included in the App's backend which determines whether a user has invested enough into a project to access its data.
+# Monitoring Project Data
 
-The frontend was built using the React JavaScript library and the backend with Express.js. When a user requests to view their project data, they are prompted to sign a message with a cryptocurrency wallet (such a wallet must be installed). The signature is passed as a parameter to the back-end in a GET request. The signature and contents of the message signed are then passed to the access control mechanism. The project names that access is granted to is then returned by the access control module to the frontend and displayed on the user interface. It is assumed that project names are unique.
+## Access Control Module
+The 'data access threshold' is set by the project creator and is the minimum value a user must invest in order to view a project's data. Access is granted by a access control module which was developed in JavaScript using the Express.js framework and Ethers library. As investment into a project is represented by ownership of the project’s RFTs or NFT, the access control mechanism uses these tokens to grant access to the project’s data. The module is passed the user’s signature of a message and the message’s contents as parameters. It then determines the user’s Ethereum account address. By interacting with the ‘ProjectMarketplace’ smart contract, it iterates through all the successfully fundraised projects and adds the name of a proect to an array (initialised empty) if the user holds at least the data access threshold of corresponding RFTs or the project NFT itself.
 
-The data access control module was developed in JavaScript using the Express.js framework and Ethers library. As investment into a project is represented by ownership of the project’s RFTs or NFT, the authentication mechanism uses these tokens to grant access to the project’s data. The mechanism is passed the user’s signature of a message and the message’s contents as parameters. The mechanism subsequently determines the user’s Ethereum account address. By interacting with the ‘ProjectMarketplace’ smart contract, the mechanism iterates through all the successfully fundraised projects and grants access to a particular project’s data if the user holds at least the data access threshold, specified when the project is created, of corresponding RFTs or the project NFT itself.
+## Web application
+In order to demonstrate the data access control module, I built a web app that contains it in its [backend](App/Backend/). When prompted, the web app displays the names of projects that the user has invested over the 'data access threshold'. When a user requests to view their project data, they are prompted to sign a message with a cryptocurrency wallet (such a wallet must be installed). The signature is passed as a parameter to the back-end in a GET request. The signature and contents of the message signed are then passed to the access control mechanism. The project names that access is granted to is then returned by the access control module to the frontend and displayed on the user interface. It is assumed that project names are unique.
+
 
 ## Installation
 1. Clone the repo
