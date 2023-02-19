@@ -17,7 +17,7 @@ There are 3 main components:
 You can either interact with a mock system that I have deployed on the Ethereum Goerli testnet or deploy your own.
 
 ### Deployed Mock System
-I have deployed a ProjectMarketplace smart contract and created 3 mock project fundraises on the Ethereum Goerli testnet. These can be viewed on [OpenSea](https://testnets.opensea.io/collection/the-springdao-projectmarketplace-v2). Funds are raised in a mock coin that I have named 'testUSDT'. The system, thus far, has the following addresses:
+I have deployed a ProjectMarketplace smart contract and created 3 mock project fundraises on the Ethereum Goerli testnet. These can be viewed on [OpenSea](https://testnets.opensea.io/collection/the-springdao-projectmarketplace-v2). Funds are raised in 'testUSDT': a ERC-20 . The system currently has these addresses:
 
 - ProjectMarketplace: "0xd7bb862c137906160045814766af449A10c1FDFB"
 - 'Water System: Endanachan, Tanzania' Project Fundraise: "0x832d15990cE4C5EA34424A1CA22b325daA635Dbb"
@@ -26,7 +26,7 @@ I have deployed a ProjectMarketplace smart contract and created 3 mock project f
 - testUDT: "0xdcE77e597F228D7352eFD4aaF4185118BaE210cE"
 
 ### Creating On-chain Infrastructure Project Fundraises
-You can create a project by calling the 'createProject' function in the ProjectMarketplace smart contract. You must specify the details of the project in the function’s parameters, such as the name of the project, the amount it is aiming to raise, the cryptocurrency that funds are raised in (must be ERC-20 based) and the ‘data access threshold’ (minimum amount of investment required to view a project’s data). When ‘createProject’ is called, a Fundraising smart contract is deployed and a NFT minted which is owned by the fundraising contract. The NFT represents the project and its ownership.
+You can create a project by calling the 'createProject' function in the [ProjectMarketplace](ProjectMarketplace/contracts/ProjectMarketplace.sol) smart contract. You must specify the details of the project in the function’s parameters, such as the name of the project, the amount it is aiming to raise, the cryptocurrency that funds are raised in (must be ERC-20 based) and the ‘data access threshold’ (minimum amount of investment required to view a project’s data). When ‘createProject’ is called, a Fundraising smart contract is deployed and a NFT minted which is owned by the fundraising contract. The NFT represents the project and its ownership.
 
 To find the address of the newly deployed Fundraising smart contract, first view the transaction on Etherscan. The address of the Fundraising smart contract is the address that the newly minted ERC-721 project NFT has been transferred to.
 
