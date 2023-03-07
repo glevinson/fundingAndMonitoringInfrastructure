@@ -28,9 +28,7 @@ I have deployed a ProjectMarketplace smart contract and created 3 mock project f
 ### Creating On-chain Infrastructure Project Fundraises
 You can create a project by calling the 'createProject' function in the [ProjectMarketplace](ProjectMarketplace/contracts/ProjectMarketplace.sol) smart contract. You must specify the details of the project in the function’s parameters, such as the name of the project, the amount it is aiming to raise, the cryptocurrency that funds are raised in (must be ERC-20 based) and the ‘data access threshold’ (minimum amount of investment required to view a project’s data). When ‘createProject’ is called, a [Fundraising](ProjectMarketplace/contracts/Fundraising.sol) smart contract is deployed and a NFT minted which is owned by the Fundraising contract. The NFT represents the project and its ownership.
 
-To find the address of the newly deployed Fundraising smart contract, first view the transaction on Etherscan. The address of the Fundraising smart contract is the address that the newly minted ERC-721 project NFT has been transferred to.
-
-When a new project is created, view the transaction on Etherscan to obtain the address of the corresponding Fundraising smart contract. The Fundraising contract address is the address that the newly minted ERC-721 project NFT has been transferred to.
+When a new project is created, view the transaction on Etherscan to obtain the address of the deployed Fundraising smart contract. The corresponding Fundraising contract address is the address that the newly minted ERC-721 project NFT has been transferred to.
 
 ### Investing in Project Fundraises
 To invest in a project's Fundraising smart contract you must first go to the smart contract of the ERC-20 that funds are being raised in and approve the Fundraising contract's address. You can then interact with the Fundraising contract's investment functions. In return for investment, users receive the Fundraising contract’s ERC-20 tokens in a 1:1 ratio to the net value of their contribution. This means a Fundraising smart contract's supply limit equals the amount that the project is aiming to raise. 
