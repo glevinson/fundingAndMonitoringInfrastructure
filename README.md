@@ -41,7 +41,7 @@ As the Fundraising smart contract owns the project NFT, the token that the contr
 The 'data access threshold' is set by the project creator and is the minimum value a user must invest in order to view a project's data. Access is granted by a access control module which was developed in JavaScript using the Express.js framework and Ethers library. As investment into a project is represented by ownership of the project’s RFTs or NFT, the access control mechanism uses these tokens to grant access to the project’s data. The module is passed the user’s signature of a message and the message’s contents as parameters. It then determines the user’s Ethereum account address. By interacting with the ‘ProjectMarketplace’ smart contract, it iterates through all the successfully fundraised projects and adds the name of a project to an array (initialised empty) if the user holds at least the data access threshold of corresponding RFTs or the project NFT itself.
 
 ## Web application
-In order to demonstrate the data access control module, I built a web app that contains it in its [backend](App/Backend/). When prompted, the web app displays the names of projects that the user has invested over the 'data access threshold'. When a user requests to view their project data, they are prompted to sign a message with a cryptocurrency wallet (such a wallet must be installed). The signature is passed as a parameter to the back-end in a GET request. The signature and contents of the message signed are then passed to the access control mechanism. The project names that access is granted to is then returned by the access control module to the frontend and displayed on the user interface. It is assumed that project names are unique.
+I built a web app that contains the access control module in its [backend](App/Backend/). When prompted, the web app displays the names of projects that the user has invested over the 'data access threshold'. When a user requests to view their project data, they are prompted to sign a message with a cryptocurrency wallet (such a wallet must be installed). The signature is passed as a parameter to the back-end in a GET request. The signature and contents of the message signed are then passed to the access control mechanism. The project names that access is granted to is then returned by the access control module to the frontend and displayed on the user interface. It is assumed that project names are unique.
 
 
 ## Installation
@@ -58,7 +58,7 @@ In order to demonstrate the data access control module, I built a web app that c
 1. Open terminal window
 2. Run backend
   ```sh
-  cd <Backend directory>
+  cd < Backend directory >
   npm run start
   ```
 3. Open another terminal window
