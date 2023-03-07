@@ -33,7 +33,7 @@ When a new project is created, view the transaction on Etherscan to obtain the a
 ### Investing in Project Fundraises
 To invest in a project's Fundraising smart contract you must first go to the smart contract of the ERC-20 that funds are being raised in and approve the Fundraising contract's address. You can then interact with the Fundraising contract's investment functions. In return for investment, users receive the Fundraising contract’s ERC-20 tokens in a 1:1 ratio to the net value of their contribution. This means a Fundraising smart contract's supply limit equals the amount that the project is aiming to raise. 
 
-As the Fundraising smart contract owns the project NFT, the token that the contract mints represent a share of the project NFT’s ownership and, thus, the project itself. Tokens minted by a Fundraising contract can therefore be referred to as re-fungible tokens (RFTs) as they enable the ownership of a successfully fund raised ProjectNFT to be divisible. Each RFT can be thought of as $\frac{1}{target amount}$ proportional ownership of the project NFT and, therefore, the project itself. 
+As the Fundraising smart contract owns the project NFT, the token that the contract mints represent a share of the project NFT’s ownership and, thus, the project itself. Tokens minted by a Fundraising contract can therefore be referred to as re-fungible tokens (RFTs) as they enable the ownership of a successfully fund raised ProjectNFT to be divisible. Each RFT can be thought of as $\frac{1}{\textit{target amount}}$ proportional ownership of the project NFT and, therefore, the project itself. 
 
 # Monitoring Project Data
 
